@@ -10,18 +10,18 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.voxelvisage.databinding.FragmentNotificationsBinding;
+import com.example.voxelvisage.databinding.FragmentCameraBinding;
 
-public class NotificationsFragment extends Fragment {
+public class CameraFragment extends Fragment {
 
-    private FragmentNotificationsBinding binding;
+    private FragmentCameraBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        NotificationsViewModel notificationsViewModel =
-                new ViewModelProvider(this).get(NotificationsViewModel.class);
+        CameraViewModel notificationsViewModel =
+                new ViewModelProvider(this).get(CameraViewModel.class);
 
-        binding = FragmentNotificationsBinding.inflate(inflater, container, false);
+        binding = FragmentCameraBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         final TextView textView = binding.textNotifications;
