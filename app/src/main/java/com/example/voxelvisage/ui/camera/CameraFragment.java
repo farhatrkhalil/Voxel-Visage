@@ -1,4 +1,4 @@
-package com.example.voxelvisage.ui.notifications;
+package com.example.voxelvisage.ui.camera;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -29,16 +28,6 @@ public class CameraFragment extends Fragment {
         notificationsViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
 
         return root;
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        AppCompatActivity activity = (AppCompatActivity) requireActivity();
-        if (activity.getSupportActionBar() != null) {
-            activity.getSupportActionBar().setTitle("Voxel Visage");
-        }
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.example.voxelvisage.ui.home;
+package com.example.voxelvisage.ui.settings;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

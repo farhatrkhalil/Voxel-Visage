@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/navigation_settings"
-        android:name="com.example.voxelvisage.ui.home.SettingsFragment"
-        android:label="@string/title_settings"
+        android:name="com.example.voxelvisage.ui.settings.SettingsFragment"
+        android:label="@string/app_name"
         tools:layout="@layout/fragment_settings" />
 
     <fragment
         android:id="@+id/navigation_camera"
-        android:name="com.example.voxelvisage.ui.notifications.CameraFragment"
-        android:label="@string/title_camera"
+        android:name="com.example.voxelvisage.ui.camera.CameraFragment"
+        android:label="@string/app_name"
         tools:layout="@layout/fragment_camera" />
 </navigation>

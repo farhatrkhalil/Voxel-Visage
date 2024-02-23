@@ -1,4 +1,4 @@
-package com.example.voxelvisage.ui.notifications;
+package com.example.voxelvisage.ui.camera;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

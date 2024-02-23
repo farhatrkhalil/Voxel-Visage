@@ -2,6 +2,7 @@ package com.example.voxelvisage;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -21,6 +22,7 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
+    private final Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,11 +46,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
         navController.navigate(R.id.navigation_camera);
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Voxel Visage");
 
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             updateIcon(destination.getId());
         });
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
