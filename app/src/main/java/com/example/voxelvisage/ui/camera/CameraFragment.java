@@ -2,6 +2,7 @@ package com.example.voxelvisage.ui.camera;
 
 import android.Manifest;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,12 +22,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.camera.core.Preview;
 
 import com.example.voxelvisage.R;
+import com.example.voxelvisage.SplashScreenActivity;
 import com.example.voxelvisage.databinding.FragmentCameraBinding;
 import com.google.common.util.concurrent.ListenableFuture;
 
 import androidx.camera.view.PreviewView;
 
 import java.util.concurrent.ExecutionException;
+
 
 public class CameraFragment extends Fragment {
 
@@ -67,7 +70,9 @@ public class CameraFragment extends Fragment {
         cameraProviderFuture.addListener(() -> {
             try {
                 ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
-                bindPreview(cameraProvider);
+
+                requireActivity().runOnUiThread(() -> bindPreview(cameraProvider));
+
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
@@ -83,6 +88,15 @@ public class CameraFragment extends Fragment {
         preview.setSurfaceProvider(previewView.getSurfaceProvider());
 
         cameraProvider.bindToLifecycle(this, cameraSelector, preview);
+
+        boolean appRestarted = requireActivity().getIntent().getBooleanExtra("appRestarted", false);
+        if (appRestarted) {
+            requireActivity().getIntent().removeExtra("appRestarted");
+
+            if (allPermissionsGranted()) {
+                restartApp();
+            }
+        }
     }
 
     private boolean allPermissionsGranted() {
@@ -114,11 +128,21 @@ public class CameraFragment extends Fragment {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CAMERA_PERMISSION) {
             if (allPermissionsGranted()) {
-                startCamera();
+                restartApp();
             } else {
                 showPermissionDeniedDialog();
             }
         }
+    }
+
+    private void restartApp() {
+        requireActivity().getIntent().putExtra("appRestarted", true);
+
+        Intent intent = new Intent(getActivity(), SplashScreenActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+
+        requireActivity().finish();
     }
 
     @Override

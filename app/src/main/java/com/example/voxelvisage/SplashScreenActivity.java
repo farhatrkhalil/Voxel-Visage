@@ -1,15 +1,19 @@
 package com.example.voxelvisage;
 
-import android.annotation.SuppressLint;
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
-@SuppressLint("CustomSplashScreen")
 public class SplashScreenActivity extends AppCompatActivity {
 
     private static final int SPLASH_DISPLAY_DURATION = 5000;
+    private static final int REQUEST_CAMERA_PERMISSION = 101;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,13 +25,43 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         setContentView(R.layout.splash_screen);
 
-        new Handler().postDelayed(new Runnable(){
-            @Override
-            public void run() {
-                Intent mainIntent = new Intent(SplashScreenActivity.this, MainActivity.class);
-                startActivity(mainIntent);
+        if (checkCameraPermission()) {
+            goToMainActivityDelayed();
+        } else {
+            requestCameraPermission();
+        }
+    }
+
+    private boolean checkCameraPermission() {
+        return ContextCompat.checkSelfPermission(
+                this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestCameraPermission() {
+        ActivityCompat.requestPermissions(
+                this,
+                new String[]{Manifest.permission.CAMERA},
+                REQUEST_CAMERA_PERMISSION
+        );
+    }
+
+    private void goToMainActivityDelayed() {
+        new Handler().postDelayed(() -> {
+            Intent mainIntent = new Intent(SplashScreenActivity.this, MainActivity.class);
+            startActivity(mainIntent);
+            finish();
+        }, SPLASH_DISPLAY_DURATION);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CAMERA_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                goToMainActivityDelayed();
+            } else {
                 finish();
             }
-        }, SPLASH_DISPLAY_DURATION);
+        }
     }
 }

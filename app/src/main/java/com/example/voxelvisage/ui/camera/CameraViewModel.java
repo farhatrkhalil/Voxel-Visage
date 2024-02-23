@@ -1,4 +1,3 @@
-// CameraViewModel.java
 package com.example.voxelvisage.ui.camera;
 
 import android.content.Context;
@@ -23,7 +22,7 @@ public class CameraViewModel extends ViewModel {
     private ExecutorService cameraExecutor;
 
     public CameraViewModel() {
-        // No need to initialize the camera here
+
     }
 
     void startCamera(Context context) {
@@ -37,7 +36,6 @@ public class CameraViewModel extends ViewModel {
                 bindPreview(context, cameraProvider);
 
             } catch (Exception e) {
-                // Handle any errors
                 e.printStackTrace();
             }
         }, ContextCompat.getMainExecutor(context));
@@ -56,19 +54,16 @@ public class CameraViewModel extends ViewModel {
         imageAnalysis.setAnalyzer(cameraExecutor, new ImageAnalysis.Analyzer() {
             @Override
             public void analyze(@NonNull ImageProxy image) {
-                // Analyze the image here if needed
-                // For simplicity, we just update the LiveData with the latest image
                 cameraImage.postValue(image);
             }
         });
 
-        // Use getViewLifecycleOwner() instead of casting context to LifecycleOwner
         cameraProvider.bindToLifecycle(
                 (LifecycleOwner) context,
                 cameraSelector,
                 preview,
                 imageAnalysis
-        ); // Correct placement of the closing parenthesis
+        );
     }
 
     public LiveData<ImageProxy> getCameraImage() {
@@ -78,7 +73,6 @@ public class CameraViewModel extends ViewModel {
     @Override
     protected void onCleared() {
         super.onCleared();
-        // Shutdown the camera executor when the ViewModel is cleared
         if (cameraExecutor != null && !cameraExecutor.isShutdown()) {
             cameraExecutor.shutdown();
         }
