@@ -22,7 +22,7 @@
             android:icon="@drawable/notifications"
             android:title="Notifications"
             android:summaryOn="You will receive notifications"
-            android:summaryOff="You won't receive notifications"
+            android:summaryOff="Notifications off"
             android:defaultValue="true"/>
 
     </PreferenceCategory>
