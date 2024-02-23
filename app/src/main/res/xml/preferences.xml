@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:title="@string/user_settings_title"
+        app:iconSpaceReserved="false">
+
+
+        <CheckBoxPreference
+            app:iconSpaceReserved="true"
+            android:key="auto_update"
+            android:icon="@drawable/autoupdate"
+            android:title="Auto Update"
+            android:summaryOn="Automatically update the app"
+            android:summaryOff="App is updated manually"
+            android:defaultValue="true"/>
+
+        <CheckBoxPreference
+            app:iconSpaceReserved="true"
+            android:key="notifications"
+            android:icon="@drawable/notifications"
+            android:title="Notifications"
+            android:summaryOn="You will receive notifications"
+            android:summaryOff="You won't receive notifications"
+            android:defaultValue="true"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false">
+
+        <Preference
+            android:title="Developers"
+            android:icon="@drawable/developers"
+            android:summary="Meet the talented developers behind this app"
+            android:key="developers_info"/>
+
+        <Preference
+            android:title="Privacy Policy"
+            android:icon="@drawable/privacypolicy"
+            android:summary="View our privacy policy"
+            android:key="privacy_policy"/>
+
+        <Preference
+            app:iconSpaceReserved="true"
+            android:title="App License"
+            android:icon="@drawable/license"
+            android:summary="This app is licensed under the MIT License.Thank you for using our app!"
+            android:key="license"/>
+
+        <Preference
+            android:title="App Version"
+            android:icon="@drawable/version"
+            android:summary="1.0"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>
