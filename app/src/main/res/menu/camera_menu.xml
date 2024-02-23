@@ -1,0 +1,25 @@
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_button_remove"
+        android:icon="@drawable/ic_custom_remove"
+        app:showAsAction="ifRoom"
+        android:title="Remove"
+        tools:ignore="HardcodedText" />
+
+    <item
+        android:id="@+id/action_button_download"
+        android:icon="@drawable/ic_custom_download"
+        app:showAsAction="always"
+        android:title="Download"
+        tools:ignore="HardcodedText" />
+
+    <item
+        android:id="@+id/action_button_share"
+        android:icon="@drawable/ic_custom_share"
+        app:showAsAction="always"
+        android:title="Share"
+        tools:ignore="HardcodedText" />
+</menu>

@@ -1,28 +1,24 @@
 package com.example.voxelvisage;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.customview.widget.Openable;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.voxelvisage.databinding.ActivityMainBinding;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
-    private AppBarConfiguration appBarConfiguration;
-    private final Handler handler = new Handler();
+    private int currentDestinationId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,12 +28,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
-        appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_camera, R.id.navigation_settings)
-                .build();
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
         navView.setOnNavigationItemSelectedListener(item -> {
@@ -50,14 +42,20 @@ public class MainActivity extends AppCompatActivity {
 
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             updateIcon(destination.getId());
+            currentDestinationId = destination.getId();
+            invalidateOptionsMenu();
         });
     }
 
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.bottom_nav_menu, menu);
+        if (currentDestinationId == R.id.navigation_camera) {
+            getMenuInflater().inflate(R.menu.camera_menu, menu);
+        } else if (currentDestinationId == R.id.navigation_settings) {
+            menu.clear();
+        } else {
+            getMenuInflater().inflate(R.menu.bottom_nav_menu, menu);
+        }
         return true;
     }
 
@@ -70,11 +68,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-        return NavigationUI.navigateUp(navController, appBarConfiguration)
+        return NavigationUI.navigateUp(navController, (Openable) null)
                 || super.onSupportNavigateUp();
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
     private void updateIcon(int itemId) {
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
         Menu menu = bottomNavigationView.getMenu();
