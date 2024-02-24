@@ -14,6 +14,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     private static final int SPLASH_DISPLAY_DURATION = 5000;
     private static final int REQUEST_CAMERA_PERMISSION = 101;
+    private static final int REQUEST_STORAGE_PERMISSION = 102;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,10 +26,10 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         setContentView(R.layout.splash_screen);
 
-        if (checkCameraPermission()) {
+        if (checkCameraPermission() && checkStoragePermission()) {
             goToMainActivityDelayed();
         } else {
-            requestCameraPermission();
+            requestPermissions();
         }
     }
 
@@ -37,10 +38,16 @@ public class SplashScreenActivity extends AppCompatActivity {
                 this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
     }
 
-    private void requestCameraPermission() {
+    private boolean checkStoragePermission() {
+        return ContextCompat.checkSelfPermission(
+                this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestPermissions() {
+        String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE};
         ActivityCompat.requestPermissions(
                 this,
-                new String[]{Manifest.permission.CAMERA},
+                permissions,
                 REQUEST_CAMERA_PERMISSION
         );
     }
@@ -56,8 +63,9 @@ public class SplashScreenActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CAMERA_PERMISSION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == REQUEST_CAMERA_PERMISSION || requestCode == REQUEST_STORAGE_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                    grantResults.length > 1 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 goToMainActivityDelayed();
             } else {
                 finish();

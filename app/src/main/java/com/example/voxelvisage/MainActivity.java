@@ -1,5 +1,6 @@
 package com.example.voxelvisage;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +21,8 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity {
 
     private int currentDestinationId;
+
+    private static final int REQUEST_CODE_PICK_IMAGES = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (currentDestinationId == R.id.navigation_home && item.getItemId() == R.id.navigation_home ) {
+        if (currentDestinationId == R.id.navigation_home && item.getItemId() == R.id.navigation_home) {
             showPlusMenu(findViewById(R.id.navigation_home));
             return true;
         }
@@ -91,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
             if (item.getItemId() == R.id.action_capture) {
                 return true;
             } else if (item.getItemId() == R.id.action_choose_from_gallery) {
+                openGallery();
                 return true;
             } else if (item.getItemId() == R.id.action_cancel) {
                 NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
@@ -101,6 +105,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
         popupMenu.show();
+    }
+
+    private void openGallery() {
+        Intent galleryIntent = new Intent(this, GalleryViewerActivity.class);
+        startActivity(galleryIntent);
     }
 
     private void updateIcon(int itemId) {

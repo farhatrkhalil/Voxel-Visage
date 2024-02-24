@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/centeredImage"
                 android:layout_marginTop="16dp"
-                android:text="Welcome to Voxel Visage, a 3D face reconstruction app\n\nClick on the plus icon\n\nSelect either to capture an image\n\nChoose from the gallery\n\nPress on cancel to remain on the main page\n\nEnsure a minimum input of 5 images\n\nWait for the result"
+                android:text="Welcome to Voxel Visage\n(A 3D Face Reconstruction App)\n\n----------------------------------------------------------------------\n\nClick on the plus icon\n\nSelect either to capture an image\n\nChoose from the gallery\n\nPress on cancel to remain on the Home page\n\nSelect 5 images\n\nWait for the result"
                 android:textAlignment="center"
                 android:gravity="center"
                 tools:ignore="HardcodedText" />

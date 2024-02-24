@@ -51,6 +51,8 @@ dependencies {
     implementation("androidx.camera:camera-lifecycle:1.4.0-alpha04")
     implementation("androidx.camera:camera-view:1.3.1")
     implementation("androidx.lifecycle:lifecycle-runtime:2.7.0")
+    implementation("com.squareup.picasso:picasso:2.71828")
+
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
