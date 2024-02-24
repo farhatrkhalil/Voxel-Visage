@@ -1,9 +1,10 @@
 package com.example.voxelvisage.ui.camera;
 
 import android.Manifest;
-import android.content.DialogInterface;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,7 +20,6 @@ import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.voxelvisage.R;
@@ -34,9 +34,9 @@ public class CameraFragment extends Fragment {
     private FragmentCameraBinding binding;
     private CameraViewModel cameraViewModel;
     private PreviewView previewView;
-    private CameraFocusHandler cameraFocusHandler;
     private DoubleTapHandler doubleTapHandler;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentCameraBinding.inflate(inflater, container, false);
@@ -45,28 +45,13 @@ public class CameraFragment extends Fragment {
         cameraViewModel = new ViewModelProvider(this).get(CameraViewModel.class);
 
         previewView = root.findViewById(R.id.previewView);
-        cameraFocusHandler = new CameraFocusHandler(requireContext());
+        doubleTapHandler = new DoubleTapHandler(() -> cameraViewModel.switchCamera());
 
-        doubleTapHandler = new DoubleTapHandler(new DoubleTapHandler.OnDoubleTapListener() {
-            @Override
-            public void onDoubleTap() {
-                cameraViewModel.switchCamera();
-            }
-        });
+        cameraViewModel.getCameraSelector().observe(getViewLifecycleOwner(), this::bindCamera);
 
-        cameraViewModel.getCameraSelector().observe(getViewLifecycleOwner(), new Observer<CameraSelector>() {
-            @Override
-            public void onChanged(CameraSelector cameraSelector) {
-                bindCamera(cameraSelector);
-            }
-        });
-
-        cameraViewModel.getIsCameraSwitched().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean isSwitched) {
-                if (isSwitched) {
-                    cameraViewModel.setIsCameraSwitched(false);
-                }
+        cameraViewModel.getIsCameraSwitched().observe(getViewLifecycleOwner(), isSwitched -> {
+            if (isSwitched) {
+                cameraViewModel.setIsCameraSwitched(false);
             }
         });
 
@@ -77,23 +62,21 @@ public class CameraFragment extends Fragment {
         }
 
         ImageButton switchCameraButton = root.findViewById(R.id.switchCameraButton);
-        switchCameraButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cameraViewModel.switchCamera();
-            }
+        switchCameraButton.setOnClickListener(v -> cameraViewModel.switchCamera());
+
+        ImageButton flashButton = root.findViewById(R.id.flashButton);
+        flashButton.setOnClickListener(v -> FlashHandler.enableFlash(flashButton));
+
+        ImageButton shutterButton = root.findViewById(R.id.shutterButton);
+        shutterButton.setOnClickListener(v -> {
+            // Add an animation here if you want
+            new Handler().postDelayed(() -> ShutterHandler.takePicture(requireContext()), 1000);
         });
 
-        previewView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                doubleTapHandler.onTouchEvent(event);
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    handleFocus(event.getX(), event.getY());
-                    return true;
-                }
-                return false;
-            }
+        previewView.setOnTouchListener((v, event) -> {
+            doubleTapHandler.onTouchEvent(event);
+            // Remove focus handling
+            return event.getAction() == MotionEvent.ACTION_DOWN;
         });
 
         return root;
@@ -130,13 +113,6 @@ public class CameraFragment extends Fragment {
         );
     }
 
-    private void handleFocus(float x, float y) {
-        CameraSelector cameraSelector = cameraViewModel.getCameraSelector().getValue();
-        if (cameraSelector != null) {
-            cameraFocusHandler.setFocusArea(x, y);
-        }
-    }
-
     private boolean allPermissionsGranted() {
         return ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
     }
@@ -145,19 +121,9 @@ public class CameraFragment extends Fragment {
         new AlertDialog.Builder(requireContext())
                 .setTitle("Permission Required")
                 .setMessage("Camera permission is required to use this feature. Please grant the permission.")
-                .setPositiveButton("Grant Permission", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ActivityCompat.requestPermissions(requireActivity(),
-                                new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
-                    }
-                })
-                .setNegativeButton("Exit App", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        requireActivity().finish();
-                    }
-                })
+                .setPositiveButton("Grant Permission", (dialog, which) -> ActivityCompat.requestPermissions(requireActivity(),
+                        new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION))
+                .setNegativeButton("Exit App", (dialog, which) -> requireActivity().finish())
                 .setCancelable(false)
                 .show();
     }
@@ -176,13 +142,6 @@ public class CameraFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
-        if (cameraFocusHandler != null) {
-            ViewGroup parentViewGroup = (ViewGroup) cameraFocusHandler.getParent();
-            if (parentViewGroup != null) {
-                parentViewGroup.removeView(cameraFocusHandler);
-            }
-        }
 
         binding = null;
     }
