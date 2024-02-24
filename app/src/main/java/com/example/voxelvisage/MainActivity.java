@@ -22,7 +22,6 @@ public class MainActivity extends AppCompatActivity {
 
     private int currentDestinationId;
 
-    private static final int REQUEST_CODE_PICK_IMAGES = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
         popupMenu.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == R.id.action_capture) {
+                navigateToCameraFragment();
                 return true;
             } else if (item.getItemId() == R.id.action_choose_from_gallery) {
                 openGallery();
@@ -106,6 +106,12 @@ public class MainActivity extends AppCompatActivity {
 
         popupMenu.show();
     }
+
+    private void navigateToCameraFragment() {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+        navController.navigate(R.id.navigation_camera);
+    }
+
 
     private void openGallery() {
         Intent galleryIntent = new Intent(this, GalleryViewerActivity.class);

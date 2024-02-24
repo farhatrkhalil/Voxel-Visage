@@ -1,6 +1,8 @@
 package com.example.voxelvisage;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class GalleryViewerActivity extends AppCompatActivity {
 
@@ -29,6 +32,8 @@ public class GalleryViewerActivity extends AppCompatActivity {
 
         gridView = findViewById(R.id.gridView);
         selectedImages = new ArrayList<>();
+
+        showPopupMessage();
 
         loadImages();
 
@@ -63,6 +68,19 @@ public class GalleryViewerActivity extends AppCompatActivity {
         }
     }
 
+    private void showPopupMessage() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Image Selection Requirement");
+        builder.setMessage("Please select 5 images and click on the right arrow to proceed.");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
 
     private void loadImages() {
         String[] projection = {MediaStore.Images.Media.DATA};
@@ -84,6 +102,8 @@ public class GalleryViewerActivity extends AppCompatActivity {
             }
             cursor.close();
         }
+
+        Collections.reverse(allImages);
 
         selectedStates = new boolean[allImages.size()];
 
