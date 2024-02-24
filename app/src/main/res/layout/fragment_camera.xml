@@ -41,7 +41,7 @@
         android:background="@android:color/transparent"
         android:src="@drawable/galleryicon"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Switch Camera Button at the bottom left corner -->
     <ImageButton

@@ -4,4 +4,7 @@
     <string name="title_camera">Camera</string>
     <string name="user_settings_title" />
     <string name="app_version" />
+    <string name="home">Home</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

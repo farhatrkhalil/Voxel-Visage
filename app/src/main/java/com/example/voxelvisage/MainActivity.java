@@ -3,6 +3,7 @@ package com.example.voxelvisage;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,11 +34,16 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
 
         navView.setOnNavigationItemSelectedListener(item -> {
-            navController.navigate(item.getItemId());
-            return true;
+            if (item.getItemId() == R.id.navigation_home) {
+                showPlusMenu(findViewById(R.id.navigation_home));
+                return true;
+            }
+
+            return NavigationUI.onNavDestinationSelected(item, Navigation.findNavController(this, R.id.nav_host_fragment_activity_main))
+                    || super.onOptionsItemSelected(item);
         });
 
-        navController.navigate(R.id.navigation_camera);
+        navController.navigate(R.id.navigation_home);
         Objects.requireNonNull(getSupportActionBar()).setTitle("Voxel Visage");
 
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
@@ -49,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (currentDestinationId == R.id.navigation_camera) {
+        if (currentDestinationId == R.id.navigation_home) {
             getMenuInflater().inflate(R.menu.camera_menu, menu);
         } else if (currentDestinationId == R.id.navigation_settings) {
             menu.clear();
@@ -61,6 +67,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (currentDestinationId == R.id.navigation_home && item.getItemId() == R.id.navigation_home ) {
+            showPlusMenu(findViewById(R.id.navigation_home));
+            return true;
+        }
+
         return NavigationUI.onNavDestinationSelected(item, Navigation.findNavController(this, R.id.nav_host_fragment_activity_main))
                 || super.onOptionsItemSelected(item);
     }
@@ -72,6 +83,26 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
+    private void showPlusMenu(android.view.View anchorView) {
+        PopupMenu popupMenu = new PopupMenu(this, anchorView);
+        popupMenu.getMenuInflater().inflate(R.menu.plus_menu, popupMenu.getMenu());
+
+        popupMenu.setOnMenuItemClickListener(item -> {
+            if (item.getItemId() == R.id.action_capture) {
+                return true;
+            } else if (item.getItemId() == R.id.action_choose_from_gallery) {
+                return true;
+            } else if (item.getItemId() == R.id.action_cancel) {
+                NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+                navController.navigate(R.id.navigation_home);
+                return true;
+            }
+            return false;
+        });
+
+        popupMenu.show();
+    }
+
     private void updateIcon(int itemId) {
         BottomNavigationView bottomNavigationView = findViewById(R.id.nav_view);
         Menu menu = bottomNavigationView.getMenu();
@@ -80,8 +111,8 @@ public class MainActivity extends AppCompatActivity {
             if (menuItem.getItemId() == itemId) {
                 if (itemId == R.id.navigation_settings) {
                     menuItem.setIcon(R.drawable.settingsfilled);
-                } else if (itemId == R.id.navigation_camera) {
-                    menuItem.setIcon(R.drawable.camerafilled);
+                } else if (itemId == R.id.navigation_home) {
+                    menuItem.setIcon(R.drawable.plusfilled);
                 }
             } else {
                 menuItem.setIcon(getDefaultIcon(menuItem.getItemId()));
@@ -92,8 +123,8 @@ public class MainActivity extends AppCompatActivity {
     private int getDefaultIcon(int itemId) {
         if (itemId == R.id.navigation_settings) {
             return R.drawable.settings;
-        } else if (itemId == R.id.navigation_camera) {
-            return R.drawable.camera;
+        } else if (itemId == R.id.navigation_home) {
+            return R.drawable.plus;
         }
         return 0;
     }
