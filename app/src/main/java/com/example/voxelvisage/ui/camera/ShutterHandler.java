@@ -9,6 +9,7 @@ import androidx.camera.core.ImageCapture;
 import androidx.camera.core.ImageCaptureException;
 import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.LifecycleOwner;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -22,7 +23,7 @@ public class ShutterHandler {
     private static int imagesTaken = 0;
     private static final int MAX_IMAGES = 5;
 
-    public static void takePicture(Context context) {
+    public static void takePicture(Context context, LifecycleOwner lifecycleOwner) {
         if (imagesTaken < MAX_IMAGES) {
             File photoFile = createImageFile(context);
 
@@ -30,7 +31,7 @@ public class ShutterHandler {
                 ProcessCameraProvider.getInstance(context).addListener(() -> {
                     try {
                         ProcessCameraProvider cameraProvider = ProcessCameraProvider.getInstance(context).get();
-                        bindImageCapture(cameraProvider, context, photoFile);
+                        bindImageCapture(cameraProvider, context, photoFile, lifecycleOwner);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -55,14 +56,14 @@ public class ShutterHandler {
         }
     }
 
-    private static void bindImageCapture(ProcessCameraProvider cameraProvider, Context context, File photoFile) {
+    private static void bindImageCapture(ProcessCameraProvider cameraProvider, Context context, File photoFile, LifecycleOwner lifecycleOwner) {
         ImageCapture imageCapture = new ImageCapture.Builder().build();
 
         ImageCapture.OutputFileOptions outputFileOptions = new ImageCapture.OutputFileOptions.Builder(photoFile).build();
 
         CameraSelector cameraSelector = new CameraSelector.Builder().requireLensFacing(CameraSelector.LENS_FACING_BACK).build();
 
-        Camera camera = cameraProvider.bindToLifecycle(null, cameraSelector, imageCapture);
+        Camera camera = cameraProvider.bindToLifecycle(lifecycleOwner, cameraSelector, imageCapture);
 
         imageCapture.takePicture(outputFileOptions, executor, new ImageCapture.OnImageSavedCallback() {
             @Override

@@ -35,6 +35,7 @@ public class CameraFragment extends Fragment {
     private CameraViewModel cameraViewModel;
     private PreviewView previewView;
     private DoubleTapHandler doubleTapHandler;
+    private PinchToZoomHandler pinchToZoomHandler;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -46,6 +47,14 @@ public class CameraFragment extends Fragment {
 
         previewView = root.findViewById(R.id.previewView);
         doubleTapHandler = new DoubleTapHandler(() -> cameraViewModel.switchCamera());
+        pinchToZoomHandler = new PinchToZoomHandler(requireContext(), scaleFactor -> {
+
+            float currentZoomRatio = cameraViewModel.getCameraInfo().getValue().getZoomState().getValue().getZoomRatio();
+
+            float newZoomRatio = currentZoomRatio * scaleFactor;
+
+            cameraViewModel.getCameraControl().getValue().setZoomRatio(newZoomRatio);
+        });
 
         cameraViewModel.getCameraSelector().observe(getViewLifecycleOwner(), this::bindCamera);
 
@@ -69,14 +78,16 @@ public class CameraFragment extends Fragment {
 
         ImageButton shutterButton = root.findViewById(R.id.shutterButton);
         shutterButton.setOnClickListener(v -> {
-            // Add an animation here if you want
-            new Handler().postDelayed(() -> ShutterHandler.takePicture(requireContext()), 1000);
+            new Handler().postDelayed(() -> ShutterHandler.takePicture(requireContext(), this), 1000);
         });
 
-        previewView.setOnTouchListener((v, event) -> {
-            doubleTapHandler.onTouchEvent(event);
-            // Remove focus handling
-            return event.getAction() == MotionEvent.ACTION_DOWN;
+        previewView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                doubleTapHandler.onTouchEvent(event);
+                pinchToZoomHandler.onTouchEvent(event);
+                return true;
+            }
         });
 
         return root;
