@@ -7,7 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.camera.CameraFragment">
 
-    <!-- Camera Preview View -->
     <androidx.camera.view.PreviewView
         android:id="@+id/previewView"
         android:layout_width="0dp"
@@ -17,33 +16,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Flash Button at the top right corner -->
     <ImageButton
         android:id="@+id/flashButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@android:color/transparent"
-        android:src="@drawable/flashon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="flash"
-        tools:ignore="HardcodedText" />
-
-    <!-- Gallery Button at the bottom right corner -->
-    <ImageButton
-        android:id="@+id/cameraButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:background="@android:color/transparent"
-        android:src="@drawable/galleryicon"
+        android:src="@drawable/flashon"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:contentDescription="flash"
+        tools:ignore="HardcodedText" />
 
-    <!-- Switch Camera Button at the bottom left corner -->
+
     <ImageButton
         android:id="@+id/switchCameraButton"
         android:layout_width="wrap_content"
@@ -55,7 +41,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <!-- Shutter Button at the bottom center -->
     <ImageButton
         android:id="@+id/shutterButton"
         android:layout_width="wrap_content"

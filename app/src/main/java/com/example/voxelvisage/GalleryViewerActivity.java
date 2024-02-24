@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -54,7 +56,11 @@ public class GalleryViewerActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
+
+            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+
+            navController.navigate(R.id.navigation_home);
+
             return true;
         } else if (item.getItemId() == R.id.action_process) {
             if (selectedImages.size() == 5) {
@@ -67,6 +73,7 @@ public class GalleryViewerActivity extends AppCompatActivity {
             return super.onOptionsItemSelected(item);
         }
     }
+
 
     private void showPopupMessage() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -112,6 +119,11 @@ public class GalleryViewerActivity extends AppCompatActivity {
     }
 
     private void toggleSelection(int position) {
+        if (selectedImages.size() >= 5 && !selectedStates[position]) {
+            Toast.makeText(this, "You can only select up to 5 images", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         selectedStates[position] = !selectedStates[position];
 
         if (selectedStates[position]) {

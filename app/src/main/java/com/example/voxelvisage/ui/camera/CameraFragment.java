@@ -2,34 +2,30 @@ package com.example.voxelvisage.ui.camera;
 
 import android.Manifest;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.camera.core.CameraSelector;
-import androidx.camera.core.ImageProxy;
+import androidx.camera.core.Preview;
 import androidx.camera.lifecycle.ProcessCameraProvider;
+import androidx.camera.view.PreviewView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.camera.core.Preview;
 
 import com.example.voxelvisage.R;
-import com.example.voxelvisage.SplashScreenActivity;
 import com.example.voxelvisage.databinding.FragmentCameraBinding;
 import com.google.common.util.concurrent.ListenableFuture;
 
-import androidx.camera.view.PreviewView;
-
 import java.util.concurrent.ExecutionException;
-
 
 public class CameraFragment extends Fragment {
 
@@ -47,23 +43,41 @@ public class CameraFragment extends Fragment {
 
         previewView = root.findViewById(R.id.previewView);
 
-        cameraViewModel.getCameraImage().observe(getViewLifecycleOwner(), new Observer<ImageProxy>() {
+        cameraViewModel.getCameraSelector().observe(getViewLifecycleOwner(), new Observer<CameraSelector>() {
             @Override
-            public void onChanged(ImageProxy imageProxy) {
+            public void onChanged(CameraSelector cameraSelector) {
+                bindCamera(cameraSelector);
+            }
+        });
 
+        cameraViewModel.getIsCameraSwitched().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isSwitched) {
+                if (isSwitched) {
+                    cameraViewModel.setIsCameraSwitched(false);
+                    // Optional: Perform actions after camera switch if needed
+                }
             }
         });
 
         if (allPermissionsGranted()) {
-            startCamera();
+            cameraViewModel.startCamera(requireContext());
         } else {
             ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA_PERMISSION);
         }
 
+        ImageButton switchCameraButton = root.findViewById(R.id.switchCameraButton);
+        switchCameraButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cameraViewModel.switchCamera();
+            }
+        });
+
         return root;
     }
 
-    private void startCamera() {
+    private void bindCamera(CameraSelector cameraSelector) {
         final ListenableFuture<ProcessCameraProvider> cameraProviderFuture =
                 ProcessCameraProvider.getInstance(requireContext());
 
@@ -71,7 +85,10 @@ public class CameraFragment extends Fragment {
             try {
                 ProcessCameraProvider cameraProvider = cameraProviderFuture.get();
 
-                requireActivity().runOnUiThread(() -> bindPreview(cameraProvider));
+                requireActivity().runOnUiThread(() -> {
+                    cameraProvider.unbindAll();
+                    bindPreview(cameraProvider, cameraSelector);
+                });
 
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
@@ -79,24 +96,16 @@ public class CameraFragment extends Fragment {
         }, ContextCompat.getMainExecutor(requireContext()));
     }
 
-    private void bindPreview(@NonNull ProcessCameraProvider cameraProvider) {
-        Preview preview = new Preview.Builder().build();
-        CameraSelector cameraSelector = new CameraSelector.Builder()
-                .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-                .build();
+    private void bindPreview(@NonNull ProcessCameraProvider cameraProvider, CameraSelector cameraSelector) {
+        Preview previewUseCase = new Preview.Builder().build();
 
-        preview.setSurfaceProvider(previewView.getSurfaceProvider());
+        previewUseCase.setSurfaceProvider(previewView.getSurfaceProvider());
 
-        cameraProvider.bindToLifecycle(this, cameraSelector, preview);
-
-        boolean appRestarted = requireActivity().getIntent().getBooleanExtra("appRestarted", false);
-        if (appRestarted) {
-            requireActivity().getIntent().removeExtra("appRestarted");
-
-            if (allPermissionsGranted()) {
-                restartApp();
-            }
-        }
+        cameraProvider.bindToLifecycle(
+                this,
+                cameraSelector,
+                previewUseCase
+        );
     }
 
     private boolean allPermissionsGranted() {
@@ -128,21 +137,11 @@ public class CameraFragment extends Fragment {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == REQUEST_CAMERA_PERMISSION) {
             if (allPermissionsGranted()) {
-                restartApp();
+                cameraViewModel.restartApp(requireActivity());
             } else {
                 showPermissionDeniedDialog();
             }
         }
-    }
-
-    private void restartApp() {
-        requireActivity().getIntent().putExtra("appRestarted", true);
-
-        Intent intent = new Intent(getActivity(), SplashScreenActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-
-        requireActivity().finish();
     }
 
     @Override

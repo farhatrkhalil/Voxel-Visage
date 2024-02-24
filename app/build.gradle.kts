@@ -25,10 +25,12 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     buildFeatures {
         viewBinding = true
         dataBinding = true
@@ -42,17 +44,15 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.7.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
     implementation("androidx.navigation:navigation-fragment:2.7.7")
-    implementation("androidx.databinding:databinding-runtime:8.2.2")
     implementation("androidx.navigation:navigation-ui:2.7.7")
     implementation("androidx.preference:preference:1.2.1")
 
     implementation("androidx.camera:camera-camera2:1.3.1")
     implementation("androidx.camera:camera-lifecycle:1.3.1")
     implementation("androidx.camera:camera-lifecycle:1.4.0-alpha04")
-    implementation("androidx.camera:camera-view:1.3.1")
+    implementation("androidx.camera:camera-view:1.4.0-alpha04")
     implementation("androidx.lifecycle:lifecycle-runtime:2.7.0")
     implementation("com.squareup.picasso:picasso:2.71828")
-
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
