@@ -1,4 +1,3 @@
-// HomeFragment.java
 package com.example.voxelvisage.ui.home;
 
 import android.os.Bundle;
