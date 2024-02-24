@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -33,6 +34,8 @@ public class CameraFragment extends Fragment {
     private FragmentCameraBinding binding;
     private CameraViewModel cameraViewModel;
     private PreviewView previewView;
+    private CameraFocusHandler cameraFocusHandler;
+    private DoubleTapHandler doubleTapHandler;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -42,6 +45,14 @@ public class CameraFragment extends Fragment {
         cameraViewModel = new ViewModelProvider(this).get(CameraViewModel.class);
 
         previewView = root.findViewById(R.id.previewView);
+        cameraFocusHandler = new CameraFocusHandler(requireContext());
+
+        doubleTapHandler = new DoubleTapHandler(new DoubleTapHandler.OnDoubleTapListener() {
+            @Override
+            public void onDoubleTap() {
+                cameraViewModel.switchCamera();
+            }
+        });
 
         cameraViewModel.getCameraSelector().observe(getViewLifecycleOwner(), new Observer<CameraSelector>() {
             @Override
@@ -55,7 +66,6 @@ public class CameraFragment extends Fragment {
             public void onChanged(Boolean isSwitched) {
                 if (isSwitched) {
                     cameraViewModel.setIsCameraSwitched(false);
-                    // Optional: Perform actions after camera switch if needed
                 }
             }
         });
@@ -71,6 +81,18 @@ public class CameraFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 cameraViewModel.switchCamera();
+            }
+        });
+
+        previewView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                doubleTapHandler.onTouchEvent(event);
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    handleFocus(event.getX(), event.getY());
+                    return true;
+                }
+                return false;
             }
         });
 
@@ -106,6 +128,13 @@ public class CameraFragment extends Fragment {
                 cameraSelector,
                 previewUseCase
         );
+    }
+
+    private void handleFocus(float x, float y) {
+        CameraSelector cameraSelector = cameraViewModel.getCameraSelector().getValue();
+        if (cameraSelector != null) {
+            cameraFocusHandler.setFocusArea(x, y);
+        }
     }
 
     private boolean allPermissionsGranted() {
@@ -147,6 +176,14 @@ public class CameraFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
+        if (cameraFocusHandler != null) {
+            ViewGroup parentViewGroup = (ViewGroup) cameraFocusHandler.getParent();
+            if (parentViewGroup != null) {
+                parentViewGroup.removeView(cameraFocusHandler);
+            }
+        }
+
         binding = null;
     }
 }
