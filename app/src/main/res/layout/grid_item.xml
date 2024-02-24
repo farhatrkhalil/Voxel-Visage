@@ -1,7 +1,6 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/imageView"
@@ -9,23 +8,12 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"/>
 
+    <!-- Tick indicator -->
     <ImageView
         android:id="@+id/tickImageView"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_gravity="top|end"
-        android:layout_margin="8dp"
-        android:background="@drawable/circle_background"
-        android:src="@drawable/ic_tick"
-        android:visibility="gone"/>
-
-    <TextView
-        android:id="@+id/folderNameTextView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="@android:color/black"
-        android:textColor="@android:color/white"
-        android:padding="8dp"
+        android:src="@drawable/ic_check"
+        android:layout_gravity="bottom|end"
         android:visibility="gone"/>
-</LinearLayout>
+</FrameLayout>

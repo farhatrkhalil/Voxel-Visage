@@ -47,11 +47,14 @@ public class GalleryAdapter extends BaseAdapter {
         }
 
         ImageView imageView = convertView.findViewById(R.id.imageView);
+        ImageView tickImageView = convertView.findViewById(R.id.tickImageView);
+
         Picasso.get().load(images.get(position)).resize(300, 300).centerCrop().into(imageView);
 
         if (selectedStates[position]) {
-            convertView.setBackgroundColor(ContextCompat.getColor(context, R.color.selected_item_background));
+            tickImageView.setVisibility(View.VISIBLE);
         } else {
+            tickImageView.setVisibility(View.GONE);
             convertView.setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent));
         }
 

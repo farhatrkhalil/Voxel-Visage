@@ -2,6 +2,7 @@ package com.example.voxelvisage;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.PopupMenu;
@@ -72,11 +73,18 @@ public class MainActivity extends AppCompatActivity {
         if (currentDestinationId == R.id.navigation_home && item.getItemId() == R.id.navigation_home) {
             showPlusMenu(findViewById(R.id.navigation_home));
             return true;
-        }
+        } else if (item.getItemId() == R.id.navigation_settings) {
+            Log.d("Navigation", "Settings clicked");
 
-        return NavigationUI.onNavDestinationSelected(item, Navigation.findNavController(this, R.id.nav_host_fragment_activity_main))
-                || super.onOptionsItemSelected(item);
+            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+            navController.navigate(R.id.navigation_settings);
+            return true;
+        } else {
+            return NavigationUI.onNavDestinationSelected(item, Navigation.findNavController(this, R.id.nav_host_fragment_activity_main))
+                    || super.onOptionsItemSelected(item);
+        }
     }
+
 
     @Override
     public boolean onSupportNavigateUp() {
