@@ -15,9 +15,9 @@ import java.util.ArrayList;
 
 public class GalleryAdapter extends BaseAdapter {
 
-    private Context context;
-    private ArrayList<Uri> images;
-    private boolean[] selectedStates;
+    private final Context context;
+    private final ArrayList<Uri> images;
+    private final boolean[] selectedStates;
 
     public GalleryAdapter(Context context, ArrayList<Uri> images, boolean[] selectedStates) {
         this.context = context;

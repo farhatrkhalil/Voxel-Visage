@@ -2,7 +2,6 @@ package com.example.voxelvisage;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +18,7 @@ import androidx.navigation.Navigation;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Objects;
 
 public class GalleryViewerActivity extends AppCompatActivity {
 
@@ -39,11 +39,9 @@ public class GalleryViewerActivity extends AppCompatActivity {
 
         loadImages();
 
-        gridView.setOnItemClickListener((parent, view, position, id) -> {
-            toggleSelection(position);
-        });
+        gridView.setOnItemClickListener((parent, view, position, id) -> toggleSelection(position));
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -79,10 +77,7 @@ public class GalleryViewerActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Image Selection Requirement");
         builder.setMessage("Please select 5 images and click on the right arrow to proceed.");
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
+        builder.setPositiveButton("OK", (dialog, which) -> {
         });
 
         AlertDialog alertDialog = builder.create();
@@ -127,7 +122,7 @@ public class GalleryViewerActivity extends AppCompatActivity {
         selectedStates[position] = !selectedStates[position];
 
         if (selectedStates[position]) {
-            selectedImages.add((Uri) galleryAdapter.getItem(position));
+            selectedImages.add(galleryAdapter.getItem(position));
         } else {
             selectedImages.remove(galleryAdapter.getItem(position));
         }
