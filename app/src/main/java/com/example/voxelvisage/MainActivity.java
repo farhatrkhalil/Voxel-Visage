@@ -1,6 +1,5 @@
 package com.example.voxelvisage;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -21,6 +20,7 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity {
 
     private int currentDestinationId;
+    private NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +31,11 @@ public class MainActivity extends AppCompatActivity {
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
         navView.setOnNavigationItemSelectedListener(item -> {
-            return NavigationUI.onNavDestinationSelected(item, Navigation.findNavController(this, R.id.nav_host_fragment_activity_main))
+            return NavigationUI.onNavDestinationSelected(item, navController)
                     || super.onOptionsItemSelected(item);
         });
 
@@ -65,19 +65,16 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (currentDestinationId == R.id.navigation_settings && item.getItemId() == R.id.navigation_settings) {
             Log.d("Navigation", "Settings clicked");
-
-            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
             navController.navigate(R.id.navigation_settings);
             return true;
         } else {
-            return NavigationUI.onNavDestinationSelected(item, Navigation.findNavController(this, R.id.nav_host_fragment_activity_main))
+            return NavigationUI.onNavDestinationSelected(item, navController)
                     || super.onOptionsItemSelected(item);
         }
     }
 
     @Override
     public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         return NavigationUI.navigateUp(navController, (Openable) null)
                 || super.onSupportNavigateUp();
     }

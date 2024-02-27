@@ -37,5 +37,19 @@
 
         </RelativeLayout>
 
+        <ImageButton
+            android:id="@+id/curvedSquare"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/border_shape"
+            android:importantForAccessibility="no" />
+
+
     </RelativeLayout>
 </layout>
