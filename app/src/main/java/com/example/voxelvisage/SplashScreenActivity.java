@@ -68,7 +68,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                     grantResults.length > 1 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 goToMainActivityDelayed();
             } else {
-                finish();
+                goToMainActivityDelayed();
             }
         }
     }
