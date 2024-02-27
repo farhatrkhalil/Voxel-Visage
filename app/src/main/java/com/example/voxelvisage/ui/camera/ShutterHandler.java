@@ -3,6 +3,7 @@ package com.example.voxelvisage.ui.camera;
 import android.content.Context;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.camera.core.Camera;
 import androidx.camera.core.CameraSelector;
 import androidx.camera.core.ImageCapture;
@@ -73,7 +74,7 @@ public class ShutterHandler {
             }
 
             @Override
-            public void onError(ImageCaptureException exception) {
+            public void onError(@NonNull ImageCaptureException exception) {
                 Toast.makeText(context, "Error capturing image", Toast.LENGTH_SHORT).show();
                 exception.printStackTrace();
             }
