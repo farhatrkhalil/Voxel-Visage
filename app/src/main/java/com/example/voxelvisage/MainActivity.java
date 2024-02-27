@@ -35,8 +35,13 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
 
         navView.setOnNavigationItemSelectedListener(item -> {
-            return NavigationUI.onNavDestinationSelected(item, navController)
-                    || super.onOptionsItemSelected(item);
+            if (item.getItemId() == R.id.navigation_home) {
+                navController.navigate(R.id.navigation_home);
+                return true;
+            } else {
+                return NavigationUI.onNavDestinationSelected(item, navController)
+                        || super.onOptionsItemSelected(item);
+            }
         });
 
         navController.navigate(R.id.navigation_home);
