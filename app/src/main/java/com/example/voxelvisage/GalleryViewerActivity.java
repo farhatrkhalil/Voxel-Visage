@@ -26,6 +26,7 @@ public class GalleryViewerActivity extends AppCompatActivity {
     private GalleryAdapter galleryAdapter;
     private ArrayList<Uri> selectedImages;
     private boolean[] selectedStates;
+    private boolean noImagesPopupShown = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +36,9 @@ public class GalleryViewerActivity extends AppCompatActivity {
         gridView = findViewById(R.id.gridView);
         selectedImages = new ArrayList<>();
 
-        showPopupMessage();
-
         loadImages();
+
+        showPopupMessage();
 
         gridView.setOnItemClickListener((parent, view, position, id) -> toggleSelection(position));
 
@@ -54,11 +55,12 @@ public class GalleryViewerActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-
-            NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
-
-            navController.navigate(R.id.navigation_home);
-
+            if (selectedImages.isEmpty() && !noImagesPopupShown) {
+                finish();
+            } else {
+                NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
+                navController.navigate(R.id.navigation_home);
+            }
             return true;
         } else if (item.getItemId() == R.id.action_process) {
             if (selectedImages.size() == 5) {
@@ -71,7 +73,6 @@ public class GalleryViewerActivity extends AppCompatActivity {
             return super.onOptionsItemSelected(item);
         }
     }
-
 
     private void showPopupMessage() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -105,12 +106,30 @@ public class GalleryViewerActivity extends AppCompatActivity {
             cursor.close();
         }
 
+        if (allImages.isEmpty()) {
+            showNoImagesPopup();
+            return;
+        }
+
         Collections.reverse(allImages);
 
         selectedStates = new boolean[allImages.size()];
 
         galleryAdapter = new GalleryAdapter(this, allImages, selectedStates);
         gridView.setAdapter(galleryAdapter);
+    }
+
+    private void showNoImagesPopup() {
+        noImagesPopupShown = true;
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("No Images Found");
+        builder.setMessage("There are no images in your gallery.");
+        builder.setPositiveButton("OK", (dialog, which) -> {
+            finish();
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     private void toggleSelection(int position) {
