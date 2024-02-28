@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import androidx.core.content.ContextCompat;
+
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class GalleryAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.grid_item, parent, false);
         }
 
-        ImageView imageView = convertView.findViewById(R.id.imageView);
+        CurvedImageView imageView = convertView.findViewById(R.id.imageView);
         ImageView tickImageView = convertView.findViewById(R.id.tickImageView);
 
         Picasso.get().load(images.get(position)).resize(300, 300).centerCrop().into(imageView);
@@ -60,6 +61,7 @@ public class GalleryAdapter extends BaseAdapter {
 
         return convertView;
     }
+
 
     public void updateView(int position, View convertView) {
         ImageView tickImageView = convertView.findViewById(R.id.tickImageView);
