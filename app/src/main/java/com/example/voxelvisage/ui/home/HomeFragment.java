@@ -51,7 +51,7 @@ public class HomeFragment extends Fragment {
     private void showOptionsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle("Choose an option")
-                .setItems(new CharSequence[]{"Capture an image", "Choose from gallery", "Cancel"},
+                .setItems(new CharSequence[]{"Capture An Image", "Choose From Gallery", "Cancel"},
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 handleOptionSelection(which);
