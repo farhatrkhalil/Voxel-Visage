@@ -2,6 +2,7 @@ package com.example.voxelvisage;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -64,6 +65,9 @@ public class GalleryViewerActivity extends AppCompatActivity {
             return true;
         } else if (item.getItemId() == R.id.action_process) {
             if (selectedImages.size() == 5) {
+                Intent intent = new Intent(GalleryViewerActivity.this, ResultActivity.class);
+                intent.putParcelableArrayListExtra("selectedImages", selectedImages);
+                startActivity(intent);
                 finish();
             } else {
                 Toast.makeText(this, "Please select 5 images", Toast.LENGTH_SHORT).show();

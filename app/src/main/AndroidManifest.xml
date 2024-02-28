@@ -48,6 +48,8 @@
             tools:ignore="RedundantLabel">
         </activity>
 
+        <activity android:name=".ResultActivity"/>
+
     </application>
 
 </manifest>
