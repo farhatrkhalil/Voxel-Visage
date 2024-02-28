@@ -60,4 +60,15 @@ public class GalleryAdapter extends BaseAdapter {
 
         return convertView;
     }
+
+    public void updateView(int position, View convertView) {
+        ImageView tickImageView = convertView.findViewById(R.id.tickImageView);
+
+        if (selectedStates[position]) {
+            tickImageView.setVisibility(View.VISIBLE);
+        } else {
+            tickImageView.setVisibility(View.GONE);
+            convertView.setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent));
+        }
+    }
 }

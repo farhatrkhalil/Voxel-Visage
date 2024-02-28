@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -35,6 +36,7 @@ public class GalleryViewerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_gallery_viewer);
 
         gridView = findViewById(R.id.gridView);
+        gridView.setSelector(android.R.color.transparent);
         selectedImages = new ArrayList<>();
 
         loadImages();
@@ -150,6 +152,9 @@ public class GalleryViewerActivity extends AppCompatActivity {
             selectedImages.remove(galleryAdapter.getItem(position));
         }
 
-        galleryAdapter.notifyDataSetChanged();
+        View view = gridView.getChildAt(position - gridView.getFirstVisiblePosition());
+        if (view != null) {
+            galleryAdapter.updateView(position, view);
+        }
     }
 }
