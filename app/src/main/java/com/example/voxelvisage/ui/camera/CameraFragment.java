@@ -64,6 +64,8 @@ public class CameraFragment extends Fragment {
             }
         });
 
+        showInstructionsDialog();
+
         if (allPermissionsGranted()) {
             cameraViewModel.startCamera(requireContext());
         } else {
@@ -126,6 +128,17 @@ public class CameraFragment extends Fragment {
 
     private boolean allPermissionsGranted() {
         return ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void showInstructionsDialog() {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Instructions")
+                .setMessage("Capture 5 images. The app will automatically navigate to the result page.")
+                .setPositiveButton("Got It", (dialog, which) -> {
+
+                })
+                .setCancelable(false)
+                .show();
     }
 
     private void showPermissionDeniedDialog() {
