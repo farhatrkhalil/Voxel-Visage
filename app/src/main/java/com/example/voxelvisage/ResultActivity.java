@@ -66,7 +66,6 @@ public class ResultActivity extends AppCompatActivity {
 
             imageView.setImageURI(Uri.parse("file://" + filePath));
 
-            imageContainer.addView(imageView);
         }
     }
 
