@@ -9,11 +9,17 @@
     android:paddingBottom="16dp"
     tools:context=".ResultActivity">
 
-    <ImageView
-        android:id="@+id/imageView"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_launcher_foreground"/>
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/imageContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+        </LinearLayout>
+
+    </ScrollView>
 
 </RelativeLayout>
