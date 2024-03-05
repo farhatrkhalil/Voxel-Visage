@@ -42,6 +42,7 @@ public class CameraFragment extends Fragment {
     private int capturedImages = 0;
     private ImageView cameraView;
     private TextView counterTextView;
+    private ArrayList<String> imageFilePaths = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -90,7 +91,7 @@ public class CameraFragment extends Fragment {
 
                 capturedImages++;
                 updateCounterText();
-
+                imageFilePaths.add(imagePath);
                 showImageSavedToast();
 
                 if (capturedImages == MAX_IMAGES) {
@@ -173,22 +174,10 @@ public class CameraFragment extends Fragment {
     }
     private void navigateToResultPage() {
         Intent resultIntent = new Intent(requireContext(), ResultActivity.class);
-
-        ArrayList<String> imageFilePaths = new ArrayList<>();
-
-        for (int i = 1; i <= MAX_IMAGES; i++) {
-            String fileName = String.format("IMG_%d.jpg", i);
-            File imageFile = new File(requireContext().getDir("images", Context.MODE_PRIVATE), fileName);
-            if (imageFile.exists()) {
-                imageFilePaths.add(imageFile.getAbsolutePath());
-            }
-        }
-
-
-        resultIntent.putStringArrayListExtra("imageFilePaths", imageFilePaths);
-
+        resultIntent.putExtra(IMAGE_FILE_PATHS_KEY, imageFilePaths);
         startActivity(resultIntent);
     }
+
 
 
 
