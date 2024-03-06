@@ -69,6 +69,7 @@ public class GalleryViewerActivity extends AppCompatActivity {
             if (selectedImages.size() == 5) {
                 Intent intent = new Intent(GalleryViewerActivity.this, ResultActivity.class);
                 intent.putParcelableArrayListExtra("selectedImages", selectedImages);
+                intent.putExtra("source", "GalleryViewerActivity");
                 startActivity(intent);
                 finish();
             } else {

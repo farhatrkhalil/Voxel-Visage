@@ -175,6 +175,7 @@ public class CameraFragment extends Fragment {
     private void navigateToResultPage() {
         Intent resultIntent = new Intent(requireContext(), ResultActivity.class);
         resultIntent.putExtra(IMAGE_FILE_PATHS_KEY, imageFilePaths);
+        resultIntent.putExtra("source", "CameraFragment");
         startActivity(resultIntent);
     }
 

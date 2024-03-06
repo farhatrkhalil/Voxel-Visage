@@ -13,12 +13,15 @@ import android.widget.RelativeLayout;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.voxelvisage.ui.camera.CameraFragment;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class ResultActivity extends AppCompatActivity {
 
     private LinearLayout imageContainer;
+    private String source;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,6 +34,8 @@ public class ResultActivity extends AppCompatActivity {
         if (intent != null) {
             ArrayList<String> imageFilePaths = intent.getStringArrayListExtra("imageFilePaths");
             ArrayList<Uri> selectedImages = intent.getParcelableArrayListExtra("selectedImages");
+
+            source = intent.getStringExtra("source");
 
             if (imageFilePaths != null && !imageFilePaths.isEmpty()) {
                 displayImages(imageFilePaths);
@@ -52,7 +57,16 @@ public class ResultActivity extends AppCompatActivity {
     }
 
     private void navigateBack() {
-        finish();
+        if ("GalleryViewerActivity".equals(source)) {
+            Intent intent = new Intent(this, GalleryViewerActivity.class);
+            startActivity(intent);
+            finish();
+        } else if ("CameraFragment".equals(source)) {
+            getSupportFragmentManager().popBackStack();
+            finish();
+        } else {
+            finish();
+        }
     }
 
     private void displayImages(ArrayList<String> imageFilePaths) {
