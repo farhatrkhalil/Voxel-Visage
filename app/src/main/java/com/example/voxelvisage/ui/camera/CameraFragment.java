@@ -141,6 +141,7 @@ public class CameraFragment extends Fragment {
                         triggerTakePictureButtonClick();
                     }
                 })
+                .setCancelable(false)
                 .show();
     }
 
@@ -172,14 +173,13 @@ public class CameraFragment extends Fragment {
                 })
                 .show();
     }
+
     private void navigateToResultPage() {
         Intent resultIntent = new Intent(requireContext(), ResultActivity.class);
         resultIntent.putExtra(IMAGE_FILE_PATHS_KEY, imageFilePaths);
         resultIntent.putExtra("source", "CameraFragment");
         startActivity(resultIntent);
     }
-
-
 
 
     private void showMaxImagesPopup() {

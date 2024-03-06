@@ -6,6 +6,7 @@
     android:paddingLeft="16dp"
     android:paddingTop="16dp"
     android:paddingRight="16dp"
+    android:screenOrientation="portrait"
     android:paddingBottom="16dp"
     tools:context=".ResultActivity">
 

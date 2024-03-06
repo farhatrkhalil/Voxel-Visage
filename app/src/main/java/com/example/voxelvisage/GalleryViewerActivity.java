@@ -89,6 +89,7 @@ public class GalleryViewerActivity extends AppCompatActivity {
         });
 
         AlertDialog alertDialog = builder.create();
+        alertDialog.setCancelable(false);
         alertDialog.show();
     }
 
