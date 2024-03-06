@@ -52,8 +52,6 @@ public class ResultActivity extends AppCompatActivity {
     }
 
     private void navigateBack() {
-        Intent intent = new Intent(this, GalleryViewerActivity.class);
-        startActivity(intent);
         finish();
     }
 
