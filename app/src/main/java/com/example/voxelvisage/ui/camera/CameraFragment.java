@@ -52,6 +52,7 @@ public class CameraFragment extends Fragment {
         cameraView = rootView.findViewById(R.id.CameraView);
         Button captureButton = rootView.findViewById(R.id.Button);
         Button proceedButton = rootView.findViewById(R.id.Proceed);
+        proceedButton.setEnabled(false);
         proceedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,10 +100,21 @@ public class CameraFragment extends Fragment {
 
     private void updateProceedButtonState() {
         Button proceedButton = requireView().findViewById(R.id.Proceed);
-        proceedButton.setEnabled(true);
+
+        if (capturedImages == MAX_IMAGES && !imageFilePaths.isEmpty()) {
+            proceedButton.setEnabled(true);
+        } else {
+            proceedButton.setEnabled(false);
+        }
     }
 
+    private void updateButtonStateAfterCapture() {
+        updateCounterText();
 
+        Button proceedButton = requireView().findViewById(R.id.Proceed);
+
+        proceedButton.setEnabled(capturedImages > 0 && capturedImages == MAX_IMAGES && !imageFilePaths.isEmpty());
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -117,7 +129,7 @@ public class CameraFragment extends Fragment {
                 loadFullResolutionImage(imagePath);
 
                 capturedImages++;
-                updateCounterText();
+                updateButtonStateAfterCapture();
                 imageFilePaths.add(imagePath);
                 showImageSavedToast();
 
@@ -220,9 +232,13 @@ public class CameraFragment extends Fragment {
 
     private void resetCapture() {
         capturedImages = 0;
+        imageFilePaths.clear();
         updateCounterText();
         cameraView.setImageBitmap(null);
+        updateProceedButtonState();
     }
+
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -248,6 +264,7 @@ public class CameraFragment extends Fragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             clearCapturedImage();
+                            resetCapture();
                         }
                     })
                     .setNegativeButton("Cancel", null)
@@ -269,7 +286,7 @@ public class CameraFragment extends Fragment {
         capturedImages = 0;
         updateCounterText();
         cameraView.setImageBitmap(null);
-        Toast.makeText(requireContext(), "Captured image removed", Toast.LENGTH_SHORT).show();
+        Toast.makeText(requireContext(), "Captured image/s removed", Toast.LENGTH_SHORT).show();
     }
 
 }
