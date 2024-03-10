@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,9 +55,15 @@ public class CameraFragment extends Fragment {
         cameraView = rootView.findViewById(R.id.CameraView);
         Button captureButton = rootView.findViewById(R.id.Button);
         Button proceedButton = rootView.findViewById(R.id.Proceed);
+        ImageButton leftArrow = rootView.findViewById(R.id.LeftArrow);
+        ImageButton rightArrow = rootView.findViewById(R.id.RightArrow);
         proceedButton.setEnabled(false);
         proceedButton.setOnClickListener(v -> handleProceedButtonClick());
         counterTextView = rootView.findViewById(R.id.CounterTextView);
+        leftArrow.setOnClickListener(v -> showPreviousImage());
+        rightArrow.setOnClickListener(v -> showNextImage());
+
+        updateArrowButtonsState();
 
         updateCounterText();
 
@@ -77,6 +85,7 @@ public class CameraFragment extends Fragment {
         }
 
         setHasOptionsMenu(true);
+
 
         return rootView;
     }
@@ -301,18 +310,21 @@ public class CameraFragment extends Fragment {
     }
 
     private void showPreviousImage() {
-        if (currentImageIndex > 0) {
+        if (currentImageIndex > 0 && currentImageIndex < imageFilePaths.size()) {
             currentImageIndex--;
             loadImageAtIndex(currentImageIndex);
         }
+        updateArrowButtonsState();
     }
 
     private void showNextImage() {
-        if (currentImageIndex < imageFilePaths.size() - 1) {
+        if (currentImageIndex >= 0 && currentImageIndex < imageFilePaths.size() - 1) {
             currentImageIndex++;
             loadImageAtIndex(currentImageIndex);
         }
+        updateArrowButtonsState();
     }
+
 
     private void loadImageAtIndex(int index) {
         String imagePath = imageFilePaths.get(index);
@@ -320,5 +332,14 @@ public class CameraFragment extends Fragment {
         updateCounterText();
     }
 
+    private void updateArrowButtonsState() {
+        if (getView() != null) {
+            ImageButton leftArrow = requireView().findViewById(R.id.LeftArrow);
+            ImageButton rightArrow = requireView().findViewById(R.id.RightArrow);
 
+            leftArrow.setEnabled(currentImageIndex > 0);
+            rightArrow.setEnabled(currentImageIndex < imageFilePaths.size() - 1);
+
+        }
+    }
 }
