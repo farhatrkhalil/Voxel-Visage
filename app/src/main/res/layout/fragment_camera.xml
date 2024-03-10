@@ -41,12 +41,25 @@
             tools:ignore="HardcodedText" />
 
         <Button
+            android:id="@+id/Button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
+            android:layout_marginBottom="56dp"
             android:text="Take Picture"
-            android:id="@+id/Button"
-            tools:ignore="HardcodedText"
-            android:layout_alignParentBottom="true"/>
+            tools:ignore="HardcodedText" />
+
+        <Button
+            android:id="@+id/Proceed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="5dp"
+            android:text="Proceed"
+            tools:ignore="HardcodedText" />
+
+
     </RelativeLayout>
 </FrameLayout>

@@ -1,5 +1,6 @@
 package com.example.voxelvisage.ui.camera;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -50,11 +51,19 @@ public class CameraFragment extends Fragment {
 
         cameraView = rootView.findViewById(R.id.CameraView);
         Button captureButton = rootView.findViewById(R.id.Button);
+        Button proceedButton = rootView.findViewById(R.id.Proceed);
+        proceedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleProceedButtonClick();
+            }
+        });
         counterTextView = rootView.findViewById(R.id.CounterTextView);
 
         updateCounterText();
 
         captureButton.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("QueryPermissionsNeeded")
             @Override
             public void onClick(View v) {
                 if (capturedImages < MAX_IMAGES) {
@@ -64,7 +73,9 @@ public class CameraFragment extends Fragment {
                     }
                 } else {
                     showMaxImagesPopup();
+                    updateProceedButtonState();
                 }
+                updateProceedButtonState();
             }
         });
 
@@ -76,6 +87,22 @@ public class CameraFragment extends Fragment {
 
         return rootView;
     }
+
+    private void handleProceedButtonClick() {
+        if (capturedImages == MAX_IMAGES && !imageFilePaths.isEmpty()) {
+            navigateToResultPage();
+        } else {
+            Toast.makeText(requireContext(), "Capture 5 images before proceeding.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    private void updateProceedButtonState() {
+        Button proceedButton = requireView().findViewById(R.id.Proceed);
+        proceedButton.setEnabled(true);
+    }
+
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -162,6 +189,7 @@ public class CameraFragment extends Fragment {
                 .setPositiveButton("Proceed", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        updateProceedButtonState();
                         navigateToResultPage();
                     }
                 })
@@ -243,4 +271,5 @@ public class CameraFragment extends Fragment {
         cameraView.setImageBitmap(null);
         Toast.makeText(requireContext(), "Captured image removed", Toast.LENGTH_SHORT).show();
     }
+
 }
