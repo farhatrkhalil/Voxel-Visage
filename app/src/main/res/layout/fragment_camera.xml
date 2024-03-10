@@ -1,10 +1,10 @@
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:screenOrientation="portrait"
-    android:layout_margin="15dp">
+    android:layout_margin="15dp"
+    android:screenOrientation="portrait">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,10 +16,10 @@
             android:layout_width="250dp"
             android:layout_height="450dp"
             android:layout_above="@+id/CounterTextView"
-            android:layout_marginEnd="27dp"
-            android:layout_marginBottom="25dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:layout_marginEnd="27dp"
+            android:layout_marginBottom="25dp"
             android:scaleType="fitXY"
             tools:ignore="ContentDescription" />
 
@@ -59,6 +59,35 @@
             android:layout_marginBottom="5dp"
             android:text="Proceed"
             tools:ignore="HardcodedText" />
+
+        <ImageButton
+            android:id="@+id/LeftArrow"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="3dp"
+            android:layout_marginEnd="2dp"
+            android:layout_toStartOf="@+id/CameraView"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/left_arrow"
+            tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+        <ImageButton
+            android:id="@+id/RightArrow"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="2dp"
+            android:layout_toStartOf="@+id/CameraView"
+            android:background="@null"
+            android:scaleType="fitCenter"
+            android:src="@drawable/right_arrow"
+            tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
 
 
     </RelativeLayout>
