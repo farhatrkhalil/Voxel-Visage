@@ -3,17 +3,18 @@ package com.example.voxelvisage.ui.camera;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -22,7 +23,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import com.example.voxelvisage.R;
@@ -43,8 +43,9 @@ public class CameraFragment extends Fragment {
     private int capturedImages = 0;
     private ImageView cameraView;
     private TextView counterTextView;
-    private ArrayList<String> imageFilePaths = new ArrayList<>();
+    private final ArrayList<String> imageFilePaths = new ArrayList<>();
 
+    @SuppressLint("QueryPermissionsNeeded")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_camera, container, false);
@@ -53,31 +54,22 @@ public class CameraFragment extends Fragment {
         Button captureButton = rootView.findViewById(R.id.Button);
         Button proceedButton = rootView.findViewById(R.id.Proceed);
         proceedButton.setEnabled(false);
-        proceedButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                handleProceedButtonClick();
-            }
-        });
+        proceedButton.setOnClickListener(v -> handleProceedButtonClick());
         counterTextView = rootView.findViewById(R.id.CounterTextView);
 
         updateCounterText();
 
-        captureButton.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("QueryPermissionsNeeded")
-            @Override
-            public void onClick(View v) {
-                if (capturedImages < MAX_IMAGES) {
-                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    if (takePictureIntent.resolveActivity(requireActivity().getPackageManager()) != null) {
-                        startActivityForResult(takePictureIntent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
-                    }
-                } else {
-                    showMaxImagesPopup();
-                    updateProceedButtonState();
+        captureButton.setOnClickListener(v -> {
+            if (capturedImages < MAX_IMAGES) {
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(requireActivity().getPackageManager()) != null) {
+                    startActivityForResult(takePictureIntent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
                 }
+            } else {
+                showMaxImagesPopup();
                 updateProceedButtonState();
             }
+            updateProceedButtonState();
         });
 
         if (savedInstanceState == null) {
@@ -101,11 +93,7 @@ public class CameraFragment extends Fragment {
     private void updateProceedButtonState() {
         Button proceedButton = requireView().findViewById(R.id.Proceed);
 
-        if (capturedImages == MAX_IMAGES && !imageFilePaths.isEmpty()) {
-            proceedButton.setEnabled(true);
-        } else {
-            proceedButton.setEnabled(false);
-        }
+        proceedButton.setEnabled(capturedImages == MAX_IMAGES && !imageFilePaths.isEmpty());
     }
 
     private void updateButtonStateAfterCapture() {
@@ -124,6 +112,7 @@ public class CameraFragment extends Fragment {
             if (extras != null) {
 
                 Bitmap capturedImage = (Bitmap) data.getExtras().get("data");
+                assert capturedImage != null;
                 String imagePath = saveImageToFile(capturedImage);
 
                 loadFullResolutionImage(imagePath);
@@ -143,7 +132,7 @@ public class CameraFragment extends Fragment {
     private String saveImageToFile(Bitmap imageBitmap) {
         File directory = requireContext().getDir("images", Context.MODE_PRIVATE);
 
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String fileName = "IMG_" + timeStamp + ".jpg";
 
         File file = new File(directory, fileName);
@@ -166,6 +155,8 @@ public class CameraFragment extends Fragment {
         }
     }
 
+
+    @SuppressLint("DefaultLocale")
     private void updateCounterText() {
         counterTextView.setText(String.format("%d/%d", capturedImages, MAX_IMAGES));
     }
@@ -174,12 +165,7 @@ public class CameraFragment extends Fragment {
         new AlertDialog.Builder(requireContext())
                 .setTitle("Instructions")
                 .setMessage("Capture 5 images, and then click on proceed to navigate to the result page.")
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        triggerTakePictureButtonClick();
-                    }
-                })
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> triggerTakePictureButtonClick())
                 .setCancelable(false)
                 .show();
     }
@@ -198,19 +184,11 @@ public class CameraFragment extends Fragment {
         new AlertDialog.Builder(requireContext())
                 .setTitle("Capture Completed")
                 .setMessage("Do you want to proceed or reset?")
-                .setPositiveButton("Proceed", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        updateProceedButtonState();
-                        navigateToResultPage();
-                    }
+                .setPositiveButton("Proceed", (dialog, which) -> {
+                    updateProceedButtonState();
+                    navigateToResultPage();
                 })
-                .setNegativeButton("Reset", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        resetCapture();
-                    }
-                })
+                .setNegativeButton("Reset", (dialog, which) -> resetCapture())
                 .show();
     }
 
@@ -239,9 +217,8 @@ public class CameraFragment extends Fragment {
     }
 
 
-
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    public void onCreateOptionsMenu(@androidx.annotation.NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.capture_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
@@ -260,12 +237,9 @@ public class CameraFragment extends Fragment {
             new AlertDialog.Builder(requireContext())
                     .setTitle("Clear Captured Image")
                     .setMessage("Are you sure you want to remove the captured image/s?")
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            clearCapturedImage();
-                            resetCapture();
-                        }
+                    .setPositiveButton("OK", (dialog, which) -> {
+                        clearCapturedImage();
+                        resetCapture();
                     })
                     .setNegativeButton("Cancel", null)
                     .show();
@@ -288,5 +262,63 @@ public class CameraFragment extends Fragment {
         cameraView.setImageBitmap(null);
         Toast.makeText(requireContext(), "Captured image/s removed", Toast.LENGTH_SHORT).show();
     }
+
+    private int currentImageIndex = 0;
+
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        cameraView.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
+            private float startX;
+
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        startX = event.getX();
+                        return true;
+
+                    case MotionEvent.ACTION_UP:
+                        float endX = event.getX();
+                        float deltaX = endX - startX;
+
+                        if (Math.abs(deltaX) > 50) {
+                            if (deltaX > 0) {
+                                showPreviousImage();
+                            } else {
+                                showNextImage();
+                            }
+                        }
+                        return true;
+                }
+                return false;
+            }
+        });
+    }
+
+    private void showPreviousImage() {
+        if (currentImageIndex > 0) {
+            currentImageIndex--;
+            loadImageAtIndex(currentImageIndex);
+        }
+    }
+
+    private void showNextImage() {
+        if (currentImageIndex < imageFilePaths.size() - 1) {
+            currentImageIndex++;
+            loadImageAtIndex(currentImageIndex);
+        }
+    }
+
+    private void loadImageAtIndex(int index) {
+        String imagePath = imageFilePaths.get(index);
+        loadFullResolutionImage(imagePath);
+        updateCounterText();
+    }
+
 
 }
