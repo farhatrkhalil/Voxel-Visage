@@ -2,6 +2,7 @@ package com.example.voxelvisage.ui.settings;
 
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -30,6 +31,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
         boolean isSystemDarkMode = currentNightMode == Configuration.UI_MODE_NIGHT_YES;
 
+        setCheckBoxPreferenceIcon("darkMode", R.drawable.darkmode_dark, R.drawable.darkmode_light, isSystemDarkMode);
+        setPreferenceIcon("developers_info", R.drawable.developers_dark, R.drawable.developers_light, isSystemDarkMode);
+        setPreferenceIcon("privacy_policy", R.drawable.privacypolicy_dark, R.drawable.privacypolicy_light, isSystemDarkMode);
+        setPreferenceIcon("license", R.drawable.license_dark, R.drawable.license_light, isSystemDarkMode);
+        setPreferenceIcon("version", R.drawable.version_dark, R.drawable.version_light, isSystemDarkMode);
+
+
         darkModePreference.setChecked(isSystemDarkMode);
 
         darkModePreference.setOnPreferenceClickListener(preference -> {
@@ -37,6 +45,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             updateTheme(isDarkModeEnabled);
             return true;
         });
+
 
         Preference developersPreference = findPreference("developers_info");
         assert developersPreference != null;
@@ -89,6 +98,34 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return true;
         });
     }
+
+    private void setCheckBoxPreferenceIcon(String key, int lightModeIconResId, int darkModeIconResId, boolean isSystemDarkMode) {
+        CheckBoxPreference checkBoxPreference = findPreference(key);
+        if (checkBoxPreference != null) {
+            int iconResourceId = isSystemDarkMode ? darkModeIconResId : lightModeIconResId;
+            Drawable iconDrawable = getDrawable(iconResourceId);
+            checkBoxPreference.setIcon(iconDrawable);
+        }
+    }
+
+    private void setPreferenceIcon(String key, int lightModeIconResId, int darkModeIconResId, boolean isSystemDarkMode) {
+        Preference preference = findPreference(key);
+        if (preference != null) {
+            int iconResourceId = isSystemDarkMode ? darkModeIconResId : lightModeIconResId;
+            Drawable iconDrawable = getDrawable(iconResourceId);
+            preference.setIcon(iconDrawable);
+        }
+    }
+
+    private Drawable getDrawable(int resourceId) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            return getResources().getDrawable(resourceId, requireContext().getTheme());
+        } else {
+            // For versions below Lollipop
+            return getResources().getDrawable(resourceId);
+        }
+    }
+
 
     private void updateTheme(boolean isDarkModeEnabled) {
         int nightMode = isDarkModeEnabled ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO;

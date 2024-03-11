@@ -29,7 +29,7 @@
         <CheckBoxPreference
             app:iconSpaceReserved="true"
             android:key="darkMode"
-            android:icon="@drawable/darkmode"
+            android:icon="@drawable/darkmode_dark"
             android:title="Dark Mode"
             android:summaryOn="Dark mode enabled"
             android:summaryOff="Dark mode disabled" />
@@ -41,27 +41,29 @@
 
         <Preference
             android:title="Developers"
-            android:icon="@drawable/developers"
+            android:icon="@drawable/developers_dark"
             android:summary="Meet the talented developers behind this app"
             android:key="developers_info"/>
 
         <Preference
             android:title="Privacy Policy"
-            android:icon="@drawable/privacypolicy"
+            android:icon="@drawable/privacypolicy_dark"
             android:summary="View our privacy policy"
             android:key="privacy_policy"/>
 
         <Preference
             app:iconSpaceReserved="true"
             android:title="App License"
-            android:icon="@drawable/license"
+            android:icon="@drawable/license_dark"
             android:summary="This app is licensed under the MIT License.Thank you for using our app!"
             android:key="license"/>
 
         <Preference
             android:title="App Version"
-            android:icon="@drawable/version"
-            android:summary="1.0"/>
+            android:icon="@drawable/version_dark"
+            android:summary="1.0"
+            android:key="version"/>
+
     </PreferenceCategory>
 
 </PreferenceScreen>
