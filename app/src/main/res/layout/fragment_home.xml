@@ -47,7 +47,7 @@
             android:layout_marginBottom="16dp"
             android:clickable="true"
             android:focusable="true"
-            android:background="@drawable/border_shape"
+            android:background="@drawable/add_btn"
             android:importantForAccessibility="no" />
 
 
