@@ -1,14 +1,16 @@
 package com.example.voxelvisage.ui.settings;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.navigation.Navigation;
 import androidx.preference.CheckBoxPreference;
+import androidx.navigation.NavController;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
@@ -25,8 +27,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         CheckBoxPreference darkModePreference = findPreference("darkMode");
         assert darkModePreference != null;
 
-        int currentNightMode = AppCompatDelegate.getDefaultNightMode();
-        darkModePreference.setChecked(currentNightMode == AppCompatDelegate.MODE_NIGHT_YES);
+        int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
+        boolean isSystemDarkMode = currentNightMode == Configuration.UI_MODE_NIGHT_YES;
+
+        darkModePreference.setChecked(isSystemDarkMode);
 
         darkModePreference.setOnPreferenceClickListener(preference -> {
             boolean isDarkModeEnabled = darkModePreference.isChecked();
@@ -93,6 +97,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(requireContext()).edit();
         editor.putBoolean("darkMode", isDarkModeEnabled);
         editor.apply();
+
+        navigateToHomeFragment();
     }
+
+    private void navigateToHomeFragment() {
+        NavController navController = Navigation.findNavController(requireView());
+        navController.navigate(R.id.navigation_home);
+    }
+
 
 }
