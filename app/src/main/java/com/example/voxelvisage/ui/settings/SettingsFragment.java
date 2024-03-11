@@ -33,8 +33,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
 
-        CheckBoxPreference notificationsPreference = findPreference("notifications");
-        assert notificationsPreference != null;
         CheckBoxPreference darkModePreference = findPreference("darkMode");
         assert darkModePreference != null;
 
@@ -43,13 +41,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         setThemeIcons();
 
-        setNotificationsIcon(notificationsPreference, isSystemDarkMode);
-
-        notificationsPreference.setOnPreferenceClickListener(preference -> {
-            boolean areNotificationsEnabled = notificationsPreference.isChecked();
-            updateNotificationsIcon(notificationsPreference, areNotificationsEnabled, isSystemDarkMode);
-            return true;
-        });
 
         darkModePreference.setChecked(isSystemDarkMode);
 
@@ -59,13 +50,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return true;
         });
 
-        Objects.requireNonNull(getPreferenceManager().getSharedPreferences()).registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> {
-            assert key != null;
-            if (key.equals("darkMode")) {
-                setThemeIcons();
-                handler.postDelayed(() -> setNotificationsIcon(notificationsPreference, isSystemDarkMode), 100);
-            }
-        });
 
         Preference developersPreference = findPreference("developers_info");
         assert developersPreference != null;
@@ -142,22 +126,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         return getResources().getDrawable(resourceId, requireContext().getTheme());
     }
 
-    private void setNotificationsIcon(CheckBoxPreference preference, boolean isSystemDarkMode) {
-        int iconResourceId = isSystemDarkMode ? R.drawable.notifications_light_off : R.drawable.notifications_dark_off;
-        Drawable iconDrawable = getDrawable(iconResourceId);
-        preference.setIcon(iconDrawable);
-    }
-
-    private void updateNotificationsIcon(CheckBoxPreference preference, boolean areNotificationsEnabled, boolean isSystemDarkMode) {
-        int iconResourceId;
-        if (areNotificationsEnabled) {
-            iconResourceId = isSystemDarkMode ? R.drawable.notifications_light_on : R.drawable.notifications_dark_on;
-        } else {
-            iconResourceId = isSystemDarkMode ? R.drawable.notifications_light_off : R.drawable.notifications_dark_off;
-        }
-        Drawable iconDrawable = getDrawable(iconResourceId);
-        preference.setIcon(iconDrawable);
-    }
 
     private void updateTheme(boolean isDarkModeEnabled) {
         int nightMode = isDarkModeEnabled ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO;
@@ -166,13 +134,6 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(requireContext()).edit();
         editor.putBoolean("darkMode", isDarkModeEnabled);
         editor.apply();
-
-        handler.postDelayed(() -> {
-            if (isAdded() && getContext() != null) {
-                setThemeIcons();
-                setNotificationsIcon(findPreference("notifications"), isSystemDarkMode);
-            }
-        }, 200);
 
         navigateToHomeFragment();
     }

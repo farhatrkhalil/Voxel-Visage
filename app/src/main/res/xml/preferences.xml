@@ -7,25 +7,6 @@
         android:title="@string/user_settings_title"
         app:iconSpaceReserved="false">
 
-
-        <CheckBoxPreference
-            app:iconSpaceReserved="true"
-            android:key="auto_update"
-            android:icon="@drawable/autoupdate"
-            android:title="Auto Update"
-            android:summaryOn="Automatically update the app"
-            android:summaryOff="App is updated manually"
-            android:defaultValue="true"/>
-
-        <CheckBoxPreference
-            app:iconSpaceReserved="true"
-            android:key="notifications"
-            android:icon="@drawable/notifications_dark_off"
-            android:title="Notifications"
-            android:summaryOn="You will receive notifications"
-            android:summaryOff="Notifications off"
-            android:defaultValue="off"/>
-
         <CheckBoxPreference
             app:iconSpaceReserved="true"
             android:key="darkMode"
