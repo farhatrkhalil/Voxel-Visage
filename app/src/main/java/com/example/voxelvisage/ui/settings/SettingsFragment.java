@@ -1,10 +1,13 @@
 package com.example.voxelvisage.ui.settings;
 
+import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
@@ -18,25 +21,35 @@ import androidx.preference.PreferenceManager;
 
 import com.example.voxelvisage.R;
 
+import java.util.Objects;
+
 public class SettingsFragment extends PreferenceFragmentCompat {
+
+    private boolean isSystemDarkMode;
+    private Handler handler = new Handler(Looper.getMainLooper());
 
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
 
+        CheckBoxPreference notificationsPreference = findPreference("notifications");
+        assert notificationsPreference != null;
         CheckBoxPreference darkModePreference = findPreference("darkMode");
         assert darkModePreference != null;
 
         int currentNightMode = getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK;
-        boolean isSystemDarkMode = currentNightMode == Configuration.UI_MODE_NIGHT_YES;
+        isSystemDarkMode = currentNightMode == Configuration.UI_MODE_NIGHT_YES;
 
-        setCheckBoxPreferenceIcon("darkMode", R.drawable.darkmode_dark, R.drawable.darkmode_light, isSystemDarkMode);
-        setPreferenceIcon("developers_info", R.drawable.developers_dark, R.drawable.developers_light, isSystemDarkMode);
-        setPreferenceIcon("privacy_policy", R.drawable.privacypolicy_dark, R.drawable.privacypolicy_light, isSystemDarkMode);
-        setPreferenceIcon("license", R.drawable.license_dark, R.drawable.license_light, isSystemDarkMode);
-        setPreferenceIcon("version", R.drawable.version_dark, R.drawable.version_light, isSystemDarkMode);
+        setThemeIcons();
 
+        setNotificationsIcon(notificationsPreference, isSystemDarkMode);
+
+        notificationsPreference.setOnPreferenceClickListener(preference -> {
+            boolean areNotificationsEnabled = notificationsPreference.isChecked();
+            updateNotificationsIcon(notificationsPreference, areNotificationsEnabled, isSystemDarkMode);
+            return true;
+        });
 
         darkModePreference.setChecked(isSystemDarkMode);
 
@@ -46,6 +59,13 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             return true;
         });
 
+        Objects.requireNonNull(getPreferenceManager().getSharedPreferences()).registerOnSharedPreferenceChangeListener((sharedPreferences, key) -> {
+            assert key != null;
+            if (key.equals("darkMode")) {
+                setThemeIcons();
+                handler.postDelayed(() -> setNotificationsIcon(notificationsPreference, isSystemDarkMode), 100);
+            }
+        });
 
         Preference developersPreference = findPreference("developers_info");
         assert developersPreference != null;
@@ -99,8 +119,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         });
     }
 
-    private void setCheckBoxPreferenceIcon(String key, int lightModeIconResId, int darkModeIconResId, boolean isSystemDarkMode) {
-        CheckBoxPreference checkBoxPreference = findPreference(key);
+    private void setCheckBoxPreferenceIcon(int lightModeIconResId, int darkModeIconResId, boolean isSystemDarkMode) {
+        CheckBoxPreference checkBoxPreference = findPreference("darkMode");
         if (checkBoxPreference != null) {
             int iconResourceId = isSystemDarkMode ? darkModeIconResId : lightModeIconResId;
             Drawable iconDrawable = getDrawable(iconResourceId);
@@ -117,15 +137,27 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private Drawable getDrawable(int resourceId) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            return getResources().getDrawable(resourceId, requireContext().getTheme());
-        } else {
-            // For versions below Lollipop
-            return getResources().getDrawable(resourceId);
-        }
+        return getResources().getDrawable(resourceId, requireContext().getTheme());
     }
 
+    private void setNotificationsIcon(CheckBoxPreference preference, boolean isSystemDarkMode) {
+        int iconResourceId = isSystemDarkMode ? R.drawable.notifications_light_off : R.drawable.notifications_dark_off;
+        Drawable iconDrawable = getDrawable(iconResourceId);
+        preference.setIcon(iconDrawable);
+    }
+
+    private void updateNotificationsIcon(CheckBoxPreference preference, boolean areNotificationsEnabled, boolean isSystemDarkMode) {
+        int iconResourceId;
+        if (areNotificationsEnabled) {
+            iconResourceId = isSystemDarkMode ? R.drawable.notifications_light_on : R.drawable.notifications_dark_on;
+        } else {
+            iconResourceId = isSystemDarkMode ? R.drawable.notifications_light_off : R.drawable.notifications_dark_off;
+        }
+        Drawable iconDrawable = getDrawable(iconResourceId);
+        preference.setIcon(iconDrawable);
+    }
 
     private void updateTheme(boolean isDarkModeEnabled) {
         int nightMode = isDarkModeEnabled ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO;
@@ -135,13 +167,28 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         editor.putBoolean("darkMode", isDarkModeEnabled);
         editor.apply();
 
+        handler.postDelayed(() -> {
+            if (isAdded() && getContext() != null) {
+                setThemeIcons();
+                setNotificationsIcon(findPreference("notifications"), isSystemDarkMode);
+            }
+        }, 200);
+
         navigateToHomeFragment();
     }
+
+
 
     private void navigateToHomeFragment() {
         NavController navController = Navigation.findNavController(requireView());
         navController.navigate(R.id.navigation_home);
     }
 
-
+    private void setThemeIcons() {
+        setCheckBoxPreferenceIcon(R.drawable.darkmode_dark, R.drawable.darkmode_light, isSystemDarkMode);
+        setPreferenceIcon("developers_info", R.drawable.developers_dark, R.drawable.developers_light, isSystemDarkMode);
+        setPreferenceIcon("privacy_policy", R.drawable.privacypolicy_dark, R.drawable.privacypolicy_light, isSystemDarkMode);
+        setPreferenceIcon("license", R.drawable.license_dark, R.drawable.license_light, isSystemDarkMode);
+        setPreferenceIcon("version", R.drawable.version_dark, R.drawable.version_light, isSystemDarkMode);
+    }
 }

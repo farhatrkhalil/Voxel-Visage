@@ -20,11 +20,11 @@
         <CheckBoxPreference
             app:iconSpaceReserved="true"
             android:key="notifications"
-            android:icon="@drawable/notifications"
+            android:icon="@drawable/notifications_dark_off"
             android:title="Notifications"
             android:summaryOn="You will receive notifications"
             android:summaryOff="Notifications off"
-            android:defaultValue="true"/>
+            android:defaultValue="off"/>
 
         <CheckBoxPreference
             app:iconSpaceReserved="true"
