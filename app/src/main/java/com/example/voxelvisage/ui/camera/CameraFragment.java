@@ -4,9 +4,11 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,6 +27,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import com.example.voxelvisage.R;
 import com.example.voxelvisage.ResultActivity;
@@ -46,7 +49,7 @@ public class CameraFragment extends Fragment {
     private TextView counterTextView;
     private final ArrayList<String> imageFilePaths = new ArrayList<>();
 
-    @SuppressLint("QueryPermissionsNeeded")
+    @SuppressLint({"QueryPermissionsNeeded", "ClickableViewAccessibility"})
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_camera, container, false);
@@ -62,7 +65,9 @@ public class CameraFragment extends Fragment {
         leftArrow.setOnClickListener(v -> showPreviousImage());
         rightArrow.setOnClickListener(v -> showNextImage());
 
+        updateArrowIcons();
         updateArrowButtonsState();
+
 
         updateCounterText();
 
@@ -85,9 +90,40 @@ public class CameraFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
+        cameraView.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
+            private float startX;
+
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        startX = event.getX();
+                        return true;
+
+                    case MotionEvent.ACTION_UP:
+                        float endX = event.getX();
+                        float deltaX = endX - startX;
+
+                        if (Math.abs(deltaX) > 50) {
+                            if (deltaX > 0) {
+                                showPreviousImage();
+                            } else {
+                                showNextImage();
+                            }
+                        }
+                        return true;
+                }
+                return false;
+            }
+        });
+
+        new Handler().postDelayed(() -> rightArrow.performClick(), 100);
 
         return rootView;
     }
+
 
     private void handleProceedButtonClick() {
         if (capturedImages == MAX_IMAGES && !imageFilePaths.isEmpty()) {
@@ -226,9 +262,12 @@ public class CameraFragment extends Fragment {
 
 
     @Override
-    public void onCreateOptionsMenu(@androidx.annotation.NonNull Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.capture_menu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
+    public void onCreateOptionsMenu(Menu menu, @NonNull MenuInflater inflater) {
+        menu.clear();
+
+        MenuItem removeItem = menu.add(Menu.NONE, R.id.action_button_remove, Menu.NONE, "Remove");
+        removeItem.setIcon(R.drawable.ic_custom_remove);
+        removeItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
     }
 
     @Override
@@ -314,6 +353,7 @@ public class CameraFragment extends Fragment {
             loadImageAtIndex(currentImageIndex);
         }
         updateArrowButtonsState();
+        updateArrowIcons();
     }
 
     private void showNextImage() {
@@ -322,6 +362,7 @@ public class CameraFragment extends Fragment {
             loadImageAtIndex(currentImageIndex);
         }
         updateArrowButtonsState();
+        updateArrowIcons();
     }
 
 
@@ -339,6 +380,32 @@ public class CameraFragment extends Fragment {
             leftArrow.setEnabled(currentImageIndex > 0);
             rightArrow.setEnabled(currentImageIndex < imageFilePaths.size() - 1);
 
+            if (capturedImages == 1) {
+                leftArrow.setVisibility(View.INVISIBLE);
+                rightArrow.setVisibility(View.INVISIBLE);
+            } else {
+                leftArrow.setVisibility(View.VISIBLE);
+                rightArrow.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+
+    private void updateArrowIcons() {
+        if (getView() != null) {
+            ImageButton leftArrow = requireView().findViewById(R.id.LeftArrow);
+            ImageButton rightArrow = requireView().findViewById(R.id.RightArrow);
+
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+            boolean isDarkMode = sharedPreferences.getBoolean("darkMode", false);
+
+            if (isDarkMode) {
+                leftArrow.setImageResource(R.drawable.left_arrow_light);
+                rightArrow.setImageResource(R.drawable.right_arrow_light);
+            } else {
+                leftArrow.setImageResource(R.drawable.left_arrow);
+                rightArrow.setImageResource(R.drawable.right_arrow);
+            }
         }
     }
 }

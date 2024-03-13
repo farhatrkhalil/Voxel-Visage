@@ -26,7 +26,6 @@ import java.util.Objects;
 public class SettingsFragment extends PreferenceFragmentCompat {
 
     private boolean isSystemDarkMode;
-    private Handler handler = new Handler(Looper.getMainLooper());
 
     @RequiresApi(api = Build.VERSION_CODES.R)
     @Override

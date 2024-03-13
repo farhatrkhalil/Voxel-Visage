@@ -5,7 +5,7 @@
     <item
         android:id="@+id/action_button_remove"
         android:icon="@drawable/ic_custom_remove"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:title="Remove"
         tools:ignore="HardcodedText" />
 
