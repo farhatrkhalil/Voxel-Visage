@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="3dp"
+    android:layout_margin="5dp"
     android:screenOrientation="portrait">
 
     <RelativeLayout
@@ -41,21 +41,23 @@
 
         <Button
             android:id="@+id/Button"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
             android:layout_marginBottom="56dp"
+            android:layout_centerHorizontal="true"
             android:text="Take Picture"
             tools:ignore="HardcodedText" />
 
         <Button
             android:id="@+id/Proceed"
-            android:layout_width="match_parent"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
             android:layout_marginBottom="5dp"
+            android:layout_centerHorizontal="true"
             android:text="Proceed"
             tools:ignore="HardcodedText" />
 

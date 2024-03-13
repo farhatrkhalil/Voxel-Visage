@@ -2,6 +2,7 @@ package com.example.voxelvisage;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -94,7 +95,7 @@ public class GalleryViewerActivity extends AppCompatActivity {
     }
 
     private void loadImages() {
-        String[] projection = {MediaStore.Images.Media.DATA};
+        String[] projection = {MediaStore.Images.Media._ID};
         Cursor cursor = getContentResolver().query(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 projection,
@@ -107,8 +108,8 @@ public class GalleryViewerActivity extends AppCompatActivity {
 
         if (cursor != null) {
             while (cursor.moveToNext()) {
-                String imagePath = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA));
-                Uri imageUri = Uri.parse("file://" + imagePath);
+                long imageId = cursor.getLong(cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID));
+                Uri imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, imageId);
                 allImages.add(imageUri);
             }
             cursor.close();
@@ -131,7 +132,7 @@ public class GalleryViewerActivity extends AppCompatActivity {
         noImagesPopupShown = true;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("No Images Found");
-        builder.setMessage("There are no images in your gallery.");
+        builder.setMessage("Either you have denied permission to access images or there are no images in your gallery.");
         builder.setPositiveButton("OK", (dialog, which) -> {
             finish();
         });

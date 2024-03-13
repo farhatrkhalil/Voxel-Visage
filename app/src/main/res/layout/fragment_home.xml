@@ -41,14 +41,15 @@
             android:id="@+id/curvedSquare"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
+            android:background="@drawable/add_btn"
             android:clickable="true"
             android:focusable="true"
-            android:background="@drawable/add_btn"
-            android:importantForAccessibility="no" />
+            android:importantForAccessibility="no"
+            tools:ignore="TouchTargetSizeCheck" />
 
 
     </RelativeLayout>
