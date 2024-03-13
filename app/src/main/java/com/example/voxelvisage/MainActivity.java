@@ -1,11 +1,15 @@
 package com.example.voxelvisage;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.customview.widget.Openable;
 import androidx.navigation.NavController;
@@ -72,6 +76,9 @@ public class MainActivity extends AppCompatActivity {
             Log.d("Navigation", "Settings clicked");
             navController.navigate(R.id.navigation_settings);
             return true;
+        } else if (item.getItemId() == R.id.action_button_share) {
+            shareOptionsDialog();
+            return true;
         } else {
             return NavigationUI.onNavDestinationSelected(item, navController)
                     || super.onOptionsItemSelected(item);
@@ -108,5 +115,46 @@ public class MainActivity extends AppCompatActivity {
             return R.drawable.home;
         }
         return 0;
+    }
+
+    private void shareOptionsDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Thanks for sharing our app!")
+                .setItems(new CharSequence[]{"Share Url", "Copy Url", "Cancel"},
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                handleShareOptionSelection(which);
+                            }
+                        });
+
+        builder.create().show();
+    }
+
+    private void handleShareOptionSelection(int selectedOption) {
+        String url = "https://github.com/farhatrkhalil/Voxel-Visage";
+        switch (selectedOption) {
+            case 0:
+                shareUrl(url);
+                break;
+            case 1:
+                copyToClipboard(url);
+                Toast.makeText(MainActivity.this, "URL copied to clipboard", Toast.LENGTH_SHORT).show();
+                break;
+            case 2:
+                break;
+        }
+    }
+
+    private void copyToClipboard(String text) {
+        android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        android.content.ClipData clip = android.content.ClipData.newPlainText("Copied Text", text);
+        clipboard.setPrimaryClip(clip);
+    }
+
+    private void shareUrl(String url) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, url);
+        startActivity(Intent.createChooser(shareIntent, "Share URL"));
     }
 }
