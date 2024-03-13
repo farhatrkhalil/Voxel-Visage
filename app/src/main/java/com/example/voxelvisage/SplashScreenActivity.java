@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import androidx.annotation.NonNull;
@@ -15,8 +16,8 @@ import androidx.core.content.ContextCompat;
 public class SplashScreenActivity extends AppCompatActivity {
 
     private static final int SPLASH_DISPLAY_DURATION = 5000;
-    private static final int REQUEST_CAMERA_PERMISSION = 101;
-    private static final int REQUEST_STORAGE_PERMISSION = 102;
+
+    private static final int REQUEST_PERMISSIONS = 123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,16 +42,26 @@ public class SplashScreenActivity extends AppCompatActivity {
     }
 
     private boolean checkStoragePermission() {
-        return ContextCompat.checkSelfPermission(
-                this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return ContextCompat.checkSelfPermission(
+                    this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        } else {
+            return ContextCompat.checkSelfPermission(
+                    this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+        }
     }
 
     private void requestPermissions() {
-        String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE};
+        String[] permissions;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            permissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE};
+        } else {
+            permissions = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        }
         ActivityCompat.requestPermissions(
                 this,
                 permissions,
-                REQUEST_CAMERA_PERMISSION
+                REQUEST_PERMISSIONS
         );
     }
 
@@ -65,11 +76,15 @@ public class SplashScreenActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CAMERA_PERMISSION || requestCode == REQUEST_STORAGE_PERMISSION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED &&
-                    grantResults.length > 1 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                goToMainActivityDelayed();
-            } else {
+        if (requestCode == REQUEST_PERMISSIONS) {
+            boolean allPermissionsGranted = true;
+            for (int result : grantResults) {
+                if (result != PackageManager.PERMISSION_GRANTED) {
+                    allPermissionsGranted = false;
+                    break;
+                }
+            }
+            if (allPermissionsGranted) {
                 goToMainActivityDelayed();
             }
         }
