@@ -65,8 +65,8 @@ public class CameraFragment extends Fragment {
         leftArrow.setOnClickListener(v -> showPreviousImage());
         rightArrow.setOnClickListener(v -> showNextImage());
 
+
         updateArrowIcons();
-        updateArrowButtonsState();
 
 
         updateCounterText();
@@ -118,6 +118,7 @@ public class CameraFragment extends Fragment {
                 return false;
             }
         });
+        updateArrowButtonsState();
 
         new Handler().postDelayed(() -> rightArrow.performClick(), 100);
 
@@ -169,6 +170,7 @@ public class CameraFragment extends Fragment {
                 if (capturedImages == MAX_IMAGES) {
                     showCompletionPopup();
                 }
+                updateArrowButtonsState();
             }
         }
     }
@@ -256,6 +258,10 @@ public class CameraFragment extends Fragment {
         capturedImages = 0;
         imageFilePaths.clear();
         updateCounterText();
+        ImageButton leftArrow = requireView().findViewById(R.id.LeftArrow);
+        ImageButton rightArrow = requireView().findViewById(R.id.RightArrow);
+        leftArrow.setVisibility(View.INVISIBLE);
+        rightArrow.setVisibility(View.INVISIBLE);
         cameraView.setImageBitmap(null);
         updateProceedButtonState();
     }
@@ -380,15 +386,16 @@ public class CameraFragment extends Fragment {
             leftArrow.setEnabled(currentImageIndex > 0);
             rightArrow.setEnabled(currentImageIndex < imageFilePaths.size() - 1);
 
-            if (capturedImages == 1) {
-                leftArrow.setVisibility(View.INVISIBLE);
-                rightArrow.setVisibility(View.INVISIBLE);
-            } else {
+            if (imageFilePaths.size() >= 2) {
                 leftArrow.setVisibility(View.VISIBLE);
                 rightArrow.setVisibility(View.VISIBLE);
+            } else {
+                leftArrow.setVisibility(View.INVISIBLE);
+                rightArrow.setVisibility(View.INVISIBLE);
             }
         }
     }
+
 
 
     private void updateArrowIcons() {
