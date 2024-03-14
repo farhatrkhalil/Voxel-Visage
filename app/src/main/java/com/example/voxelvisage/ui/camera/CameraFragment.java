@@ -48,6 +48,7 @@ public class CameraFragment extends Fragment {
     private ImageView cameraView;
     private TextView counterTextView;
     private final ArrayList<String> imageFilePaths = new ArrayList<>();
+    private ImageButton closeButton;
 
     @SuppressLint({"QueryPermissionsNeeded", "ClickableViewAccessibility"})
     @Override
@@ -64,6 +65,9 @@ public class CameraFragment extends Fragment {
         counterTextView = rootView.findViewById(R.id.CounterTextView);
         leftArrow.setOnClickListener(v -> showPreviousImage());
         rightArrow.setOnClickListener(v -> showNextImage());
+        closeButton = rootView.findViewById(R.id.CloseButton);
+        closeButton.setOnClickListener(v -> handleRemoveImageClick());
+        updateCloseButtonVisibility();
 
 
         updateArrowIcons();
@@ -125,6 +129,48 @@ public class CameraFragment extends Fragment {
         return rootView;
     }
 
+    private void handleRemoveImageClick() {
+        if (!imageFilePaths.isEmpty() && currentImageIndex < imageFilePaths.size()) {
+            showRemoveImageConfirmationDialog();
+        }
+    }
+
+    private void showRemoveImageConfirmationDialog() {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Remove Image")
+                .setMessage("Are you sure you want to remove this image?")
+                .setPositiveButton("Yes", (dialog, which) -> removeCurrentImage())
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    private void removeCurrentImage() {
+        if (!imageFilePaths.isEmpty() && currentImageIndex < imageFilePaths.size()) {
+            imageFilePaths.remove(currentImageIndex);
+            capturedImages--;
+            updateCounterText();
+            updateButtonStateAfterCapture();
+            closeButton.setVisibility(imageFilePaths.isEmpty() ? View.GONE : View.VISIBLE);
+            updateCloseButtonVisibility();
+            Toast.makeText(requireContext(), "Image removed", Toast.LENGTH_SHORT).show();
+            if (!imageFilePaths.isEmpty()) {
+                if (currentImageIndex >= imageFilePaths.size()) {
+                    currentImageIndex = imageFilePaths.size() - 1;
+                }
+                loadImageAtIndex(currentImageIndex);
+            } else {
+                cameraView.setImageBitmap(null);
+                closeButton.setVisibility(View.GONE);
+                updateArrowButtonsState();
+            }
+        }
+    }
+
+
+    private void updateCloseButtonVisibility() {
+        closeButton.setVisibility(imageFilePaths.isEmpty() ? View.GONE : View.VISIBLE);
+    }
+
 
     private void handleProceedButtonClick() {
         if (capturedImages == MAX_IMAGES && !imageFilePaths.isEmpty()) {
@@ -165,6 +211,7 @@ public class CameraFragment extends Fragment {
                 capturedImages++;
                 updateButtonStateAfterCapture();
                 imageFilePaths.add(imagePath);
+                updateCloseButtonVisibility();
                 showImageSavedToast();
 
                 if (capturedImages == MAX_IMAGES) {
@@ -292,7 +339,6 @@ public class CameraFragment extends Fragment {
                     .setMessage("Are you sure you want to remove the captured image/s?")
                     .setPositiveButton("OK", (dialog, which) -> {
                         clearCapturedImage();
-                        resetCapture();
                     })
                     .setNegativeButton("Cancel", null)
                     .show();
@@ -313,6 +359,7 @@ public class CameraFragment extends Fragment {
         capturedImages = 0;
         updateCounterText();
         cameraView.setImageBitmap(null);
+        closeButton.setVisibility(View.GONE);
         Toast.makeText(requireContext(), "Captured image/s removed", Toast.LENGTH_SHORT).show();
     }
 
@@ -373,10 +420,13 @@ public class CameraFragment extends Fragment {
 
 
     private void loadImageAtIndex(int index) {
-        String imagePath = imageFilePaths.get(index);
-        loadFullResolutionImage(imagePath);
-        updateCounterText();
+        if (!imageFilePaths.isEmpty() && index >= 0 && index < imageFilePaths.size()) {
+            String imagePath = imageFilePaths.get(index);
+            loadFullResolutionImage(imagePath);
+            updateCounterText();
+        }
     }
+
 
     private void updateArrowButtonsState() {
         if (getView() != null) {

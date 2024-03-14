@@ -37,7 +37,8 @@
                 android:layout_gravity="top|end"
                 android:background="@null"
                 android:padding="10dp"
-                android:src="@drawable/close_drawable" />
+                android:src="@drawable/close_drawable"
+                android:visibility="gone"/>
 
         </androidx.cardview.widget.CardView>
 
