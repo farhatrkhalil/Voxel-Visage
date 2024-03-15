@@ -7,6 +7,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -20,12 +23,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
@@ -71,7 +77,6 @@ public class CameraFragment extends Fragment {
 
 
         updateArrowIcons();
-
 
         updateCounterText();
 
@@ -124,7 +129,7 @@ public class CameraFragment extends Fragment {
         });
         updateArrowButtonsState();
 
-        new Handler().postDelayed(() -> rightArrow.performClick(), 100);
+        new Handler().postDelayed(rightArrow::performClick, 100);
 
         return rootView;
     }
@@ -342,9 +347,7 @@ public class CameraFragment extends Fragment {
             new AlertDialog.Builder(requireContext())
                     .setTitle("Clear Captured Image")
                     .setMessage("Are you sure you want to remove the captured image/s?")
-                    .setPositiveButton("OK", (dialog, which) -> {
-                        clearCapturedImage();
-                    })
+                    .setPositiveButton("OK", (dialog, which) -> clearCapturedImage())
                     .setNegativeButton("Cancel", null)
                     .show();
         } else {
@@ -365,6 +368,9 @@ public class CameraFragment extends Fragment {
         updateCounterText();
         cameraView.setImageBitmap(null);
         closeButton.setVisibility(View.GONE);
+        imageFilePaths.clear();
+        updateArrowButtonsState();
+        updateProceedButtonState();
         Toast.makeText(requireContext(), "Captured image/s removed", Toast.LENGTH_SHORT).show();
     }
 
@@ -451,23 +457,29 @@ public class CameraFragment extends Fragment {
         }
     }
 
-
-
     private void updateArrowIcons() {
         if (getView() != null) {
-            ImageButton leftArrow = requireView().findViewById(R.id.LeftArrow);
-            ImageButton rightArrow = requireView().findViewById(R.id.RightArrow);
-
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
             boolean isDarkMode = sharedPreferences.getBoolean("darkMode", false);
 
+            int leftArrowResId;
+            int rightArrowResId;
+
+            ImageButton leftArrow = requireView().findViewById(R.id.LeftArrow);
+            ImageButton rightArrow = requireView().findViewById(R.id.RightArrow);
+
             if (isDarkMode) {
-                leftArrow.setImageResource(R.drawable.left_arrow_light);
-                rightArrow.setImageResource(R.drawable.right_arrow_light);
+                leftArrowResId = R.drawable.left_arrow_light;
+                rightArrowResId = R.drawable.right_arrow_light;
             } else {
-                leftArrow.setImageResource(R.drawable.left_arrow);
-                rightArrow.setImageResource(R.drawable.right_arrow);
+                leftArrowResId = R.drawable.left_arrow;
+                rightArrowResId = R.drawable.right_arrow;
             }
+
+
+
+            leftArrow.setImageResource(leftArrowResId);
+            rightArrow.setImageResource(rightArrowResId);
         }
     }
 }
