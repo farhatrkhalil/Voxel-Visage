@@ -152,6 +152,8 @@ public class CameraFragment extends Fragment {
             updateButtonStateAfterCapture();
             closeButton.setVisibility(imageFilePaths.isEmpty() ? View.GONE : View.VISIBLE);
             updateCloseButtonVisibility();
+            updateProceedButtonState();
+            updateArrowButtonsState();
             Toast.makeText(requireContext(), "Image removed", Toast.LENGTH_SHORT).show();
             if (!imageFilePaths.isEmpty()) {
                 if (currentImageIndex >= imageFilePaths.size()) {
@@ -161,7 +163,10 @@ public class CameraFragment extends Fragment {
             } else {
                 cameraView.setImageBitmap(null);
                 closeButton.setVisibility(View.GONE);
-                updateArrowButtonsState();
+                ImageButton leftArrow = requireView().findViewById(R.id.LeftArrow);
+                ImageButton rightArrow = requireView().findViewById(R.id.RightArrow);
+                leftArrow.setVisibility(View.INVISIBLE);
+                rightArrow.setVisibility(View.INVISIBLE);
             }
         }
     }
