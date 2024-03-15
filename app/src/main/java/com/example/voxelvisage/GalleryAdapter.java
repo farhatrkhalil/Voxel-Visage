@@ -19,7 +19,7 @@ public class GalleryAdapter extends BaseAdapter {
     private final Context context;
     private final ArrayList<Uri> images;
     private final boolean[] selectedStates;
-    private int visibleItemCount = 15;
+    private int visibleItemCount = 20;
     private int loadedItemCount = 0;
 
 

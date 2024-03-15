@@ -84,7 +84,7 @@
         <ImageButton
             android:id="@+id/LeftArrow"
             android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_height="60dp"
             android:layout_centerVertical="true"
             android:background="@null"
             android:scaleType="fitCenter"
@@ -94,7 +94,7 @@
         <ImageButton
             android:id="@+id/RightArrow"
             android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_height="60dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginTop="2dp"
