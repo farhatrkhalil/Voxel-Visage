@@ -49,7 +49,7 @@ public class CameraFragment extends Fragment {
 
     private static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 100;
     public static final String IMAGE_FILE_PATHS_KEY = "imageFilePaths";
-    private static final int MAX_IMAGES = 5;
+    private static final int MAX_IMAGES = 3;
     private int capturedImages = 0;
     private ImageView cameraView;
     private TextView counterTextView;
@@ -186,7 +186,7 @@ public class CameraFragment extends Fragment {
         if (capturedImages == MAX_IMAGES && !imageFilePaths.isEmpty()) {
             navigateToResultPage();
         } else {
-            Toast.makeText(requireContext(), "Capture 5 images before proceeding.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(requireContext(), "Capture 3 images before proceeding.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -267,7 +267,7 @@ public class CameraFragment extends Fragment {
     private void showInstructionsPopup() {
         new AlertDialog.Builder(requireContext())
                 .setTitle("Instructions")
-                .setMessage("Capture 5 images, and then click on proceed to navigate to the result page.")
+                .setMessage("Capture 3 images, and then click on proceed to navigate to the result page.")
                 .setPositiveButton(android.R.string.ok, (dialog, which) -> triggerTakePictureButtonClick())
                 .setCancelable(false)
                 .show();

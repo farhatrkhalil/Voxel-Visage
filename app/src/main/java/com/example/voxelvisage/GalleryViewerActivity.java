@@ -67,14 +67,14 @@ public class GalleryViewerActivity extends AppCompatActivity {
             }
             return true;
         } else if (item.getItemId() == R.id.action_process) {
-            if (selectedImages.size() == 5) {
+            if (selectedImages.size() == 3) {
                 Intent intent = new Intent(GalleryViewerActivity.this, ResultActivity.class);
                 intent.putParcelableArrayListExtra("selectedImages", selectedImages);
                 intent.putExtra("source", "GalleryViewerActivity");
                 startActivity(intent);
                 finish();
             } else {
-                Toast.makeText(this, "Please select 5 images", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Please select 3 images", Toast.LENGTH_SHORT).show();
             }
             return true;
         } else {
@@ -85,7 +85,7 @@ public class GalleryViewerActivity extends AppCompatActivity {
     private void showPopupMessage() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Image Selection Requirement");
-        builder.setMessage("Please select 5 images and click on the right arrow to proceed.");
+        builder.setMessage("Please select 3 images and click on the right arrow to proceed.");
         builder.setPositiveButton("OK", (dialog, which) -> {
         });
 
@@ -142,8 +142,8 @@ public class GalleryViewerActivity extends AppCompatActivity {
     }
 
     private void toggleSelection(int position) {
-        if (selectedImages.size() >= 5 && !selectedStates[position]) {
-            Toast.makeText(this, "You can only select up to 5 images", Toast.LENGTH_SHORT).show();
+        if (selectedImages.size() >= 3 && !selectedStates[position]) {
+            Toast.makeText(this, "You can only select up to 3 images", Toast.LENGTH_SHORT).show();
             return;
         }
 
