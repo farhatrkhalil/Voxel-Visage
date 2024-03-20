@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!-- Background option outside the overflow menu -->
+    <item
+        android:id="@+id/action_background"
+        android:title="Background"
+        android:icon="@drawable/galleryicon"
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction,HardcodedText" />
+
+    <!-- Camera option outside the overflow menu -->
+    <item
+        android:id="@+id/action_camera_model"
+        android:title="Camera"
+        android:icon="@drawable/camerafilled"
+        app:showAsAction="always"
+        tools:ignore="HardcodedText" />
+
+    <item
+        android:id="@+id/action_overflow"
+        android:title="Overflow"
+        android:icon="@drawable/overflow"
+        app:showAsAction="always"
+        tools:ignore="HardcodedText">
+        <menu>
+            <item
+                android:id="@+id/action_download_model"
+                android:title="Download Model" />
+            <item
+                android:id="@+id/action_share_model"
+                android:title="Share Model" />
+        </menu>
+    </item>
+</menu>
