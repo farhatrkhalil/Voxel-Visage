@@ -1,15 +1,16 @@
 package com.example.voxelvisage;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.webkit.WebView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.view.MenuItem;
-import android.webkit.WebView;
-
 public class ResultActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +35,20 @@ public class ResultActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             onBackPressed();
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = getIntent();
+        String source = intent.getStringExtra("source");
+
+        if ("GalleryViewerActivity".equals(source)) {
+            Intent galleryIntent = new Intent(this, GalleryViewerActivity.class);
+            startActivity(galleryIntent);
+            finish();
         }
     }
 }
