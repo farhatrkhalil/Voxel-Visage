@@ -17,7 +17,7 @@ public class ResultActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
 
-        WebView webView = findViewById(R.id.webView);
+        WebView webView = findViewById(R.id.modelWebView);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setAllowFileAccessFromFileURLs(true);
         webView.loadUrl("file:///android_res/raw/model_viewer.html");

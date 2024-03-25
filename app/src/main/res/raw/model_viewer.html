@@ -1,29 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="eng">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>3D Model Viewer</title>
         <style>
-        body {
-            margin: 0;
-            overflow: hidden;
-        }
-        #container {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #f0f0f0;
+        #loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            display: none; /* Initially hide the loading indicator */
         }
     </style>
     </head>
     <body>
-        <div id="container"></div>
+        <!-- Loading indicator -->
+        <div id="loading">Loading...</div>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-        <script src="js/OrbitControls.js"></script>
-        <script src="js/main.js"></script>
+        <!-- Import the component -->
+        <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+        <script src="https://unpkg.com/focus-visible@5.0.2/dist/focus-visible.js"></script>
+
+        <!-- Model viewer -->
+        <model-viewer
+                id="reveal"
+                loading="eager"
+                camera-controls="true"
+                auto-rotate="true"
+                poster="https://test-aorist-bucket.s3.amazonaws.com/images/artwork/900x600/187.1.jpg"
+                src="https://test-aorist-bucket.s3.amazonaws.com/models/artwork/187.1.glb"
+                alt="Bold [3D]"
+                ar-status="not-presenting"
+                style="width: 100%; height: 100%; position: absolute; left: 0px; top: 0px; z-index: 0; display: block;">
+        </model-viewer>
+
+        <script>
+        // Show loading indicator when the model starts loading
+        document.querySelector('model-viewer').addEventListener('load', function() {
+            document.getElementById('loading').style.display = 'none';
+        });
+    </script>
     </body>
 </html>
