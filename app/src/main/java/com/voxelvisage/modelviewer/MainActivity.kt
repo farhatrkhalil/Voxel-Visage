@@ -261,7 +261,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadSampleModel() {
-        val sampleModelNames = sampleModels.map { it.substringAfterLast("/") }
+        val sampleModelNames = sampleModels.map { it.substringAfterLast("/").removeSuffix(".stl").replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() } }
         AlertDialog.Builder(this)
             .setTitle("Select Sample Model")
             .setItems(sampleModelNames.toTypedArray()) { dialog, which ->
