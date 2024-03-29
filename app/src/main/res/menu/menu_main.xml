@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/menu_open_model"
         android:icon="@drawable/ic_folder_open_white_24dp"
         android:title="@string/open_model"
-        app:showAsAction="always" />
+        app:showAsAction="always"
+        tools:ignore="AlwaysShowAction" />
     <item android:id="@+id/menu_load_sample"
+        android:icon="@drawable/menu_dots"
         android:title="@string/load_sample"
         app:showAsAction="never" />
 </menu>

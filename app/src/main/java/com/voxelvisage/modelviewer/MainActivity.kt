@@ -2,6 +2,7 @@ package com.voxelvisage.modelviewer
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.ContentResolver
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -142,8 +143,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun beginOpenModel() {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).setType("*/*")
-        openDocumentLauncher.launch(intent)
+        val sampleModelNames = sampleModels.map { it.substringAfterLast("/") }
+        AlertDialog.Builder(this)
+            .setTitle("Select Model")
+            .setItems(sampleModelNames.toTypedArray()) { _, which ->
+                val selectedModelName = sampleModels[which]
+                try {
+                    val stream = assets.open(selectedModelName)
+                    setCurrentModel(StlModel(stream))
+                    stream.close()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 
     private fun createNewModelView(model: Model?) {
@@ -234,6 +250,8 @@ class MainActivity : AppCompatActivity() {
         binding.progressBar.visibility = View.GONE
     }
 
+
+
     private fun startVrActivity() {
         if (ModelViewerApplication.currentModel == null) {
             Toast.makeText(this, R.string.view_vr_not_loaded, Toast.LENGTH_SHORT).show()
@@ -243,12 +261,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadSampleModel() {
-        try {
-            val stream = assets.open(sampleModels[sampleModelIndex++ % sampleModels.size])
-            setCurrentModel(StlModel(stream))
-            stream.close()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
+        val sampleModelNames = sampleModels.map { it.substringAfterLast("/") }
+        AlertDialog.Builder(this)
+            .setTitle("Select Sample Model")
+            .setItems(sampleModelNames.toTypedArray()) { dialog, which ->
+                try {
+                    val stream = assets.open(sampleModels[which])
+                    setCurrentModel(StlModel(stream))
+                    stream.close()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+                dialog.dismiss()
+            }
+            .setNeutralButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 }
