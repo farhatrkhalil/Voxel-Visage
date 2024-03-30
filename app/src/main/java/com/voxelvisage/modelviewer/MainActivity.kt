@@ -44,21 +44,23 @@ class MainActivity : AppCompatActivity() {
     private var modelView: ModelSurfaceView? = null
     private val disposables = CompositeDisposable()
 
-    private val openDocumentLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        if (it.resultCode == Activity.RESULT_OK && it.data?.data != null) {
-            val uri = it.data?.data
-            grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            beginLoadModel(uri!!)
+    private val openDocumentLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == Activity.RESULT_OK && it.data?.data != null) {
+                val uri = it.data?.data
+                grantUriPermission(packageName, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                beginLoadModel(uri!!)
+            }
         }
-    }
 
-    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-        if (isGranted) {
-            beginOpenModel()
-        } else {
-            Toast.makeText(this, R.string.read_permission_failed, Toast.LENGTH_SHORT).show()
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) {
+                beginOpenModel()
+            } else {
+                Toast.makeText(this, R.string.read_permission_failed, Toast.LENGTH_SHORT).show()
+            }
         }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -125,17 +127,23 @@ class MainActivity : AppCompatActivity() {
                 checkReadPermissionThenOpen()
                 true
             }
+
             R.id.menu_load_sample -> {
                 loadSampleModel()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
 
     private fun checkReadPermissionThenOpen() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q &&
-            (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
+            (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED)
+        ) {
             requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
         } else {
             showDisclaimerDialog()
@@ -194,12 +202,15 @@ class MainActivity : AppCompatActivity() {
                             fileName.lowercase(Locale.ROOT).endsWith(".stl") -> {
                                 StlModel(stream)
                             }
+
                             fileName.lowercase(Locale.ROOT).endsWith(".obj") -> {
                                 ObjModel(stream)
                             }
+
                             fileName.lowercase(Locale.ROOT).endsWith(".ply") -> {
                                 PlyModel(stream)
                             }
+
                             else -> {
                                 // assume it's STL.
                                 StlModel(stream)
@@ -218,26 +229,32 @@ class MainActivity : AppCompatActivity() {
                 closeSilently(stream)
             }
         }.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doAfterTerminate {
-                    binding.progressBar.visibility = View.GONE
-                }
-                .subscribe({
-                    setCurrentModel(it)
-                }, {
-                    it.printStackTrace()
-                    Toast.makeText(applicationContext, getString(R.string.open_model_error, it.message), Toast.LENGTH_SHORT).show()
-                }))
+            .observeOn(AndroidSchedulers.mainThread())
+            .doAfterTerminate {
+                binding.progressBar.visibility = View.GONE
+            }
+            .subscribe({
+                setCurrentModel(it)
+            }, {
+                it.printStackTrace()
+                Toast.makeText(
+                    applicationContext,
+                    getString(R.string.open_model_error, it.message),
+                    Toast.LENGTH_SHORT
+                ).show()
+            })
+        )
     }
 
     private fun getFileName(cr: ContentResolver, uri: Uri): String? {
         if ("content" == uri.scheme) {
             val projection = arrayOf(MediaStore.MediaColumns.DISPLAY_NAME)
-            ContentResolverCompat.query(cr, uri, projection, null, null, null, null)?.use { metaCursor ->
-                if (metaCursor.moveToFirst()) {
-                    return metaCursor.getString(0)
+            ContentResolverCompat.query(cr, uri, projection, null, null, null, null)
+                ?.use { metaCursor ->
+                    if (metaCursor.moveToFirst()) {
+                        return metaCursor.getString(0)
+                    }
                 }
-            }
         }
         return uri.lastPathSegment
     }
@@ -250,7 +267,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
     private fun startVrActivity() {
         if (ModelViewerApplication.currentModel == null) {
             Toast.makeText(this, R.string.view_vr_not_loaded, Toast.LENGTH_SHORT).show()
@@ -260,13 +276,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadSampleModel() {
-        val sampleModelNames = sampleModels.map { it.substringAfterLast("/").removeSuffix(".stl").replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() } }
+        val sampleModelNames = sampleModels.map {
+            it.substringAfterLast("/").removeSuffix(".stl")
+                .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+        }
         AlertDialog.Builder(this)
             .setTitle("Select Sample Model")
             .setItems(sampleModelNames.toTypedArray()) { dialog, which ->
                 try {
                     val stream = assets.open(sampleModels[which])
-                    setCurrentModel(StlModel(stream))
+                    val fileName = sampleModelNames[which]
+                    val fileFormat = sampleModels[which].substringAfterLast(".")
+                    val title = "$fileName.$fileFormat"
+                    val model = StlModel(stream)
+                    model.title = title
+                    setCurrentModel(model)
                     stream.close()
                 } catch (e: IOException) {
                     e.printStackTrace()
