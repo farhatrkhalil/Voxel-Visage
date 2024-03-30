@@ -7,4 +7,5 @@
     <string name="open_model_error">Failed to load model: %s</string>
     <string name="view_vr">View in VR mode</string>
     <string name="view_vr_not_loaded">Please load a model first.</string>
+    <string name="settings">Settings</string>
 </resources>

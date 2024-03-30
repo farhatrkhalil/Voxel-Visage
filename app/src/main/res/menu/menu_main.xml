@@ -9,7 +9,9 @@
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction" />
     <item android:id="@+id/menu_load_sample"
-        android:icon="@drawable/menu_dots"
         android:title="@string/load_sample"
+        app:showAsAction="never" />
+    <item android:id="@+id/menu_settings"
+        android:title="@string/settings"
         app:showAsAction="never" />
 </menu>

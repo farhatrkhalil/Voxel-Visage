@@ -138,28 +138,27 @@ class MainActivity : AppCompatActivity() {
             (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
             requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
         } else {
-            beginOpenModel()
+            showDisclaimerDialog()
         }
     }
 
-    private fun beginOpenModel() {
-        val sampleModelNames = sampleModels.map { it.substringAfterLast("/") }
+    private fun showDisclaimerDialog() {
         AlertDialog.Builder(this)
-            .setTitle("Select Model")
-            .setItems(sampleModelNames.toTypedArray()) { _, which ->
-                val selectedModelName = sampleModels[which]
-                try {
-                    val stream = assets.open(selectedModelName)
-                    setCurrentModel(StlModel(stream))
-                    stream.close()
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
+            .setTitle("Disclaimer")
+            .setMessage("Please select a model with the supported formats (.obj, .stl, .ply)")
+            .setPositiveButton("OK") { _, _ ->
+                beginOpenModel()
             }
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
             }
             .show()
+    }
+
+
+    private fun beginOpenModel() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).setType("*/*")
+        openDocumentLauncher.launch(intent)
     }
 
     private fun createNewModelView(model: Model?) {
