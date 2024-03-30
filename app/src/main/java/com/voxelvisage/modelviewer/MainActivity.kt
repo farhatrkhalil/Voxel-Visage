@@ -181,7 +181,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun resetModelView() {
-        if (modelView != null) {
+        if (modelView != null && ModelViewerApplication.currentModel != null) {
             val builder = AlertDialog.Builder(this)
             builder.setTitle("Reset View")
                 .setMessage("Are you sure you want to reset the view?")
