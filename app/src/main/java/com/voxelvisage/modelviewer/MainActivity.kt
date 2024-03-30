@@ -97,10 +97,12 @@ class MainActivity : AppCompatActivity() {
     private fun showWelcomeDialog() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
         builder.setTitle("Welcome to Voxel Visage")
-            .setMessage("Our 3D facial reconstruction app!\n\nTo get started, you can:\n\n" +
-                    "- Load a sample model\n" +
-                    "- Select a model\n" +
-                    "- Provide 3 facial images\n")
+            .setMessage(
+                "Our 3D facial reconstruction app!\n\nTo get started, you can:\n\n" +
+                        "- Load a sample model\n" +
+                        "- Select a model\n" +
+                        "- Provide 3 facial images\n"
+            )
             .setPositiveButton("OK") { dialog, which ->
                 dialog.dismiss()
                 showOptionsDialog()
@@ -123,7 +125,6 @@ class MainActivity : AppCompatActivity() {
             .setCancelable(true)
             .show()
     }
-
 
 
     override fun onStart() {
@@ -174,26 +175,14 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
     private fun resetModelView() {
-        if (modelView == null) {
-            AlertDialog.Builder(this)
-                .setTitle("No Model")
-                .setMessage("There is currently no model to remove.")
-                .setPositiveButton("OK") { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .show()
-        } else {
+        if (modelView != null) {
             val builder = AlertDialog.Builder(this)
             builder.setTitle("Reset View")
                 .setMessage("Are you sure you want to reset the view?")
                 .setPositiveButton("Yes") { _, _ ->
-                    binding.containerView.removeView(modelView)
-
-                    modelView = ModelSurfaceView(this, null)
-
-                    binding.containerView.addView(modelView)
-
+                    modelView?.removeModel()
                     title = "Voxel Visage"
                     Toast.makeText(this, "Model view reset", Toast.LENGTH_SHORT).show()
                 }
@@ -201,10 +190,16 @@ class MainActivity : AppCompatActivity() {
                     dialog.dismiss()
                 }
                 .show()
+        } else {
+            AlertDialog.Builder(this)
+                .setTitle("No Model")
+                .setMessage("There is currently no model to remove.")
+                .setPositiveButton("OK") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
         }
     }
-
-
 
 
     private fun checkReadPermissionThenOpen() {

@@ -4,13 +4,14 @@ import android.content.Context
 import android.graphics.PointF
 import android.opengl.GLSurfaceView
 import android.view.MotionEvent
+import com.voxelvisage.modelviewer.ModelViewerApplication.Companion.currentModel
 import com.voxelvisage.modelviewer.util.Util.pxToDp
 import kotlin.math.sqrt
 
 class ModelSurfaceView(context: Context, model: Model?) : GLSurfaceView(context) {
-    private val renderer: ModelRenderer
-    private var previousX = 0f
-    private var previousY = 0f
+    internal val renderer: ModelRenderer
+    internal var previousX = 0f
+    internal var previousY = 0f
     private val pinchStartPoint = PointF()
     private var pinchStartDistance = 0.0f
     private var touchMode = TOUCH_NONE
@@ -64,6 +65,13 @@ class ModelSurfaceView(context: Context, model: Model?) : GLSurfaceView(context)
         }
         return true
     }
+
+    fun removeModel() {
+        currentModel = null
+        renderer.setModel(null)
+        requestRender()
+    }
+
 
     private fun getPinchDistance(event: MotionEvent): Float {
         val x = event.getX(0) - event.getX(1)

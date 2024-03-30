@@ -6,7 +6,7 @@ import android.opengl.Matrix
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class ModelRenderer(private val model: Model?) : GLSurfaceView.Renderer {
+class ModelRenderer(private var model: Model?) : GLSurfaceView.Renderer {
     private val light = Light(floatArrayOf(0.0f, 0.0f, MODEL_BOUND_SIZE * 10, 1.0f))
     private val floor = Floor()
 
@@ -27,6 +27,9 @@ class ModelRenderer(private val model: Model?) : GLSurfaceView.Renderer {
             translateZ /= dz
         }
         updateViewMatrix()
+    }
+    fun setModel(model: Model?) {
+        this.model = model
     }
 
     fun rotate(aX: Float, aY: Float) {
