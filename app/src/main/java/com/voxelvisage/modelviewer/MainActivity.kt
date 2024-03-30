@@ -171,6 +171,10 @@ class MainActivity : AppCompatActivity() {
                 resetModelView()
                 true
             }
+            R.id.menu_settings -> {
+                startActivity(Intent(this, SettingsActivity::class.java))
+                true
+            }
 
             else -> super.onOptionsItemSelected(item)
         }
@@ -325,12 +329,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setCurrentModel(model: Model) {
+        ModelViewerApplication.currentModel = model
         createNewModelView(model)
         Toast.makeText(applicationContext, R.string.open_model_success, Toast.LENGTH_SHORT).show()
         title = model.title
         binding.progressBar.visibility = View.GONE
     }
-
 
     private fun startVrActivity() {
         if (ModelViewerApplication.currentModel == null) {
