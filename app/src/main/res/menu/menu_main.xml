@@ -11,6 +11,9 @@
     <item android:id="@+id/menu_load_sample"
         android:title="@string/load_sample"
         app:showAsAction="never" />
+    <item android:id="@+id/menu_reset_view"
+        android:title="@string/reset_view"
+        app:showAsAction="never" />
     <item android:id="@+id/menu_settings"
         android:title="@string/settings"
         app:showAsAction="never" />

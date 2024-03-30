@@ -67,6 +67,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        showWelcomeDialog()
         binding.progressBar.visibility = View.GONE
         binding.actionButton.setOnClickListener { startVrActivity() }
 
@@ -92,6 +93,38 @@ class MainActivity : AppCompatActivity() {
             beginLoadModel(intent.data!!)
         }
     }
+
+    private fun showWelcomeDialog() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setTitle("Welcome to Voxel Visage")
+            .setMessage("Our 3D facial reconstruction app!\n\nTo get started, you can:\n\n" +
+                    "- Load a sample model\n" +
+                    "- Select a model\n" +
+                    "- Provide 3 facial images\n")
+            .setPositiveButton("OK") { dialog, which ->
+                dialog.dismiss()
+                showOptionsDialog()
+            }
+            .setCancelable(false)
+            .show()
+    }
+
+    private fun showOptionsDialog() {
+        val options = arrayOf("Load sample model", "Select a model", "Provide 3 facial images")
+        AlertDialog.Builder(this)
+            .setTitle("Choose an option")
+            .setItems(options) { dialog, which ->
+                when (which) {
+                    0 -> loadSampleModel()
+                    1 -> checkReadPermissionThenOpen()
+                }
+                dialog.dismiss()
+            }
+            .setCancelable(true)
+            .show()
+    }
+
+
 
     override fun onStart() {
         super.onStart()
@@ -133,9 +166,46 @@ class MainActivity : AppCompatActivity() {
                 true
             }
 
+            R.id.menu_reset_view -> {
+                resetModelView()
+                true
+            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
+    private fun resetModelView() {
+        if (modelView == null) {
+            AlertDialog.Builder(this)
+                .setTitle("No Model")
+                .setMessage("There is currently no model to remove.")
+                .setPositiveButton("OK") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+        } else {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Reset View")
+                .setMessage("Are you sure you want to reset the view?")
+                .setPositiveButton("Yes") { _, _ ->
+                    binding.containerView.removeView(modelView)
+
+                    modelView = ModelSurfaceView(this, null)
+
+                    binding.containerView.addView(modelView)
+
+                    title = "Voxel Visage"
+                    Toast.makeText(this, "Model view reset", Toast.LENGTH_SHORT).show()
+                }
+                .setNegativeButton("No") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+        }
+    }
+
+
+
 
     private fun checkReadPermissionThenOpen() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q &&
