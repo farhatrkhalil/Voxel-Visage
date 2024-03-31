@@ -96,6 +96,9 @@ class MainActivity : AppCompatActivity() {
         if (intent.data != null && savedInstanceState == null) {
             beginLoadModel(intent.data!!)
         }
+        binding.shareDownload.setOnClickListener {
+            showShareDownloadOptions()
+        }
     }
 
     @SuppressLint("MissingSuperCall")
@@ -147,6 +150,41 @@ class MainActivity : AppCompatActivity() {
             }
             .setCancelable(true)
             .show()
+    }
+
+    private fun showShareDownloadOptions() {
+        if (ModelViewerApplication.currentModel == null) {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("No Model Available")
+                .setMessage("There is currently no model available to share or download.")
+                .setPositiveButton("OK") { dialog, which ->
+                    dialog.dismiss()
+                }
+                .show()
+        } else {
+            val options = arrayOf("Share model", "Download model")
+            AlertDialog.Builder(this)
+                .setTitle("Select an option")
+                .setItems(options) { dialog, which ->
+                    when (which) {
+                        0 -> shareModel()
+                        1 -> downloadModel()
+                    }
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Cancel") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+        }
+    }
+
+    private fun shareModel() {
+        Toast.makeText(this, "Share Model selected", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun downloadModel() {
+        Toast.makeText(this, "Download Model selected", Toast.LENGTH_SHORT).show()
     }
 
 
