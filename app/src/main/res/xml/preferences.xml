@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:scrollbarAlwaysDrawVerticalTrack="true">
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false">
+
+        <Preference
+            app:iconSpaceReserved="false"
+            android:title="Developers"
+            android:summary="Meet the talented developers behind this app"
+            android:key="developers_info"/>
+
+        <Preference
+            app:iconSpaceReserved="false"
+            android:title="Privacy Policy"
+            android:summary="View our privacy policy"
+            android:key="privacy_policy"/>
+
+        <Preference
+            app:iconSpaceReserved="false"
+            android:title="App License"
+            android:summary="This app is licensed under the MIT License.Thank you for using our app!"
+            android:key="license"/>
+
+        <Preference
+            app:iconSpaceReserved="false"
+            android:title="App Version"
+            android:summary="1.0"
+            android:key="version"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
