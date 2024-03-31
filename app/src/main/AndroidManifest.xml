@@ -11,10 +11,7 @@
 
     <uses-feature android:name="android.hardware.sensor.accelerometer" android:required="true"/>
     <uses-feature android:name="android.hardware.sensor.gyroscope" android:required="true"/>
-
-    <!-- Indicates use of Android's VR-mode, available only on Android N+. -->
     <uses-feature android:name="android.software.vr.mode" android:required="false"/>
-    <!-- Indicates use of VR features that are available only on Daydream-ready devices. -->
     <uses-feature android:name="android.hardware.vr.high_performance" android:required="false"/>
 
     <application
@@ -44,13 +41,15 @@
 
         <activity android:name=".MainActivity"
             android:configChanges="orientation|screenSize"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
         </activity>
 
-        <activity android:name=".SettingsActivity">
-
+        <activity android:name=".SettingsActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
         </activity>
-
         <activity
             android:name=".gvr.ModelGvrActivity"
             android:screenOrientation="landscape"
@@ -68,11 +67,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="com.google.intent.category.CARDBOARD" />
-
-                <!-- The DAYDREAM category should only be declared by Activities that are Daydream
-                     compatible. Daydream compatible apps should typically use the Daydream
-                     controller APIs directly, however in this sample app we instead rely on
-                     Cardboard trigger emulation. -->
                 <category android:name="com.google.intent.category.DAYDREAM" />
             </intent-filter>
         </activity>

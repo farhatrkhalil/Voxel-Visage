@@ -1,6 +1,7 @@
 package com.voxelvisage.modelviewer
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.ClipData
@@ -95,6 +96,25 @@ class MainActivity : AppCompatActivity() {
         if (intent.data != null && savedInstanceState == null) {
             beginLoadModel(intent.data!!)
         }
+    }
+
+    @SuppressLint("MissingSuperCall")
+    override fun onBackPressed() {
+        showExitConfirmationDialog()
+    }
+
+    private fun showExitConfirmationDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage("Are you sure you want to exit the app?")
+            .setCancelable(false)
+            .setPositiveButton("Yes") { dialog, id ->
+                finish()
+            }
+            .setNegativeButton("No") { dialog, id ->
+                dialog.dismiss()
+            }
+        val alert = builder.create()
+        alert.show()
     }
 
     private fun showWelcomeDialog() {
