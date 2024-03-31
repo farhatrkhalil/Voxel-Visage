@@ -20,6 +20,7 @@ import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContentResolverCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
@@ -75,13 +76,13 @@ class MainActivity : AppCompatActivity() {
         binding.actionButton.setOnClickListener { startVrActivity() }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.containerView)) { _, insets ->
-            (binding.actionButton.layoutParams as FrameLayout.LayoutParams).apply {
+            (binding.actionButton.layoutParams as ConstraintLayout.LayoutParams).apply {
                 topMargin = insets.systemWindowInsetTop
                 bottomMargin = insets.systemWindowInsetBottom
                 leftMargin = insets.systemWindowInsetLeft
                 rightMargin = insets.systemWindowInsetRight
             }
-            (binding.progressBar.layoutParams as FrameLayout.LayoutParams).apply {
+            (binding.progressBar.layoutParams as ConstraintLayout.LayoutParams).apply {
                 topMargin = insets.systemWindowInsetTop
                 bottomMargin = insets.systemWindowInsetBottom
                 leftMargin = insets.systemWindowInsetLeft
