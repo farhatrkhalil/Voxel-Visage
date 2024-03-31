@@ -3,7 +3,10 @@ package com.voxelvisage.modelviewer
 import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -171,6 +174,10 @@ class MainActivity : AppCompatActivity() {
                 resetModelView()
                 true
             }
+            R.id.menu_share_app -> {
+                showShareDialog()
+                true
+            }
             R.id.menu_settings -> {
                 startActivity(Intent(this, SettingsActivity::class.java))
                 true
@@ -178,6 +185,56 @@ class MainActivity : AppCompatActivity() {
 
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun showShareDialog() {
+        val options = arrayOf("Share the app", "Copy the repository link", "Cancel")
+        AlertDialog.Builder(this)
+            .setTitle("Thanks for sharing the app")
+            .setItems(options) { dialog, which ->
+                when (which) {
+                    0 -> shareApp()
+                    1 -> copyRepoLink()
+                }
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun shareApp() {
+        val appInfo = """
+        Check out Voxel Visage, a powerful 3D Face Reconstruction app that leverages a locally hosted API for face and landmarks recognition. 
+        The API generates the necessary .obj files, which are then displayed in the application. 
+        Internet connection is required for this functionality.
+        
+        This repository contains the source code and resources for an efficient 3D face reconstruction algorithm, offering users a seamless experience through an Android application developed using both Java and Kotlin in Android Studio.
+        
+        Features:
+        - View 3D models on Android devices.
+        - Support for STL (ASCII and binary) files.
+        - Limited support for OBJ (Wavefront) and PLY (Stanford) files.
+        - Download and share 3D models.
+        - Requires internet connection for face and landmarks recognition.
+        
+        License: Copyright 2024+ Khalil Farhat, Abed El Fattah Amouneh, Sammy Medawar, Wally El Sayed
+        Licensed under the MIT License
+        
+        Learn more at: https://github.com/farhatrkhalil/Voxel-Visage
+    """.trimIndent()
+
+        val sendIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, appInfo)
+            type = "text/plain"
+        }
+        startActivity(Intent.createChooser(sendIntent, "Share"))
+    }
+
+    private fun copyRepoLink() {
+        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clip = ClipData.newPlainText("Repository Link", "https://github.com/farhatrkhalil/Voxel-Visage")
+        clipboard.setPrimaryClip(clip)
+        Toast.makeText(this, "Repository link copied to clipboard", Toast.LENGTH_SHORT).show()
     }
 
     private fun resetModelView() {
