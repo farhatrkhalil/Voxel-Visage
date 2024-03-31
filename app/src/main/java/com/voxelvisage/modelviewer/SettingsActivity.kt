@@ -47,7 +47,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
         val licensePreference: Preference? = findPreference("license")
         licensePreference?.setOnPreferenceClickListener {
-            showAlertDialog("App License", "This app is licensed under the MIT License. The MIT License is a type of software license that allows you, the user, a great deal of freedom. It means you can use, modify, and distribute this app according to the terms of the MIT License. You are free to do so as long as you provide appropriate attribution or credit to the original authors.\n\nThank you for using our app!")
+            showAlertDialog("App License", "This app is licensed under the MIT License. The MIT License is a type of software license that allows you, the user, a great deal of freedom. It means you can use, modify, and distribute this app according to the terms of the MIT License.\n\nHowever, please note that all 3D models samples included within the app do not belong to the app itself. If you choose to use or load 3D models from external sources, we do not claim ownership of those models. Additionally, if you generate a 3D model by providing images, you own the resulting model. You are free to do so as long as you provide appropriate attribution or credit to the original authors.\n\nThank you for using our app!")
             true
         }
     }
