@@ -16,7 +16,6 @@ import android.provider.MediaStore
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -39,7 +38,7 @@ import okhttp3.Request
 import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.io.InputStream
-import java.util.*
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -47,6 +46,7 @@ class MainActivity : AppCompatActivity() {
     private var sampleModelIndex = 0
     private var modelView: ModelSurfaceView? = null
     private val disposables = CompositeDisposable()
+    private var loadingDialog: LoadingDialog? = null
 
     private val openDocumentLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -72,7 +72,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         showWelcomeDialog()
-        binding.progressBar.visibility = View.GONE
         binding.actionButton.setOnClickListener { startVrActivity() }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.containerView)) { _, insets ->
@@ -305,7 +304,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun beginLoadModel(uri: Uri) {
-        binding.progressBar.visibility = View.VISIBLE
+        loadingDialog = LoadingDialog(this)
+        loadingDialog!!.show()
 
         disposables.add(Observable.fromCallable {
             var model: Model? = null
@@ -358,7 +358,7 @@ class MainActivity : AppCompatActivity() {
         }.subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doAfterTerminate {
-                binding.progressBar.visibility = View.GONE
+                loadingDialog!!.dismiss()
             }
             .subscribe({
                 setCurrentModel(it)
@@ -391,7 +391,6 @@ class MainActivity : AppCompatActivity() {
         createNewModelView(model)
         Toast.makeText(applicationContext, R.string.open_model_success, Toast.LENGTH_SHORT).show()
         title = model.title
-        binding.progressBar.visibility = View.GONE
     }
 
     private fun startVrActivity() {
