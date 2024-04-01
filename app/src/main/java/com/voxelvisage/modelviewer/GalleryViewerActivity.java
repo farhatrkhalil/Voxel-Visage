@@ -80,6 +80,9 @@ public class GalleryViewerActivity extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home) {
             if (selectedImages.isEmpty() && !noImagesPopupShown) {
                 finish();
+            } else if (!selectedImages.isEmpty()) {
+                selectedImages.clear();
+                finish();
             }
             return true;
         } else if (item.getItemId() == R.id.action_process) {
