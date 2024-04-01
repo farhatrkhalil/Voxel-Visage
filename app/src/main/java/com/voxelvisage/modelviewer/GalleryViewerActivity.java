@@ -65,7 +65,7 @@ public class GalleryViewerActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.gallery_viewer_menu, menu);
         return true;
     }
 
@@ -82,7 +82,7 @@ public class GalleryViewerActivity extends AppCompatActivity {
                 finish();
             }
             return true;
-        } else if (item.getItemId() == R.id.processButton) {
+        } else if (item.getItemId() == R.id.action_process) {
             if (selectedImages.size() == 3) {
                 Intent intent = new Intent(GalleryViewerActivity.this, MainActivity.class);
                 intent.putParcelableArrayListExtra("selectedImages", selectedImages);
