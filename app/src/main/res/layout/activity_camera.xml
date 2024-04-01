@@ -14,12 +14,12 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/CardView"
-            android:layout_width="255dp"
-            android:layout_height="519dp"
+            android:layout_width="251dp"
+            android:layout_height="280dp"
             android:layout_above="@+id/CounterTextView"
             android:layout_centerInParent="true"
             android:layout_marginEnd="27dp"
-            android:layout_marginBottom="25dp"
+            android:layout_marginTop="60dp"
             app:cardCornerRadius="10dp"
             app:cardElevation="0dp"
             tools:ignore="ContentDescription">
@@ -27,7 +27,7 @@
             <ImageView
                 android:id="@+id/CameraView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="280dp"
                 android:scaleType="fitXY"
                 tools:ignore="ContentDescription" />
 
@@ -39,7 +39,7 @@
                 android:background="@null"
                 android:padding="10dp"
                 android:src="@drawable/close_drawable"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
         </androidx.cardview.widget.CardView>
 
@@ -67,7 +67,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="56dp"
+            android:layout_marginBottom="110dp"
             android:text="Take Picture"
             tools:ignore="HardcodedText" />
 
@@ -78,7 +78,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="60dp"
             android:text="Proceed"
             tools:ignore="HardcodedText" />
 

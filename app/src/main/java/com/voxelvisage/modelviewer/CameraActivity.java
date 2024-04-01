@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 public class CameraActivity extends AppCompatActivity {
 
@@ -42,6 +43,7 @@ public class CameraActivity extends AppCompatActivity {
     private ImageButton closeButton;
     private int currentImageIndex = 0;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +60,7 @@ public class CameraActivity extends AppCompatActivity {
         updateCloseButtonVisibility();
 
         updateCounterText();
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         captureButton.setOnClickListener(v -> {
             if (capturedImages < MAX_IMAGES) {
@@ -106,6 +109,7 @@ public class CameraActivity extends AppCompatActivity {
 
         new Handler().postDelayed(() -> rightArrow.performClick(), 100);
     }
+
 
     private void handleRemoveImageClick() {
         if (!imageFilePaths.isEmpty() && currentImageIndex < imageFilePaths.size()) {
@@ -280,7 +284,12 @@ public class CameraActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_button_remove) {
+
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        else if (item.getItemId() == R.id.action_button_remove) {
             showClearImagePopup();
             return true;
         }
