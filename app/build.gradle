@@ -53,7 +53,7 @@ dependencies {
     implementation 'com.google.vr:sdk-base:1.190.0'
     implementation 'androidx.navigation:navigation-runtime-ktx:2.7.7'
     implementation 'androidx.preference:preference-ktx:1.2.1'
-    implementation 'androidx.preference:preference:1.2.1'
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'

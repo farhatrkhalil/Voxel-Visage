@@ -73,7 +73,18 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         showWelcomeDialog()
-        binding.actionButton.setOnClickListener { startVrActivity() }
+        binding.addButton.setOnClickListener {
+            showImageSourceDialog()
+        }
+
+        binding.shareDownload.setOnClickListener {
+            showShareDownloadOptions()
+        }
+
+        binding.actionButton.setOnClickListener {
+            startVrActivity()
+        }
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.containerView)) { _, insets ->
             (binding.actionButton.layoutParams as ConstraintLayout.LayoutParams).apply {
@@ -96,14 +107,37 @@ class MainActivity : AppCompatActivity() {
         if (intent.data != null && savedInstanceState == null) {
             beginLoadModel(intent.data!!)
         }
-        binding.shareDownload.setOnClickListener {
-            showShareDownloadOptions()
-        }
     }
 
     @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
         showExitConfirmationDialog()
+    }
+
+    private fun showImageSourceDialog() {
+        val options = arrayOf("Capture an Image", "Select from Gallery")
+        AlertDialog.Builder(this)
+            .setTitle("Select Image Source")
+            .setItems(options) { dialog, which ->
+                when (which) {
+                    0 -> captureImage()
+                    1 -> selectFromGallery()
+                }
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun captureImage() {
+        Toast.makeText(this, "Implement image capture functionality", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun selectFromGallery() {
+        val intent = Intent(this, GalleryViewerActivity::class.java)
+        startActivity(intent)
     }
 
     private fun showExitConfirmationDialog() {
@@ -145,6 +179,7 @@ class MainActivity : AppCompatActivity() {
                 when (which) {
                     0 -> loadSampleModel()
                     1 -> checkReadPermissionThenOpen()
+                    2 -> showImageSourceDialog()
                 }
                 dialog.dismiss()
             }

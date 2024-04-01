@@ -5,4 +5,5 @@
     <color name="colorPrimaryLight">#2E2828</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorWindowBackground">#333</color>
+    <color name="Black">#000000</color>
 </resources>
