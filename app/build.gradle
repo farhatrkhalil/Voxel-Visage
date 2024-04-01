@@ -7,7 +7,7 @@ android {
         applicationId "com.voxelvisage.modelviewer"
         minSdk 22
         targetSdk 34
-        versionCode 21
+        versionCode 1
         vectorDrawables.useSupportLibrary true
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

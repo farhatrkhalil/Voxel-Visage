@@ -132,7 +132,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun captureImage() {
-        Toast.makeText(this, "Implement image capture functionality", Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, CameraActivity::class.java)
+        startActivity(intent)
     }
 
     private fun selectFromGallery() {
