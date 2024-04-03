@@ -26,6 +26,12 @@
 
         <Preference
             app:iconSpaceReserved="false"
+            android:title="Acknowledgements"
+            android:summary="Tap here to view acknowledgements for sample models."
+            android:key="acknowledgements"/>
+
+        <Preference
+            app:iconSpaceReserved="false"
             android:title="App Version"
             android:summary="1.0"
             android:key="version"/>

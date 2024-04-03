@@ -61,7 +61,16 @@ class SettingsFragment : PreferenceFragmentCompat() {
         licensePreference?.setOnPreferenceClickListener {
             showAlertDialog(
                 "App License",
-                "This app is licensed under the MIT License. The MIT License is a type of software license that allows you, the user, a great deal of freedom. It means you can use, modify, and distribute this app according to the terms of the MIT License.\n\nHowever, please note that all 3D models samples included within the app do not belong to the app itself. If you choose to use or load 3D models from external sources, we do not claim ownership of those models. Additionally, if you generate a 3D model by providing images, you own the resulting model. You are free to do so as long as you provide appropriate attribution or credit to the original authors.\n\nThank you for using our app!"
+                "This app is licensed under the MIT License. The MIT License is a type of software license that allows you, the user, a great deal of freedom. It means you can use, modify, and distribute this app according to the terms of the MIT License.\n\nHowever, please note that all 3D models samples included within the app do not belong to the app itself. If you choose to use or load 3D models from external sources, we do not claim ownership of those models.\n\nAdditionally, if you generate a 3D model by providing images, you own the resulting model. You are free to do so as long as you provide appropriate attribution or credit to the original authors.\n\nThank you for using our app!"
+            )
+            true
+        }
+
+        val acknowledgementsPreference: Preference? = findPreference("acknowledgements")
+        acknowledgementsPreference?.setOnPreferenceClickListener {
+            showAlertDialog(
+                "Acknowledgements",
+                "Sample models provided by:\n\nAirless Ping Pong Ball.stl\n\nhttps://www.printables.com/model/795518-airless-ping-pong-ball,\n\nBroom-bracket.stl\n\nhttps://www.printables.com/model/62410-broom-holder-print-in-place/files,\n\nBunny.stl\n\nhttps://www.thingiverse.com/thing:88208,\n\nCircleSquareTruss.stl\n\nhttps://free3d.com/3d-model/circle-square-truss-full-diameter-150cm-973959.html,\n\nCube.stl\n\nhttps://free3d.com/3d-model/rubiks-cube-5499.html,\n\nDragon.stl\n\nhttps://www.thingiverse.com/thing:3652793,\n\nFace.stl\n\nhttps://www.turbosquid.com/3d-models/face_01-487745,\n\nLucy.stl\n\nhttps://www.ameede.net/angel-artifact-figure-h006053-file-stl-free-download-3d-model-for-cnc-and-3d-printer/"
             )
             true
         }
