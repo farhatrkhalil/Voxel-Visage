@@ -13,10 +13,15 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
+import android.text.InputFilter
+import android.text.InputType
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +29,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContentResolverCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
+import com.voxelvisage.modelviewer.ModelViewerApplication.Companion.currentModel
 import com.voxelvisage.modelviewer.databinding.ActivityMainBinding
 import com.voxelvisage.modelviewer.gvr.ModelGvrActivity
 import com.voxelvisage.modelviewer.obj.ObjModel
@@ -37,17 +43,22 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.ByteArrayInputStream
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
+import java.net.URLConnection
+import java.nio.channels.FileChannel
 import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var sampleModels: List<String>
-    private var sampleModelIndex = 0
     private var modelView: ModelSurfaceView? = null
     private val disposables = CompositeDisposable()
     private var loadingDialog: LoadingDialog? = null
+    private var uri: Uri? = null
 
     private val openDocumentLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -204,7 +215,7 @@ class MainActivity : AppCompatActivity() {
                 .setItems(options) { dialog, which ->
                     when (which) {
                         0 -> shareModel()
-                        1 -> downloadModel()
+                        1 -> showDownloadDisclaimerDialog()
                     }
                     dialog.dismiss()
                 }
@@ -219,10 +230,99 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, "Share Model selected", Toast.LENGTH_SHORT).show()
     }
 
-    private fun downloadModel() {
-        Toast.makeText(this, "Download Model selected", Toast.LENGTH_SHORT).show()
+    private fun showDownloadDisclaimerDialog() {
+        val alertDialog = AlertDialog.Builder(this)
+            .setTitle("Disclaimer")
+            .setMessage("Please after this disclaimer enter the desired model name, and note that the format of the model will remain unchanged (.obj, .stl, .ply).")
+            .setPositiveButton("OK") { dialog, which ->
+                downloadModel()
+                dialog.dismiss()
+            }
+            .setCancelable(false)
+            .create()
+
+        alertDialog.show()
     }
 
+    private fun downloadModel() {
+        val editText = EditText(this)
+        editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+
+        AlertDialog.Builder(this)
+            .setTitle("Enter Model Name")
+            .setView(editText)
+            .setPositiveButton("Next") { dialog, _ ->
+                val modelName = editText.text.toString().trim()
+                if (modelName.isEmpty()) {
+                    Toast.makeText(this, "Model name cannot be empty", Toast.LENGTH_SHORT).show()
+                } else if (modelName.contains(Regex("[.](obj|stl|ply)$"))) {
+                    Toast.makeText(this, "Model name should not contain file formats like .obj, .stl, .ply", Toast.LENGTH_SHORT).show()
+                } else {
+                    saveModelToFile(modelName)
+                }
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun saveModelToFile(modelName: String) {
+
+        val uri = uri ?: run {
+            Toast.makeText(this, "URI is null", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val inputStream: InputStream? = contentResolver.openInputStream(uri)
+        if (inputStream == null) {
+            Toast.makeText(this, "Failed to open model file", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val extension = when (currentModel) {
+            is ObjModel -> "obj"
+            is StlModel -> "stl"
+            is PlyModel -> "ply"
+            else -> {
+                Toast.makeText(this, "Invalid model type", Toast.LENGTH_SHORT).show()
+                return
+            }
+        }
+
+        val destinationFile = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+            "$modelName.$extension"
+        )
+
+        try {
+            FileOutputStream(destinationFile).use { outputStream ->
+                inputStream.copyTo(outputStream)
+            }
+            Toast.makeText(this, "$modelName.$extension saved to the download directory", Toast.LENGTH_SHORT).show()
+
+            val mimeType = when (extension) {
+                "obj" -> "text/plain"
+                "stl" -> "application/netfabb"
+                "ply" -> "application/sla"
+                else -> "application/octet-stream"
+            }
+
+            val shareIntent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_STREAM, Uri.fromFile(destinationFile))
+                type = mimeType
+            }
+            startActivity(Intent.createChooser(shareIntent, "Share model"))
+
+        } catch (e: IOException) {
+            e.printStackTrace()
+            Toast.makeText(this, "Failed to save model", Toast.LENGTH_SHORT).show()
+        } finally {
+            inputStream?.close()
+        }
+    }
 
     override fun onStart() {
         super.onStart()
@@ -398,6 +498,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun beginLoadModel(uri: Uri) {
+        this.uri = uri
         loadingDialog = LoadingDialog(this)
         loadingDialog!!.show()
 
