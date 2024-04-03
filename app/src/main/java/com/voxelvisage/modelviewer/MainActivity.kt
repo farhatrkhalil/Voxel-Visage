@@ -209,13 +209,12 @@ class MainActivity : AppCompatActivity() {
                 }
                 .show()
         } else {
-            val options = arrayOf("Share model", "Download model")
+            val options = arrayOf("Download/Share model")
             AlertDialog.Builder(this)
                 .setTitle("Select an option")
                 .setItems(options) { dialog, which ->
                     when (which) {
-                        0 -> shareModel()
-                        1 -> showDownloadDisclaimerDialog()
+                        0 -> showDownloadDisclaimerDialog()
                     }
                     dialog.dismiss()
                 }
@@ -224,10 +223,6 @@ class MainActivity : AppCompatActivity() {
                 }
                 .show()
         }
-    }
-
-    private fun shareModel() {
-        Toast.makeText(this, "Share Model selected", Toast.LENGTH_SHORT).show()
     }
 
     private fun showDownloadDisclaimerDialog() {
@@ -378,7 +373,6 @@ class MainActivity : AppCompatActivity() {
                 startActivity(settingsIntent)
                 true
             }
-
             else -> super.onOptionsItemSelected(item)
         }
     }
