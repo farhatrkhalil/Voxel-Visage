@@ -373,7 +373,9 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.menu_settings -> {
-                startActivity(Intent(this, SettingsActivity::class.java))
+                val settingsIntent = Intent(this, SettingsActivity::class.java)
+                settingsIntent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+                startActivity(settingsIntent)
                 true
             }
 
