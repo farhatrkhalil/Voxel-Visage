@@ -19,7 +19,7 @@ public class StlModelTest {
         assertEquals(model.getVertexCount(), 153846);
         stream.close();
 
-        stream = new FileInputStream(RAW_DIR + "bunny.stl");
+        stream = new FileInputStream(RAW_DIR + "Bunny.stl");
         model = new StlModel(stream);
         assertEquals(model.getVertexCount(), 20898);
         stream.close();

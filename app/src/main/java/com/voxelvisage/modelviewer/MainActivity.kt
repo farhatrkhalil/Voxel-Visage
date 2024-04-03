@@ -200,7 +200,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showShareDownloadOptions() {
-        if (ModelViewerApplication.currentModel == null) {
+        if (isSampleModel()) {
+            AlertDialog.Builder(this)
+                .setTitle("Sample Models Restriction")
+                .setMessage("Sample models are restricted from downloading and sharing due to copyright protection.\n\nThis measure ensures compliance with copyright laws, safeguarding the rights of content creators. Allowing downloads without proper authorization could lead to legal ramifications, including copyright infringement.\n\nBy enforcing this restriction, the application maintains ethical usage practices and respects the intellectual property rights of model creators.")
+                .setPositiveButton("OK") { dialog, which ->
+                    dialog.dismiss()
+                }
+                .show()
+        } else if (ModelViewerApplication.currentModel == null) {
             val builder = AlertDialog.Builder(this)
             builder.setTitle("No Model Available")
                 .setMessage("There is currently no model available to share or download.")
@@ -225,10 +233,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     private fun showDownloadDisclaimerDialog() {
         val alertDialog = AlertDialog.Builder(this)
             .setTitle("Disclaimer")
-            .setMessage("Please after this disclaimer enter the desired model name, and note that the format of the model will remain unchanged (.obj, .stl, .ply).")
+            .setMessage("Please enter the desired model name, and note that the format of the model will remain unchanged (.obj, .stl, .ply).")
             .setPositiveButton("OK") { dialog, which ->
                 downloadModel()
                 dialog.dismiss()
@@ -237,6 +246,12 @@ class MainActivity : AppCompatActivity() {
             .create()
 
         alertDialog.show()
+    }
+
+
+    private fun isSampleModel(): Boolean {
+        val currentModelTitle = ModelViewerApplication.currentModel?.title ?: return false
+        return sampleModels.contains(currentModelTitle) && currentModelTitle.endsWith(".stl")
     }
 
     private fun downloadModel() {
@@ -251,7 +266,11 @@ class MainActivity : AppCompatActivity() {
                 if (modelName.isEmpty()) {
                     Toast.makeText(this, "Model name cannot be empty", Toast.LENGTH_SHORT).show()
                 } else if (modelName.contains(Regex("[.](obj|stl|ply)$"))) {
-                    Toast.makeText(this, "Model name should not contain file formats like .obj, .stl, .ply", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this,
+                        "Model name should not contain file formats like .obj, .stl, .ply",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else {
                     saveModelToFile(modelName)
                 }
@@ -295,7 +314,11 @@ class MainActivity : AppCompatActivity() {
             FileOutputStream(destinationFile).use { outputStream ->
                 inputStream.copyTo(outputStream)
             }
-            Toast.makeText(this, "$modelName.$extension saved to the download directory", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                this,
+                "$modelName.$extension saved to the download directory",
+                Toast.LENGTH_SHORT
+            ).show()
 
             val mimeType = when (extension) {
                 "obj" -> "text/plain"
@@ -363,16 +386,19 @@ class MainActivity : AppCompatActivity() {
                 resetModelView()
                 true
             }
+
             R.id.menu_share_app -> {
                 showShareDialog()
                 true
             }
+
             R.id.menu_settings -> {
                 val settingsIntent = Intent(this, SettingsActivity::class.java)
                 settingsIntent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
                 startActivity(settingsIntent)
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -422,7 +448,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun copyRepoLink() {
         val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clip = ClipData.newPlainText("Repository Link", "https://github.com/farhatrkhalil/Voxel-Visage")
+        val clip = ClipData.newPlainText(
+            "Repository Link",
+            "https://github.com/farhatrkhalil/Voxel-Visage"
+        )
         clipboard.setPrimaryClip(clip)
         Toast.makeText(this, "Repository link copied to clipboard", Toast.LENGTH_SHORT).show()
     }
