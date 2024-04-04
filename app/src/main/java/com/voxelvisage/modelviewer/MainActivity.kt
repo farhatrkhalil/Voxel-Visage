@@ -126,9 +126,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showImageSourceDialog() {
-        val options = arrayOf("Capture an Image", "Select from Gallery")
+        val options = arrayOf("Capture Images from Camera", "Select Images from Gallery")
         AlertDialog.Builder(this)
-            .setTitle("Select Image Source")
+            .setTitle("Choose Source Of Images:")
             .setItems(options) { dialog, which ->
                 when (which) {
                     0 -> captureImage()
@@ -186,7 +186,7 @@ class MainActivity : AppCompatActivity() {
     private fun showOptionsDialog() {
         val options = arrayOf("Load sample model", "Select a model", "Provide 3 facial images")
         AlertDialog.Builder(this)
-            .setTitle("Choose an option")
+            .setTitle("Choose an option:")
             .setItems(options) { dialog, which ->
                 when (which) {
                     0 -> loadSampleModel()
