@@ -1,8 +1,17 @@
 package com.voxelvisage.modelviewer
 
 import android.content.DialogInterface
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.method.LinkMovementMethod
+import android.text.style.URLSpan
+import android.text.util.Linkify
 import android.view.MenuItem
+import android.view.MotionEvent
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NavUtils
@@ -77,10 +86,59 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
 
     private fun showAlertDialog(title: String, message: String) {
-        AlertDialog.Builder(requireContext())
-            .setTitle(title)
-            .setMessage(message)
-            .setPositiveButton("OK") { dialog: DialogInterface, which: Int -> dialog.dismiss() }
-            .show()
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle(title)
+
+        val spannableMessage = SpannableString(message)
+        Linkify.addLinks(spannableMessage, Linkify.WEB_URLS)
+
+        builder.setMessage(spannableMessage)
+        builder.setPositiveButton("OK") { dialogInterface: DialogInterface, _: Int ->
+            dialogInterface.dismiss()
+        }
+
+        val alertDialog = builder.create()
+        alertDialog.show()
+
+        alertDialog.findViewById<TextView>(android.R.id.message)?.movementMethod = object : LinkMovementMethod() {
+            override fun onTouchEvent(widget: TextView, buffer: Spannable, event: MotionEvent): Boolean {
+                val action = event.action
+
+                if (action == MotionEvent.ACTION_UP) {
+                    var x = event.x.toInt()
+                    var y = event.y.toInt()
+
+                    x -= widget.totalPaddingLeft
+                    y -= widget.totalPaddingTop
+
+                    x += widget.scrollX
+                    y += widget.scrollY
+
+                    val layout = widget.layout
+                    val line = layout.getLineForVertical(y)
+                    val off = layout.getOffsetForHorizontal(line, x.toFloat())
+
+                    val link = buffer.getSpans(off, off, URLSpan::class.java)
+
+                    if (link.isNotEmpty()) {
+                        val url = link[0].url
+
+                        AlertDialog.Builder(requireContext())
+                            .setTitle("External Link")
+                            .setMessage("You are about to leave the app and open the following link:\n\n$url")
+                            .setPositiveButton("OK") { _, _ ->
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                                startActivity(intent)
+                            }
+                            .setNegativeButton("Cancel", null)
+                            .show()
+
+                        return true
+                    }
+                }
+
+                return super.onTouchEvent(widget, buffer, event)
+            }
+        }
     }
 }
