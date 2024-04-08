@@ -97,7 +97,10 @@ class MainActivity : AppCompatActivity() {
             startVrActivity()
         }
 
-        binding.filterButton.setOnClickListener(eyeGlassButtonClickListener)
+        binding.filterButton.setOnClickListener {
+            val eyeGlassButtonClickListener = EyeGlassButtonClickListener(this@MainActivity)
+            eyeGlassButtonClickListener.onClick(it)
+        }
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.containerView)) { _, insets ->
@@ -525,7 +528,7 @@ class MainActivity : AppCompatActivity() {
         binding.containerView.addView(modelView, 0)
     }
 
-    private fun beginLoadModel(uri: Uri) {
+    fun beginLoadModel(uri: Uri) {
         this.uri = uri
         loadingDialog = LoadingDialog(this)
         loadingDialog!!.show()
