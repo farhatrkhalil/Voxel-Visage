@@ -67,4 +67,20 @@
         app:useCompatPadding="true"
         tools:ignore="SpeakableTextPresentCheck" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/filterButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@null"
+        app:backgroundTint="#C3AA14"
+        app:borderWidth="2dp"
+        app:layout_constraintBottom_toBottomOf="@+id/actionButton"
+        app:layout_constraintEnd_toStartOf="@+id/actionButton"
+        app:layout_constraintTop_toTopOf="@+id/actionButton"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/filters"
+        app:tint="@android:color/white"
+        app:useCompatPadding="true"
+        tools:ignore="SpeakableTextPresentCheck" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
