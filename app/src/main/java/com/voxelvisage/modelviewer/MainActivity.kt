@@ -82,6 +82,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val eyeGlassButtonClickListener = EyeGlassButtonClickListener(this)
 
         showWelcomeDialog()
         binding.addButton.setOnClickListener {
@@ -95,6 +96,8 @@ class MainActivity : AppCompatActivity() {
         binding.actionButton.setOnClickListener {
             startVrActivity()
         }
+
+        binding.filterButton.setOnClickListener(eyeGlassButtonClickListener)
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.containerView)) { _, insets ->
