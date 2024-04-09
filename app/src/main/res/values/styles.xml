@@ -11,7 +11,10 @@
 
         <item name="toolbarStyle">@style/ToolbarStyle</item>
         <item name="popupMenuStyle">@style/PopupMenuStyle</item>
+        <item name="android:textSize">20sp</item>
     </style>
+
+
 
     <style name="AppTheme.NoTitle">
         <item name="windowActionBar">false</item>
