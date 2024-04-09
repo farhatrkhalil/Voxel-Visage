@@ -5,7 +5,7 @@ android {
     compileSdk 34
     defaultConfig {
         applicationId "com.voxelvisage.modelviewer"
-        minSdk 22
+        minSdk 24
         targetSdk 34
         versionCode 1
         vectorDrawables.useSupportLibrary true
