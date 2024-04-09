@@ -102,7 +102,6 @@ class MainActivity : AppCompatActivity() {
             eyeGlassButtonClickListener.onClick(it)
         }
 
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.containerView)) { _, insets ->
             (binding.actionButton.layoutParams as ConstraintLayout.LayoutParams).apply {
                 topMargin = insets.systemWindowInsetTop

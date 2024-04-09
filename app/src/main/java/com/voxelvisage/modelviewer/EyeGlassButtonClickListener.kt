@@ -33,31 +33,8 @@ class EyeGlassButtonClickListener(private val mainActivity: MainActivity) : View
                         "If the selected model does not accurately represent a face or is unclear, an error will be displayed."
             )
             .setPositiveButton("OK") { _, _ ->
-                showSelectOptionDialog()
             }
             .show()
     }
 
-    private fun showSelectOptionDialog() {
-        val options = arrayOf("1-Thin Eyeglasses Filter", "2-Metal Frame Glasses Filter")
-
-        AlertDialog.Builder(mainActivity)
-            .setTitle("Select Option:")
-            .setItems(options) { dialog, which ->
-                when (which) {
-                    0 -> applyFilter("thin_eyeglasses_filter1.obj")
-                    1 -> applyFilter("metal_frame_reading_glasses_filter2.obj")
-                }
-            }
-            .setPositiveButton("OK", null)
-            .setNegativeButton("Cancel") { dialog, which ->
-                dialog.dismiss()
-            }
-            .show()
-    }
-
-    private fun applyFilter(filterName: String) {
-        val modelUri = Uri.parse("android.resource://${mainActivity.packageName}/raw/$filterName")
-        mainActivity.beginLoadModel(modelUri)
-    }
 }

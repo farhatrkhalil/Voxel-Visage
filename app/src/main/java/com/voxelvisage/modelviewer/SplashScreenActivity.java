@@ -48,13 +48,15 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     private void requestPermissions() {
         String[] permissions;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             permissions = new String[]{
                     Manifest.permission.CAMERA,
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    "android.permission.READ_MEDIA_IMAGES",
-                    "android.permission.WRITE_MEDIA_IMAGES",
-                    "android.permission.READ_MEDIA_VIDEO"
+                    Manifest.permission.MANAGE_EXTERNAL_STORAGE
+            };
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            permissions = new String[]{
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
             };
         } else {
             permissions = new String[]{
@@ -69,6 +71,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 REQUEST_CAMERA_PERMISSION
         );
     }
+
 
     private void goToMainActivityDelayed() {
         new Handler().postDelayed(() -> {
