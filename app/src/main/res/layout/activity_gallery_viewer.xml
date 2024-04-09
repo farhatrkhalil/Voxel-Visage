@@ -26,8 +26,9 @@
                 android:stretchMode="columnWidth"
                 android:drawSelectorOnTop="false"
                 android:focusable="false"
-                android:verticalSpacing="8dp"
-                android:horizontalSpacing="8dp"
+                android:verticalSpacing="20dp"
+                android:horizontalSpacing="15dp"
+                android:layout_marginTop="15dp"
                 android:padding="8dp"/>
 
             <Button
