@@ -18,10 +18,13 @@ import android.provider.MediaStore
 import android.text.InputFilter
 import android.text.InputType
 import android.util.Log
+import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -132,8 +135,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun showImageSourceDialog() {
         val options = arrayOf("Capture Images from Camera", "Select Images from Gallery")
-        AlertDialog.Builder(this)
-            .setTitle("Choose Source Of Images:")
+        val builder = AlertDialog.Builder(this)
+        val dialog = builder.setTitle("Choose Source Of Images:")
             .setItems(options) { dialog, which ->
                 when (which) {
                     0 -> captureImage()
@@ -144,8 +147,16 @@ class MainActivity : AppCompatActivity() {
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
             }
-            .show()
+            .create()
+
+        dialog.show()
+
+        val textViewTitle = dialog.findViewById<TextView>(android.R.id.title)
+        val textViewMessage = dialog.findViewById<TextView>(android.R.id.message)
+        textViewTitle?.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25f)
+        textViewMessage?.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25f)
     }
+
 
     private fun captureImage() {
         val intent = Intent(this, CameraActivity::class.java)
@@ -173,7 +184,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showWelcomeDialog() {
         val builder: AlertDialog.Builder = AlertDialog.Builder(this)
-        builder.setTitle("Welcome to Voxel Visage")
+        val dialog = builder.setTitle("Welcome to Voxel Visage")
             .setMessage(
                 "Our 3D facial reconstruction app!\n\nTo get started, you can:\n\n" +
                         "- Load a sample model\n" +
@@ -185,13 +196,22 @@ class MainActivity : AppCompatActivity() {
                 showOptionsDialog()
             }
             .setCancelable(false)
-            .show()
+            .create()
+
+        dialog.show()
+
+        val titleView = dialog.findViewById<TextView>(android.R.id.title)
+        titleView?.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25f)
+
+        val messageView = dialog.findViewById<TextView>(android.R.id.message)
+        messageView?.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25f)
     }
+
 
     private fun showOptionsDialog() {
         val options = arrayOf("Load sample model", "Select a model", "Provide 3 facial images")
-        AlertDialog.Builder(this)
-            .setTitle("Choose an option:")
+        val builder = AlertDialog.Builder(this)
+        val dialog = builder.setTitle("Choose an option:")
             .setItems(options) { dialog, which ->
                 when (which) {
                     0 -> loadSampleModel()
@@ -201,8 +221,20 @@ class MainActivity : AppCompatActivity() {
                 dialog.dismiss()
             }
             .setCancelable(true)
-            .show()
+            .create()
+
+        dialog.show()
+
+        val listView = dialog.listView
+        val adapter = listView.adapter as ArrayAdapter<*>
+        for (i in 0 until adapter.count) {
+            val childView = listView.getChildAt(i)
+            if (childView is TextView) {
+                childView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25f)
+            }
+        }
     }
+
 
     private fun showShareDownloadOptions() {
         if (isSampleModel()) {
@@ -221,6 +253,10 @@ class MainActivity : AppCompatActivity() {
                     dialog.dismiss()
                 }
                 .show()
+                .apply {
+                    val messageView = findViewById<TextView>(android.R.id.message)
+                    messageView?.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25f)
+                }
         } else {
             val options = arrayOf("Download/Share model")
             AlertDialog.Builder(this)
@@ -483,9 +519,15 @@ class MainActivity : AppCompatActivity() {
                     dialog.dismiss()
                 }
                 .show()
+                .apply {
+                    val titleView = findViewById<TextView>(resources.getIdentifier("alertTitle", "id", "android"))
+                    titleView?.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25f)
+
+                    val messageView = findViewById<TextView>(android.R.id.message)
+                    messageView?.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25f)
+                }
         }
     }
-
 
     private fun checkReadPermissionThenOpen() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q &&
