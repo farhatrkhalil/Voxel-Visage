@@ -13,7 +13,7 @@ This repository contains the source code and resources for an efficient 3D face 
 - Requires internet connection for face and landmarks recognition.
 
 ## App Support
-- Min Android Android 7.0 => Max Android 14.0
+- Min Android 7.0 => Max Android 14.0
 
 ## License
 
