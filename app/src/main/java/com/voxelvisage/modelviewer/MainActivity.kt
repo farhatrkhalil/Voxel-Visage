@@ -10,18 +10,19 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
-import android.text.InputFilter
 import android.text.InputType
-import android.util.Log
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.TextView
@@ -47,12 +48,9 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.ByteArrayInputStream
 import java.io.File
-import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
-import java.net.URLConnection
-import java.nio.channels.FileChannel
 import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
@@ -62,6 +60,7 @@ class MainActivity : AppCompatActivity() {
     private val disposables = CompositeDisposable()
     private var loadingDialog: LoadingDialog? = null
     private var uri: Uri? = null
+    private val handler = Handler(Looper.getMainLooper())
 
     private val openDocumentLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -86,6 +85,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val eyeGlassButtonClickListener = EyeGlassButtonClickListener(this)
+
+        checkConnectivity()
 
         showWelcomeDialog()
         binding.addButton.setOnClickListener {
@@ -126,6 +127,25 @@ class MainActivity : AppCompatActivity() {
         if (intent.data != null && savedInstanceState == null) {
             beginLoadModel(intent.data!!)
         }
+    }
+
+
+    private fun checkConnectivity() {
+        handler.postDelayed({
+            if (isConnected()) {
+            } else {
+                val intent = Intent(this@MainActivity, NoInternetActivity::class.java)
+                startActivity(intent)
+            }
+
+            checkConnectivity()
+        }, 1000)
+    }
+
+    private fun isConnected(): Boolean {
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
+        return activeNetwork?.isConnectedOrConnecting == true
     }
 
     @SuppressLint("MissingSuperCall")
@@ -403,6 +423,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         disposables.clear()
+        handler.removeCallbacksAndMessages(null)
         super.onDestroy()
     }
 
