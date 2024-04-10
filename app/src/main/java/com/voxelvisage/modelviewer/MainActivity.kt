@@ -129,17 +129,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     private fun checkConnectivity() {
-        handler.postDelayed({
-            if (isConnected()) {
-            } else {
-                val intent = Intent(this@MainActivity, NoInternetActivity::class.java)
-                startActivity(intent)
-            }
-
-            checkConnectivity()
-        }, 1000)
+        if (isConnected()) {
+            Toast.makeText(this, "Connected to the internet", Toast.LENGTH_SHORT).show()
+        } else {
+            val intent = Intent(this@MainActivity, NoInternetActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun isConnected(): Boolean {
