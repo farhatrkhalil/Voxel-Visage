@@ -670,7 +670,7 @@ class MainActivity : AppCompatActivity() {
         return uri.lastPathSegment
     }
 
-    private fun setCurrentModel(model: Model) {
+    fun setCurrentModel(model: Model) {
         ModelViewerApplication.currentModel = model
         createNewModelView(model)
         Toast.makeText(applicationContext, R.string.open_model_success, Toast.LENGTH_SHORT).show()

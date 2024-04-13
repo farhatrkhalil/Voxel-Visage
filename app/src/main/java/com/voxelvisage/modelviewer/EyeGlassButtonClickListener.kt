@@ -6,13 +6,12 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
-import com.voxelvisage.modelviewer.MainActivity
-import com.voxelvisage.modelviewer.ModelViewerApplication
-import com.voxelvisage.modelviewer.R
+import com.voxelvisage.modelviewer.obj.ObjModel
+import java.io.IOException
+import java.util.Locale
 
 class EyeGlassButtonClickListener(private val mainActivity: MainActivity) : View.OnClickListener {
 
@@ -22,6 +21,8 @@ class EyeGlassButtonClickListener(private val mainActivity: MainActivity) : View
 
     private fun showEyeGlassSelectionDialog() {
         val hasModel = ModelViewerApplication.currentModel != null
+
+        mainActivity.assets.list("")?.filter { it.endsWith(".obj") } ?: emptyList()
 
         val alertDialogBuilder = AlertDialog.Builder(mainActivity)
 
@@ -37,9 +38,6 @@ class EyeGlassButtonClickListener(private val mainActivity: MainActivity) : View
                 }
             return
         }
-
-        val filterModels: List<String> =
-            mainActivity.assets.list("")?.filter { it.endsWith(".obj") } ?: emptyList()
 
         alertDialogBuilder
             .setTitle("Filters Overlaying")
@@ -83,26 +81,50 @@ class EyeGlassButtonClickListener(private val mainActivity: MainActivity) : View
         option1TextView.text = "Metal Frame Reading Glasses"
         option2TextView.text = "Thin Eyeglasses"
 
-        // Load thumbnails using Glide or any other image loading library
         Glide.with(mainActivity).load(options[0].second).into(option1Button)
         Glide.with(mainActivity).load(options[1].second).into(option2Button)
 
-        // Handle button clicks
+
+        alertDialogBuilder
+            .setTitle("Select a filter:")
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+
+        val dialog = alertDialogBuilder.create()
+        dialog.setCancelable(true)
+
         option1Button.setOnClickListener {
-            // Handle option 1 selection here
+            handleOptionSelection(options[0].first)
+            dialog.dismiss()
         }
         option2Button.setOnClickListener {
-            // Handle option 2 selection here
+            handleOptionSelection(options[1].first)
+            dialog.dismiss()
         }
 
         alertDialogBuilder
             .setTitle("Select a filter:")
-            .setPositiveButton("OK") { dialog, _ ->
-                dialog.dismiss()
-            }
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
             }
-            .show()
+
+        dialog.show()
+    }
+
+    private fun handleOptionSelection(modelName: String) {
+        try {
+            val stream = mainActivity.assets.open(modelName)
+            val fileName = modelName.substringAfterLast("/").removeSuffix(".obj")
+                .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+            val fileFormat = modelName.substringAfterLast(".")
+            val title = "$fileName.$fileFormat"
+            val model = ObjModel(stream)
+            model.title = title
+            mainActivity.setCurrentModel(model)
+            stream.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
     }
 }
