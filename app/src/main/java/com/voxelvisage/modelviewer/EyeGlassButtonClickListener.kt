@@ -13,6 +13,7 @@ import com.voxelvisage.modelviewer.obj.ObjModel
 import java.io.IOException
 import java.util.Locale
 
+@Suppress("NAME_SHADOWING")
 class EyeGlassButtonClickListener(private val mainActivity: MainActivity) : View.OnClickListener {
 
     override fun onClick(v: View?) {
@@ -43,11 +44,10 @@ class EyeGlassButtonClickListener(private val mainActivity: MainActivity) : View
             .setTitle("Filters Overlaying")
             .setMessage(
                 "The user can select one of the 3D eyeglasses filters.\n\n" +
-                        "Voxel Visage will apply the selected filter to a 3D model face displayed in the scene by fitting the glasses onto the face seamlessly.\n\n" +
-                        "If the selected model does not accurately represent a face or is unclear, an error will be displayed.\n"
+                        "Voxel Visage will add the selected filter to the scene.\n\n" +
+                        "For the best experience, a face is required to accurately test the visual appearance of the glasses.\n"
             )
             .setPositiveButton("OK") { dialog, _ ->
-                // After clicking OK, show another dialog with the options
                 showSelectOptionsDialog()
                 dialog.dismiss()
             }
@@ -61,8 +61,8 @@ class EyeGlassButtonClickListener(private val mainActivity: MainActivity) : View
     private fun showSelectOptionsDialog() {
         val options = arrayOf(
             Pair(
-                "metal_frame_reading_glasses_filter2.obj",
-                "file:///android_asset/metal_frame_reading_glasses_filter2.png"
+                "glasses.obj",
+                "file:///android_asset/glasses.png"
             ),
             Pair("thin_eyeglasses_filter1.obj", "file:///android_asset/thin_eyeglasses_filter1.png")
         )
@@ -78,7 +78,7 @@ class EyeGlassButtonClickListener(private val mainActivity: MainActivity) : View
         val option1TextView = dialogView.findViewById<TextView>(R.id.option1TextView)
         val option2TextView = dialogView.findViewById<TextView>(R.id.option2TextView)
 
-        option1TextView.text = "Metal Frame Reading Glasses"
+        option1TextView.text = "Glasses"
         option2TextView.text = "Thin Eyeglasses"
 
         Glide.with(mainActivity).load(options[0].second).into(option1Button)
