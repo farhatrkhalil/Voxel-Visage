@@ -19,9 +19,20 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class GalleryViewerActivity extends AppCompatActivity {
 
@@ -30,6 +41,9 @@ public class GalleryViewerActivity extends AppCompatActivity {
     private ArrayList<Uri> selectedImages;
     private boolean[] selectedStates;
     private boolean noImagesPopupShown = false;
+
+    private static final String MODEL_PATH = "file:///android_asset/generic_head.obj";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +57,8 @@ public class GalleryViewerActivity extends AppCompatActivity {
         loadImages();
 
         showPopupMessage();
+
+        checkApiConnectivity();
 
         FrameLayout galleryContainer = findViewById(R.id.gallery_container);
         galleryContainer.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -61,6 +77,33 @@ public class GalleryViewerActivity extends AppCompatActivity {
         gridView.setOnItemClickListener((parent, view, position, id) -> toggleSelection(position));
 
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void checkApiConnectivity() {
+        new Thread(() -> {
+            try {
+                URL url = new URL("http://192.168.0.107:8000/check_api");
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+
+                int responseCode = connection.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    String apiURL = connection.getURL().toString();
+                    runOnUiThread(() -> {
+                        Toast.makeText(GalleryViewerActivity.this, String.format("API Connected at: %s", apiURL), Toast.LENGTH_LONG).show();
+                    });
+                } else {
+                    runOnUiThread(() -> {
+                        Toast.makeText(GalleryViewerActivity.this, "API Connection Failed", Toast.LENGTH_SHORT).show();
+                    });
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                runOnUiThread(() -> {
+                    Toast.makeText(GalleryViewerActivity.this, "API Connection Failed", Toast.LENGTH_SHORT).show();
+                });
+            }
+        }).start();
     }
 
     @Override
@@ -86,15 +129,7 @@ public class GalleryViewerActivity extends AppCompatActivity {
             }
             return true;
         } else if (item.getItemId() == R.id.action_process) {
-            if (selectedImages.size() == 3) {
-                Intent intent = new Intent(GalleryViewerActivity.this, MainActivity.class);
-                intent.putParcelableArrayListExtra("selectedImages", selectedImages);
-                intent.putExtra("source", "GalleryViewerActivity");
-                startActivity(intent);
-                finish();
-            } else {
-                Toast.makeText(this, "Please select 3 images", Toast.LENGTH_SHORT).show();
-            }
+            processImages();
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -176,5 +211,32 @@ public class GalleryViewerActivity extends AppCompatActivity {
         if (view != null) {
             galleryAdapter.updateView(position, view);
         }
+    }
+
+    private void processImages() {
+        if (selectedImages.size() != 3) {
+            Toast.makeText(this, "Please select 3 images", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Intent intent = new Intent(GalleryViewerActivity.this, MainActivity.class);
+        intent.putExtra("model_path", MODEL_PATH);
+        startActivity(intent);
+
+        finish();
+    }
+
+
+    private String getImagePath(Uri uri) {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
+        if (cursor != null) {
+            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            String path = cursor.getString(columnIndex);
+            cursor.close();
+            return path;
+        }
+        return null;
     }
 }

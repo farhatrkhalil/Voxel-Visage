@@ -48,6 +48,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.ByteArrayInputStream
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
@@ -83,10 +84,21 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
+
+
         setContentView(binding.root)
         val eyeGlassButtonClickListener = EyeGlassButtonClickListener(this)
 
-        checkConnectivity()
+        if (intent.data != null && savedInstanceState == null) {
+            val modelPath = intent.getStringExtra("model_path")
+            if (modelPath != null) {
+                loadModelFromFile(modelPath)
+            } else {
+                Toast.makeText(this, "Model path is null", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            Toast.makeText(this, "Intent data is null", Toast.LENGTH_SHORT).show()
+        }
 
         showWelcomeDialog()
         binding.addButton.setOnClickListener {
@@ -128,6 +140,27 @@ class MainActivity : AppCompatActivity() {
             beginLoadModel(intent.data!!)
         }
     }
+
+    private fun loadModelFromFile(filePath: String) {
+        try {
+            val stream = FileInputStream(filePath)
+            val fileName = File(filePath).nameWithoutExtension
+            val fileFormat = filePath.substringAfterLast(".")
+            val title = "$fileName.$fileFormat"
+            val model = when (fileFormat) {
+                "obj" -> ObjModel(stream)
+                "stl" -> StlModel(stream)
+                "ply" -> PlyModel(stream)
+                else -> throw IllegalArgumentException("Unsupported file format: $fileFormat")
+            }
+            model.title = title
+            setCurrentModel(model)
+            stream.close()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
 
     private fun checkConnectivity() {
         if (isConnected()) {
