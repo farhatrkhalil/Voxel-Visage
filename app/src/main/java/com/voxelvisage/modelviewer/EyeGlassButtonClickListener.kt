@@ -1,9 +1,18 @@
 package com.voxelvisage.modelviewer
 
+
+import android.annotation.SuppressLint
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import com.bumptech.glide.Glide
+import com.voxelvisage.modelviewer.MainActivity
+import com.voxelvisage.modelviewer.ModelViewerApplication
+import com.voxelvisage.modelviewer.R
 
 class EyeGlassButtonClickListener(private val mainActivity: MainActivity) : View.OnClickListener {
 
@@ -29,7 +38,8 @@ class EyeGlassButtonClickListener(private val mainActivity: MainActivity) : View
             return
         }
 
-        val filtermodels: List<String> = mainActivity.assets.list("")?.filter { it.endsWith(".obj") } ?: emptyList()
+        val filterModels: List<String> =
+            mainActivity.assets.list("")?.filter { it.endsWith(".obj") } ?: emptyList()
 
         alertDialogBuilder
             .setTitle("Filters Overlaying")
@@ -49,16 +59,49 @@ class EyeGlassButtonClickListener(private val mainActivity: MainActivity) : View
             .show()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun showSelectOptionsDialog() {
-        val options = arrayOf("metal_frame_reading_glasses_filter2.obj", "thin_eyeglasses_filter1.obj")
+        val options = arrayOf(
+            Pair(
+                "metal_frame_reading_glasses_filter2.obj",
+                "file:///android_asset/metal_frame_reading_glasses_filter2.png"
+            ),
+            Pair("thin_eyeglasses_filter1.obj", "file:///android_asset/thin_eyeglasses_filter1.png")
+        )
 
         val alertDialogBuilder = AlertDialog.Builder(mainActivity)
+        val dialogView =
+            LayoutInflater.from(mainActivity).inflate(R.layout.dialog_select_options, null)
+        alertDialogBuilder.setView(dialogView)
+
+        val option1Button = dialogView.findViewById<ImageButton>(R.id.option1Button)
+        val option2Button = dialogView.findViewById<ImageButton>(R.id.option2Button)
+
+        val option1TextView = dialogView.findViewById<TextView>(R.id.option1TextView)
+        val option2TextView = dialogView.findViewById<TextView>(R.id.option2TextView)
+
+        option1TextView.text = "Metal Frame Reading Glasses"
+        option2TextView.text = "Thin Eyeglasses"
+
+        // Load thumbnails using Glide or any other image loading library
+        Glide.with(mainActivity).load(options[0].second).into(option1Button)
+        Glide.with(mainActivity).load(options[1].second).into(option2Button)
+
+        // Handle button clicks
+        option1Button.setOnClickListener {
+            // Handle option 1 selection here
+        }
+        option2Button.setOnClickListener {
+            // Handle option 2 selection here
+        }
+
         alertDialogBuilder
             .setTitle("Select a filter:")
-            .setItems(options) { dialog, which ->
-                // Handle option selection here
-                val selectedOption = options[which]
-                // You can perform further actions based on the selected option
+            .setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
             }
             .show()
     }
