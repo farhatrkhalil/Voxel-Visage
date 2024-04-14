@@ -8,6 +8,24 @@
     android:background="@color/colorWindowBackground"
     tools:context="com.voxelvisage.modelviewer.MainActivity">
 
+    <TextView
+        android:id="@+id/fpsCounter"
+        android:layout_width="92dp"
+        android:layout_height="56dp"
+        android:layout_marginEnd="92dp"
+        android:background="@drawable/floating_button_background"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="FPS: 0"
+        android:textColor="@android:color/white"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/actionButton"
+        app:layout_constraintEnd_toStartOf="@+id/actionButton"
+        app:layout_constraintTop_toTopOf="@+id/actionButton"
+        app:layout_constraintVertical_bias="0.54"
+        tools:ignore="HardcodedText,SmallSp" />
+
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="1dp"

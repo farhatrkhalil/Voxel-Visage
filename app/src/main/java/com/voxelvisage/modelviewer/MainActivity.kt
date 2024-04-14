@@ -89,16 +89,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         val eyeGlassButtonClickListener = EyeGlassButtonClickListener(this)
 
-        if (intent.data != null && savedInstanceState == null) {
-            val modelPath = intent.getStringExtra("model_path")
-            if (modelPath != null) {
-                loadModelFromFile(modelPath)
-            } else {
-                Toast.makeText(this, "Model path is null", Toast.LENGTH_SHORT).show()
-            }
-        } else {
-            Toast.makeText(this, "Intent data is null", Toast.LENGTH_SHORT).show()
-        }
 
         showWelcomeDialog()
         binding.addButton.setOnClickListener {
@@ -138,6 +128,13 @@ class MainActivity : AppCompatActivity() {
 
         if (intent.data != null && savedInstanceState == null) {
             beginLoadModel(intent.data!!)
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    fun updateFpsCounter(fps: Int) {
+        runOnUiThread {
+            binding.fpsCounter.text = "FPS: $fps"
         }
     }
 

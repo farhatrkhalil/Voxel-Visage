@@ -1,12 +1,13 @@
 package com.voxelvisage.modelviewer
 
+import android.content.Context
 import android.opengl.GLES20
 import android.opengl.GLSurfaceView
 import android.opengl.Matrix
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class ModelRenderer(private var model: Model?) : GLSurfaceView.Renderer {
+class ModelRenderer(private val context: Context, private var model: Model?) : GLSurfaceView.Renderer {
     private val light = Light(floatArrayOf(0.0f, 0.0f, MODEL_BOUND_SIZE * 10, 1.0f))
     private val floor = Floor()
 
@@ -18,6 +19,9 @@ class ModelRenderer(private var model: Model?) : GLSurfaceView.Renderer {
     private var translateX = 0f
     private var translateY = 0f
     private var translateZ = 0f
+
+    private var frameCount = 0
+    private var startTime = System.currentTimeMillis()
 
     fun translate(dx: Float, dy: Float, dz: Float) {
         val translateScaleFactor = MODEL_BOUND_SIZE / 200f
@@ -47,6 +51,19 @@ class ModelRenderer(private var model: Model?) : GLSurfaceView.Renderer {
     }
 
     override fun onDrawFrame(unused: GL10) {
+
+        frameCount++
+
+        val currentTime = System.currentTimeMillis()
+        val elapsedTime = currentTime - startTime
+        if (elapsedTime >= 1000) {
+            val fps = (frameCount * 1000f / elapsedTime).toInt()
+
+            (context as? MainActivity)?.updateFpsCounter(fps)
+
+            frameCount = 0
+            startTime = currentTime
+        }
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT or GLES20.GL_DEPTH_BUFFER_BIT)
         floor.draw(viewMatrix, projectionMatrix, light)
         model?.draw(viewMatrix, projectionMatrix, light)
