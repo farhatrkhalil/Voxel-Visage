@@ -11,6 +11,7 @@ This repository contains the source code and resources for an efficient 3D face 
 - Limited support for OBJ (Wavefront) and PLY (Stanford) files.
 - Download and share 3D models.
 - Immersive VR without the need for glasses.
+- Real-time FPS counter for performance monitoring.
   
 ## App Support
 
