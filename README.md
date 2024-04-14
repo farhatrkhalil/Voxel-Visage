@@ -11,11 +11,15 @@ This repository contains the source code and resources for an efficient 3D face 
 - Limited support for OBJ (Wavefront) and PLY (Stanford) files.
 - Download and share 3D models.
 - Immersive VR without the need for glasses.
-- Requires internet connection to establish a connection to hosted API and receive the model.
-
+  
 ## App Support
+
 - Min Android 7.0 => Max Android 14.0
 
+## Requirements
+
+- An internet connection is required to establish a connection to the hosted API and receive the model.
+  
 ## License
 
 Copyright 2024+ Khalil Farhat, Abed El Fattah Amouneh, Sammy Medawar, Wally El Sayed
