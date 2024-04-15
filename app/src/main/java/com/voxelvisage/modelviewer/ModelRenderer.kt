@@ -7,9 +7,10 @@ import android.opengl.Matrix
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class ModelRenderer(private val context: Context, private var model: Model?) : GLSurfaceView.Renderer {
-    private val light = Light(floatArrayOf(0.0f, 0.0f, MODEL_BOUND_SIZE * 10, 1.0f))
-    private val floor = Floor()
+class ModelRenderer(private val context: Context, private var model: Model?, val floorColor: FloatArray, val lineColor: FloatArray) : GLSurfaceView.Renderer {
+    val light = Light(floatArrayOf(0.0f, 0.0f, MODEL_BOUND_SIZE * 10, 1.0f))
+    val floor = Floor(floorColor, lineColor)
+
 
     private val projectionMatrix = FloatArray(16)
     private val viewMatrix = FloatArray(16)
@@ -35,6 +36,12 @@ class ModelRenderer(private val context: Context, private var model: Model?) : G
     fun setModel(model: Model?) {
         this.model = model
     }
+    fun changeBackground(floorColor: FloatArray, lineColor: FloatArray) {
+        // Update the floor and line colors
+        floor.floorColor = floorColor
+        floor.lineColor = lineColor
+    }
+
 
     fun rotate(aX: Float, aY: Float) {
         val rotateScaleFactor = 0.5f

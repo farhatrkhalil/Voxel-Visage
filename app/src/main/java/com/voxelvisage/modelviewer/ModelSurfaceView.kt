@@ -8,7 +8,7 @@ import com.voxelvisage.modelviewer.ModelViewerApplication.Companion.currentModel
 import com.voxelvisage.modelviewer.util.Util.pxToDp
 import kotlin.math.sqrt
 
-class ModelSurfaceView(context: Context, model: Model?) : GLSurfaceView(context) {
+class ModelSurfaceView(context: Context, model: Model?, floorColor: FloatArray, lineColor: FloatArray) : GLSurfaceView(context) {
     internal val renderer: ModelRenderer
     internal var previousX = 0f
     internal var previousY = 0f
@@ -92,7 +92,7 @@ class ModelSurfaceView(context: Context, model: Model?) : GLSurfaceView(context)
 
     init {
         setEGLContextClientVersion(2)
-        renderer = ModelRenderer(context,model)
+        renderer = ModelRenderer(context, model, floorColor, lineColor)
         setRenderer(renderer)
         renderMode = RENDERMODE_WHEN_DIRTY
     }

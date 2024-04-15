@@ -63,6 +63,13 @@ class MainActivity : AppCompatActivity() {
     private var uri: Uri? = null
     private val handler = Handler(Looper.getMainLooper())
 
+
+    private var floorColor = floatArrayOf(0.3f, 0.9f, 0.6f, 1.0f)
+    private var lineColor = floatArrayOf(0.5f, 0.5f, 0.5f, 1.0f)
+
+    private var modelRenderer = ModelRenderer(this, null, floorColor, lineColor)
+
+
     private val openDocumentLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == Activity.RESULT_OK && it.data?.data != null) {
@@ -85,6 +92,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
 
+        var floorColor = floatArrayOf(0.8f, 0.4f, 0.8f, 1.0f)
+        var lineColor = floatArrayOf(0.5f, 0.5f, 0.5f, 1.0f)
+
+        modelView = ModelSurfaceView(this, null, floorColor, lineColor)
+        modelRenderer = ModelRenderer(this, null, floorColor, lineColor)
 
         setContentView(binding.root)
         val eyeGlassButtonClickListener = EyeGlassButtonClickListener(this)
@@ -102,6 +114,7 @@ class MainActivity : AppCompatActivity() {
         binding.actionButton.setOnClickListener {
             startVrActivity()
         }
+
 
         binding.filterButton.setOnClickListener {
             val eyeGlassButtonClickListener = EyeGlassButtonClickListener(this@MainActivity)
@@ -169,7 +182,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun isConnected(): Boolean {
-        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork: NetworkInfo? = connectivityManager.activeNetworkInfo
         return activeNetwork?.isConnectedOrConnecting == true
     }
@@ -487,6 +501,16 @@ class MainActivity : AppCompatActivity() {
                 true
             }
 
+            R.id.background -> {
+                // Call changeBackground with desired colors
+                changeBackground(
+                    item,
+                    floatArrayOf(0.5f, 0.5f, 0.5f, 0.5f),
+                    floatArrayOf(0.8f, 0.8f, 0.8f, 0.5f)
+                )
+                true
+            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -567,7 +591,14 @@ class MainActivity : AppCompatActivity() {
                 }
                 .show()
                 .apply {
-                    val titleView = findViewById<TextView>(resources.getIdentifier("alertTitle", "id", "android"))
+                    val titleView =
+                        findViewById<TextView>(
+                            resources.getIdentifier(
+                                "alertTitle",
+                                "id",
+                                "android"
+                            )
+                        )
                     titleView?.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25f)
 
                     val messageView = findViewById<TextView>(android.R.id.message)
@@ -612,7 +643,7 @@ class MainActivity : AppCompatActivity() {
         if (modelView != null) {
             binding.containerView.removeView(modelView)
         }
-        modelView = ModelSurfaceView(this, model)
+        modelView = ModelSurfaceView(this, model, floorColor, lineColor)
         binding.containerView.addView(modelView, 0)
     }
 
@@ -674,13 +705,13 @@ class MainActivity : AppCompatActivity() {
             .doAfterTerminate {
                 loadingDialog!!.dismiss()
             }
-            .subscribe({
-                setCurrentModel(it)
-            }, {
-                it.printStackTrace()
+            .subscribe({ result: Model ->
+                setCurrentModel(result)
+            }, { error: Throwable ->
+                error.printStackTrace()
                 Toast.makeText(
                     applicationContext,
-                    getString(R.string.open_model_error, it.message),
+                    getString(R.string.open_model_error, error.message),
                     Toast.LENGTH_SHORT
                 ).show()
             })
@@ -742,4 +773,14 @@ class MainActivity : AppCompatActivity() {
             }
             .show()
     }
+
+    private fun changeBackground(item: MenuItem, floorColor: FloatArray, lineColor: FloatArray) {
+        // Update the floor and line colors in ModelRenderer
+
+        modelRenderer.changeBackground(floorColor, lineColor)
+
+        // Notify the user
+        Toast.makeText(this, "Background changed", Toast.LENGTH_SHORT).show()
+    }
+
 }

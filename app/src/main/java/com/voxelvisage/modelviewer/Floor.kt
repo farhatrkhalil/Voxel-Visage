@@ -6,9 +6,7 @@ import com.voxelvisage.modelviewer.util.Util.compileProgram
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
-class Floor : ArrayModel() {
-    private val floorColor = floatArrayOf(0.2f, 0.2f, 0.2f, 0.5f)
-    private val lineColor = floatArrayOf(0.6f, 0.6f, 0.6f, 0.5f)
+class Floor(var floorColor: FloatArray, var lineColor: FloatArray) : ArrayModel() {
     private var extent = 0f
 
     override fun setup(boundSize: Float) {
