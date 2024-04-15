@@ -769,10 +769,40 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
+    private val combinations = listOf(
+        Pair(
+            "Red Floor with Grey Lines",
+            floatArrayOf(1.0f, 0.0f, 0.0f, 1.0f) to floatArrayOf(0.5f, 0.5f, 0.5f, 1.0f)
+        ),
+        Pair(
+            "Blue Floor with Black Lines",
+            floatArrayOf(0.0f, 0.0f, 1.0f, 1.0f) to floatArrayOf(0.0f, 0.0f, 0.0f, 1.0f)
+        ),
+        Pair(
+            "Green Floor with Dark Green Lines",
+            floatArrayOf(0.0f, 1.0f, 0.0f, 1.0f) to floatArrayOf(0.0f, 0.5f, 0.0f, 1.0f)
+        ),
+        Pair(
+            "Yellow Floor with Orange Lines",
+            floatArrayOf(1.0f, 1.0f, 0.0f, 1.0f) to floatArrayOf(1.0f, 0.5f, 0.0f, 1.0f)
+        ),
+        Pair(
+            "Purple Floor with Pink Lines",
+            floatArrayOf(0.5f, 0.0f, 0.5f, 1.0f) to floatArrayOf(1.0f, 0.0f, 1.0f, 1.0f)
+        ),
+        Pair(
+            "Default Floor with Default Lines",
+            floatArrayOf(0.2f, 0.2f, 0.2f, 1.0f) to floatArrayOf(0.5f, 0.5f, 0.5f, 1.0f)
+        )
+    )
+
+    private var currentCombinationIndex = 0
+
     private fun changeBackground() {
-        floorColor = floatArrayOf(1.0f, 0.0f, 0.0f, 1.0f)
-        val lineColor = floatArrayOf(0.5f, 0.5f, 0.5f, 1.0f)
+        floorColor = combinations[currentCombinationIndex].second.first
+        lineColor = combinations[currentCombinationIndex].second.second
         modelView?.refreshBackground(floorColor, lineColor)
-        Toast.makeText(this, "Background changed", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, combinations[currentCombinationIndex].first, Toast.LENGTH_SHORT).show()
+        currentCombinationIndex = (currentCombinationIndex + 1) % combinations.size
     }
 }
