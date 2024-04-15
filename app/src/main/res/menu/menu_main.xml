@@ -9,7 +9,7 @@
         tools:ignore="AlwaysShowAction,AppCompatResource" />
 
     <item android:id="@+id/menu_open_model"
-        android:icon="@drawable/ic_folder_open_white_24dp"
+        android:icon="@drawable/folder"
         android:title="@string/open_model"
         app:showAsAction="always"
         tools:ignore="AlwaysShowAction,AppCompatResource" />
