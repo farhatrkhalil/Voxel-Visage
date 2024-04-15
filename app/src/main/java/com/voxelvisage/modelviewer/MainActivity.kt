@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())
 
 
-    private var floorColor = floatArrayOf(0.3f, 0.9f, 0.6f, 1.0f)
+    private var floorColor = floatArrayOf(0.2f, 0.2f, 0.2f, 1.0f)
     private var lineColor = floatArrayOf(0.5f, 0.5f, 0.5f, 1.0f)
 
     private var modelRenderer = ModelRenderer(this, null, floorColor, lineColor)
@@ -502,12 +502,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.background -> {
-                // Call changeBackground with desired colors
-                changeBackground(
-                    item,
-                    floatArrayOf(0.5f, 0.5f, 0.5f, 0.5f),
-                    floatArrayOf(0.8f, 0.8f, 0.8f, 0.5f)
-                )
+                changeBackground()
                 true
             }
 
@@ -774,13 +769,10 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun changeBackground(item: MenuItem, floorColor: FloatArray, lineColor: FloatArray) {
-        // Update the floor and line colors in ModelRenderer
-
-        modelRenderer.changeBackground(floorColor, lineColor)
-
-        // Notify the user
+    private fun changeBackground() {
+        floorColor = floatArrayOf(1.0f, 0.0f, 0.0f, 1.0f)
+        val lineColor = floatArrayOf(0.5f, 0.5f, 0.5f, 1.0f)
+        modelView?.refreshBackground(floorColor, lineColor)
         Toast.makeText(this, "Background changed", Toast.LENGTH_SHORT).show()
     }
-
 }

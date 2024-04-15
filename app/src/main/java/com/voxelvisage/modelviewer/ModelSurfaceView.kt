@@ -72,6 +72,10 @@ class ModelSurfaceView(context: Context, model: Model?, floorColor: FloatArray, 
         requestRender()
     }
 
+    fun refreshBackground(floorColor: FloatArray, lineColor: FloatArray) {
+        renderer.changeBackground(floorColor, lineColor)
+        requestRender()
+    }
 
     private fun getPinchDistance(event: MotionEvent): Float {
         val x = event.getX(0) - event.getX(1)
