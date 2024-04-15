@@ -12,9 +12,8 @@
         <item name="toolbarStyle">@style/ToolbarStyle</item>
         <item name="popupMenuStyle">@style/PopupMenuStyle</item>
         <item name="android:textSize" tools:ignore="SpUsage">25dp</item>
+        <item name="actionOverflowButtonStyle">@style/OverflowIconStyle</item>
     </style>
-
-
 
     <style name="AppTheme.NoTitle">
         <item name="windowActionBar">false</item>
@@ -25,6 +24,11 @@
     <style name="ToolbarStyle" parent="Widget.Material3.Toolbar">
         <item name="android:background">@color/colorPrimary</item>
     </style>
+
+    <style name="OverflowIconStyle" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tint">#FFFFFF</item>
+    </style>
+
 
     <style name="PopupMenuStyle" parent="Widget.Material3.PopupMenu">
         <item name="overlapAnchor">true</item>
