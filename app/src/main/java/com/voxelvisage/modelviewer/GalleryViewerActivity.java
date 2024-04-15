@@ -19,20 +19,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
-
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class GalleryViewerActivity extends AppCompatActivity {
 
@@ -139,8 +131,12 @@ public class GalleryViewerActivity extends AppCompatActivity {
     private void showPopupMessage() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Image Selection Requirement");
-        builder.setMessage("Please select 3 images and click on the right arrow to proceed.");
-        builder.setPositiveButton("OK", (dialog, which) -> {
+        builder.setMessage("Please select 3 facial images and click on the right arrow to proceed.\n\nThe order must be as follows:\n\n" +
+                "1• Centered face image\n\n" +
+                "2• Left face image\n\n" +
+                "3• Right face image.\n\n" +
+                "This order is mandatory.");
+                builder.setPositiveButton("OK", (dialog, which) -> {
         });
 
         AlertDialog alertDialog = builder.create();

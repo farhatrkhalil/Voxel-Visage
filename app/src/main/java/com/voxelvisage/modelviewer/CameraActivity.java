@@ -222,10 +222,15 @@ public class CameraActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle("Instructions")
                 .setMessage("To create a 3D model of your face, 3 pictures are required:\n\n" +
-                        "- A centered image of yourself only containing your face\n" +
-                        "- An offset image of the front of your face to the left\n" +
+                        "- A centered image of yourself only containing your face\n\n" +
+                        "- An offset image of the front of your face to the left\n\n" +
                         "- An offset image of the front of your face to the right\n\n" +
-                        "The more accurately you follow these instructions, the more accurate the results.")
+                        "The more accurately you follow these instructions, the more accurate the results.\n\n" +
+                        "Please ensure the images are selected in the following order:\n\n" +
+                        "1. Centered face image\n\n" +
+                        "2. Left face image\n\n" +
+                        "3. Right face image.\n\n" +
+                        "This order is mandatory.")
                 .setPositiveButton(android.R.string.ok, (dialog, which) -> triggerTakePictureButtonClick())
                 .setCancelable(false)
                 .show();
