@@ -24,6 +24,10 @@ This repository contains the source code and resources for an efficient 3D face 
   
 ## License
 
-Copyright 2024+ Khalil Farhat, Abed El Fattah Amouneh, Sammy Medawar, Wally El Sayed
+Copyright 2024+ 
+- Khalil Farhat
+- Abed El Fattah Amouneh
+- Sammy Medawar
+- Wally El Sayed
 
 Licensed under the [MIT License](https://opensource.org/licenses/MIT)
