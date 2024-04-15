@@ -771,27 +771,27 @@ class MainActivity : AppCompatActivity() {
 
     private val combinations = listOf(
         Pair(
-            "Red Floor with Grey Lines",
-            floatArrayOf(1.0f, 0.0f, 0.0f, 1.0f) to floatArrayOf(0.5f, 0.5f, 0.5f, 1.0f)
+            "Pink Floor",
+            floatArrayOf(1.0f, 0.5f, 0.5f, 1.0f) to floatArrayOf(0.0f, 0.0f, 0.0f, 1.0f)
         ),
         Pair(
-            "Blue Floor with Black Lines",
-            floatArrayOf(0.0f, 0.0f, 1.0f, 1.0f) to floatArrayOf(0.0f, 0.0f, 0.0f, 1.0f)
+            "Light Blue Floor",
+            floatArrayOf(0.5f, 0.5f, 1.0f, 1.0f) to floatArrayOf(0.0f, 0.0f, 0.0f, 1.0f)
         ),
         Pair(
-            "Green Floor with Dark Green Lines",
-            floatArrayOf(0.0f, 1.0f, 0.0f, 1.0f) to floatArrayOf(0.0f, 0.5f, 0.0f, 1.0f)
+            "Green Floor",
+            floatArrayOf(0.0f, 1.0f, 0.0f, 1.0f) to floatArrayOf(0.0f, 0.0f, 0.0f, 1.0f)
         ),
         Pair(
-            "Yellow Floor with Orange Lines",
-            floatArrayOf(1.0f, 1.0f, 0.0f, 1.0f) to floatArrayOf(1.0f, 0.5f, 0.0f, 1.0f)
+            "Yellow Floor",
+            floatArrayOf(1.0f, 1.0f, 0.0f, 1.0f) to floatArrayOf(0.0f, 0.0f, 0.0f, 1.0f)
         ),
         Pair(
-            "Purple Floor with Pink Lines",
-            floatArrayOf(0.5f, 0.0f, 0.5f, 1.0f) to floatArrayOf(1.0f, 0.0f, 1.0f, 1.0f)
+            "Purple Floor",
+            floatArrayOf(0.5f, 0.0f, 0.5f, 1.0f) to floatArrayOf(0.0f, 0.0f, 0.0f, 1.0f)
         ),
         Pair(
-            "Default Floor with Default Lines",
+            "Default Floor",
             floatArrayOf(0.2f, 0.2f, 0.2f, 1.0f) to floatArrayOf(0.5f, 0.5f, 0.5f, 1.0f)
         )
     )
