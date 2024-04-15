@@ -1,0 +1,12 @@
+dlib==19.24.2
+fastapi==0.109.2
+matplotlib==3.7.1
+opencv_python==4.8.1.78
+pydantic==2.6.1
+pandas
+numpy
+scipy
+plotly
+fastapi
+pip install uvicorn
+pip install python-multipart
