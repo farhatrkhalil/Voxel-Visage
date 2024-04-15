@@ -12,6 +12,7 @@ This repository contains the source code and resources for an efficient 3D face 
 - Download and share 3D models.
 - Immersive VR without the need for glasses.
 - Real-time FPS counter for performance monitoring.
+- Adjust Scene Colors & Environment.
   
 ## App Support
 
