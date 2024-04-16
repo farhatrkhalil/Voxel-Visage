@@ -7,6 +7,7 @@ This repository contains the source code and resources for an efficient 3D face 
 ## Features
 
 - View 3D models on Android devices.
+- Camera movement & zoom for detailed exploration. 
 - Support for STL (ASCII and binary) files.
 - Limited support for OBJ (Wavefront) and PLY (Stanford) files.
 - Download and share 3D models.
@@ -21,6 +22,10 @@ This repository contains the source code and resources for an efficient 3D face 
 ## Requirements
 
 - An internet connection is required to establish a connection to the hosted API and receive the model.
+
+## Future Development
+
+- Augmented reality filters (planned): We're exploring advanced features like virtual eyewear and other face filters.
   
 ## License
 
