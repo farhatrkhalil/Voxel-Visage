@@ -19,22 +19,31 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import retrofit2.Call;
+import com.voxelvisage.modelviewer.RetrofitClient;
+
 public class GalleryViewerActivity extends AppCompatActivity {
+
 
     private GridView gridView;
     private GalleryAdapter galleryAdapter;
     private ArrayList<Uri> selectedImages;
     private boolean[] selectedStates;
     private boolean noImagesPopupShown = false;
-
-    private static final String MODEL_PATH = "file:///android_asset/generic_head.obj";
 
 
     @Override
@@ -74,9 +83,9 @@ public class GalleryViewerActivity extends AppCompatActivity {
     private void checkApiConnectivity() {
         new Thread(() -> {
             try {
-                URL url = new URL("http://192.168.0.107:8000/check_api");
+                URL url = new URL("http://172.25.112.1:3003/check_api");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("GET");
+                connection.setRequestMethod("POST");
 
                 int responseCode = connection.getResponseCode();
                 if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -96,6 +105,55 @@ public class GalleryViewerActivity extends AppCompatActivity {
                 });
             }
         }).start();
+    }
+
+    private void uploadImages() {
+
+        if (selectedImages.size() != 3) {
+            Toast.makeText(this, "Please select 3 images", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        List<MultipartBody.Part> imageParts = new ArrayList<>();
+        for (Uri imageUri : selectedImages) {
+            String imagePath = getImagePath(imageUri);
+            if (imagePath == null) {
+                // Handle error if path retrieval fails
+                continue;
+            }
+
+            File imageFile = new File(imagePath);
+            RequestBody requestBody = RequestBody.create(imageFile, MediaType.parse("image/*"));
+            MultipartBody.Part imagePart = MultipartBody.Part.createFormData("files", imageFile.getName(), requestBody);
+            imageParts.add(imagePart);
+        }
+
+        // Get an instance of ApiService (implementation detail)
+        ApiService apiService = RetrofitClient.getInstance().create(ApiService.class);
+
+        Call<YourResponseModel> call = apiService.uploadImages(imageParts);
+
+        // Handle the asynchronous call
+        call.enqueue(new Callback<YourResponseModel>() {
+            @Override
+            public void onResponse(Call<YourResponseModel> call, Response<YourResponseModel> response) {
+                if (response.isSuccessful()) {
+                    // Handle successful upload response (show success message etc.)
+                    YourResponseModel responseModel = response.body();
+                    // Access response data from responseModel
+                } else {
+                    // Handle upload failure (show error message etc.)
+                    int statusCode = response.code();
+                    // Handle error based on status code
+                }
+            }
+
+            @Override
+            public void onFailure(Call<YourResponseModel> call, Throwable t) {
+                // Handle network error or other failures
+                Toast.makeText(GalleryViewerActivity.this, "Upload Failed", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -121,12 +179,13 @@ public class GalleryViewerActivity extends AppCompatActivity {
             }
             return true;
         } else if (item.getItemId() == R.id.action_process) {
-            processImages();
-            return true;
+            uploadImages();
         } else {
             return super.onOptionsItemSelected(item);
         }
+        return false;
     }
+
 
     private void showPopupMessage() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -208,20 +267,6 @@ public class GalleryViewerActivity extends AppCompatActivity {
             galleryAdapter.updateView(position, view);
         }
     }
-
-    private void processImages() {
-        if (selectedImages.size() != 3) {
-            Toast.makeText(this, "Please select 3 images", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Intent intent = new Intent(GalleryViewerActivity.this, MainActivity.class);
-        intent.putExtra("model_path", MODEL_PATH);
-        startActivity(intent);
-
-        finish();
-    }
-
 
     private String getImagePath(Uri uri) {
         String[] projection = {MediaStore.Images.Media.DATA};
