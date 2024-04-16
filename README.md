@@ -22,6 +22,10 @@ This repository contains the source code and resources for an efficient 3D face 
 ## Requirements
 
 - An internet connection is required to establish a connection to the hosted API and receive the model.
+
+## Future Development:
+
+- Augmented reality filters (planned): We're exploring advanced features like virtual eyewear and other face filters.
   
 ## License
 
@@ -29,9 +33,5 @@ This repository contains the source code and resources for an efficient 3D face 
 - Abed El Fattah Amouneh
 - Sammy Medawar
 - Wally El Sayed
-
-## Future Development:
-
-- Augmented reality filters (planned): We're exploring advanced features like virtual eyewear and other face filters.
 
 Copyright 2024+, licensed under the [MIT License](https://opensource.org/licenses/MIT)
