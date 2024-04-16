@@ -110,7 +110,7 @@ public class GalleryViewerActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(Void... voids) {
             try {
-                URL urlObj = new URL("http://127.0.0.1:3003");
+                URL urlObj = new URL("http://192.168.0.107:3003/check_api");
                 HttpURLConnection connection = (HttpURLConnection) urlObj.openConnection();
                 connection.setRequestMethod("GET");
                 connection.setConnectTimeout(5000); // Set a timeout for the connection

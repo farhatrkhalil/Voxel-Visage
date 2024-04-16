@@ -72,7 +72,7 @@ object RetrofitClient {
         get() {
             if (retrofit == null) {
                 retrofit = Retrofit.Builder()
-                    .baseUrl("http://127.0.0.1:3003") // Replace with your actual API base URL
+                    .baseUrl("http://192.168.0.107:3003") // Replace with your actual API base URL
                     .addConverterFactory(ScalarsConverterFactory.create()) // Adjust if needed (e.g., for JSON use GsonConverterFactory)
                     .client(okHttpClient)
                     .build()
