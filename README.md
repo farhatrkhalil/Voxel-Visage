@@ -23,7 +23,7 @@ This repository contains the source code and resources for an efficient 3D face 
 
 - An internet connection is required to establish a connection to the hosted API and receive the model.
 
-## Future Development:
+## Future Development
 
 - Augmented reality filters (planned): We're exploring advanced features like virtual eyewear and other face filters.
   
