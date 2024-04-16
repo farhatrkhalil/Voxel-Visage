@@ -92,6 +92,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
 
+        val intent = intent
+
+        if (intent.hasExtra("modelPath")) {
+            val modelPath = intent.getStringExtra("modelPath")!!
+            val uri = Uri.parse(modelPath)
+            beginLoadModel(uri)
+        }
+
         var floorColor = floatArrayOf(0.8f, 0.4f, 0.8f, 1.0f)
         var lineColor = floatArrayOf(0.5f, 0.5f, 0.5f, 1.0f)
 

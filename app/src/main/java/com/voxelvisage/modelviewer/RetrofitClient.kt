@@ -1,14 +1,15 @@
 package com.voxelvisage.modelviewer
 
 import android.content.Context
+import android.content.Intent
 import android.webkit.MimeTypeMap
+import androidx.core.content.ContextCompat.startActivity
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
-import okio.Okio
 import okio.buffer
 import okio.sink
 import retrofit2.Call
@@ -21,11 +22,14 @@ import retrofit2.http.POST
 import retrofit2.http.Part
 import java.io.File
 
+
 object RetrofitClient {
 
     private var retrofit: Retrofit? = null
     private val okHttpClient = OkHttpClient()
+    private var modelName: String? = null
 
+    @JvmStatic
     fun uploadImages(imageFiles: List<File>, context: Context) {
         val apiService = instance!!.create(ApiService::class.java)
         val imageParts: MutableList<MultipartBody.Part> = ArrayList()
@@ -45,20 +49,24 @@ object RetrofitClient {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
                     if (responseBody != null) {
-                        // Create a new file in the app's private storage
                         val file = File(context.filesDir, "model.obj")
                         val sink = file.sink().buffer()
                         sink.writeAll(responseBody.source())
                         sink.close()
+                        modelName = file.absolutePath;
+                        val intent = Intent(context, MainActivity::class.java)
+                        intent.putExtra("modelPath", modelName)
+                        startActivity(context, intent, null)
                     }
                 }
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                // Handle failure
+
             }
         })
     }
+
 
     private val instance: Retrofit?
         get() {
@@ -71,6 +79,7 @@ object RetrofitClient {
             }
             return retrofit
         }
+
 
     interface ApiService {
         @Multipart
