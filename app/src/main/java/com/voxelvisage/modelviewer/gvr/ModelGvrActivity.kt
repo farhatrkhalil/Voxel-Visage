@@ -23,7 +23,7 @@ class ModelGvrActivity : GvrActivity(), StereoRenderer {
     private var translateY = 0f
     private var translateZ = 0f
 
-    private val light = Light(floatArrayOf(0.0f, 0.0f, MODEL_BOUND_SIZE * 10, 1.0f))
+    private val light = Light(floatArrayOf(0.0f, LIGHT_X_OFFSET, MODEL_BOUND_SIZE * 10, 1.0f))
     private val viewMatrix = FloatArray(16)
     private val finalViewMatrix = FloatArray(16)
     private val tempMatrix = FloatArray(16)
@@ -157,6 +157,7 @@ class ModelGvrActivity : GvrActivity(), StereoRenderer {
         private const val Z_FAR = MODEL_BOUND_SIZE * 4
         private const val YAW_LIMIT = 0.12f
         private const val PITCH_LIMIT = 0.12f
+        private const val LIGHT_X_OFFSET = 9.0f;
 
         // Convenience vector for extracting the position from a matrix via multiplication.
         private val POS_MATRIX_MULTIPLY_VEC = floatArrayOf(0f, 0f, 0f, 1.0f)
