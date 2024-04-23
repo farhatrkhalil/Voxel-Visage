@@ -1,6 +1,6 @@
 Our project revolves around developing and deploying a robust API tailored to tackle critical challenges in facial analysis and visualization. The API functions as the backbone of our system, orchestrating seamless communication between disparate components and facilitating efficient data processing.
 
-In the methodology of face detection, we've devised a comprehensive approach that combines synthetic datasets with real-world data to enhance accuracy. Here's how it works:
+In the methodology of face detection, we've devised a comprehensive approach that combines synthetic datasets with real-world data to avoid unethical datasets and any bias. Here's how it works:
 
 Data Combination: We blend synthetic datasets with real-world data to create a robust training set for our face detection model. This combination ensures that our model can generalize well across various scenarios and demographics.
 Model Comparison: We rigorously compare our existing data model with a new one trained on ethical data. This comparison allows us to assess the accuracy and efficacy of the new model in real-world applications.
