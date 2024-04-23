@@ -36,7 +36,7 @@
         tools:targetApi="m">
 
         <activity
-            android:name=".SplashScreenActivity"
+            android:name=".splashscreen.SplashScreenActivity"
             android:label="@string/app_name"
             tools:ignore="LockedOrientationActivity,RedundantLabel"
             android:exported="true"
@@ -48,7 +48,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MainActivity"
+        <activity android:name=".main.MainActivity"
             android:configChanges="orientation|screenSize"
             android:exported="true"
             android:screenOrientation="portrait"
@@ -80,27 +80,27 @@
 
         </activity>
 
-        <activity android:name=".SettingsActivity"
+        <activity android:name=".settings.SettingsActivity"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
         </activity>
 
         <activity
-            android:name=".GalleryViewerActivity"
+            android:name=".gallery.GalleryViewerActivity"
             android:label="Gallery Viewer"
             tools:ignore="LockedOrientationActivity,RedundantLabel"
             android:screenOrientation="portrait">
         </activity>
 
         <activity
-            android:name=".CameraActivity"
+            android:name=".camera.CameraActivity"
             android:label="Camera Activity"
             tools:ignore="LockedOrientationActivity,RedundantLabel"
             android:screenOrientation="portrait">
         </activity>
 
         <activity
-            android:name=".NoInternetActivity"
+            android:name=".connection.NoInternetActivity"
             android:label="No Internet Activity"
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:screenOrientation="portrait"

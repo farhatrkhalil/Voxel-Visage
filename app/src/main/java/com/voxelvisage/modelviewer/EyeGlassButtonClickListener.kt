@@ -9,6 +9,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
+import com.voxelvisage.modelviewer.main.MainActivity
 import com.voxelvisage.modelviewer.obj.ObjModel
 import java.io.IOException
 import java.util.Locale

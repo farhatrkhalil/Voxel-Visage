@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorWindowBackground"
-    tools:context="com.voxelvisage.modelviewer.MainActivity">
+    tools:context="com.voxelvisage.modelviewer.main.MainActivity">
 
     <TextView
         android:id="@+id/fpsCounter"

@@ -1,9 +1,10 @@
-package com.voxelvisage.modelviewer
+package com.voxelvisage.modelviewer.connection
 
 import android.content.Context
 import android.content.Intent
 import android.webkit.MimeTypeMap
 import androidx.core.content.ContextCompat.startActivity
+import com.voxelvisage.modelviewer.main.MainActivity
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody

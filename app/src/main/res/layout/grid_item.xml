@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.voxelvisage.modelviewer.CurvedImageView
+    <com.voxelvisage.modelviewer.gallery.CurvedImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

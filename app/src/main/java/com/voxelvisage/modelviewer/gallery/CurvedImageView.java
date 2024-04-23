@@ -1,4 +1,4 @@
-package com.voxelvisage.modelviewer;
+package com.voxelvisage.modelviewer.gallery;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -7,6 +7,8 @@ import android.graphics.Path;
 import android.util.AttributeSet;
 
 import androidx.appcompat.widget.AppCompatImageView;
+
+import com.voxelvisage.modelviewer.R;
 
 public class CurvedImageView extends AppCompatImageView {
     private Path path;

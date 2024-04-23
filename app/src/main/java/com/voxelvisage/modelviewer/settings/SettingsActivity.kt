@@ -1,4 +1,4 @@
-package com.voxelvisage.modelviewer
+package com.voxelvisage.modelviewer.settings
 
 import android.content.DialogInterface
 import android.content.Intent
@@ -14,9 +14,9 @@ import android.view.MotionEvent
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NavUtils
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.voxelvisage.modelviewer.R
 
 class SettingsActivity : AppCompatActivity() {
 

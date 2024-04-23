@@ -1,4 +1,4 @@
-package com.voxelvisage.modelviewer;
+package com.voxelvisage.modelviewer.gallery;
 
 import android.content.Context;
 import android.net.Uri;
@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import androidx.core.content.ContextCompat;
 
 import com.squareup.picasso.Picasso;
+import com.voxelvisage.modelviewer.R;
 
 import java.util.ArrayList;
 

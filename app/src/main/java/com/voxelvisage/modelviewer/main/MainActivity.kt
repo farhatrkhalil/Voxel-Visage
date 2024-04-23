@@ -1,4 +1,4 @@
-package com.voxelvisage.modelviewer
+package com.voxelvisage.modelviewer.main
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -33,11 +33,22 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContentResolverCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
+import com.voxelvisage.modelviewer.EyeGlassButtonClickListener
+import com.voxelvisage.modelviewer.LoadingDialog
+import com.voxelvisage.modelviewer.Model
+import com.voxelvisage.modelviewer.ModelRenderer
+import com.voxelvisage.modelviewer.ModelSurfaceView
+import com.voxelvisage.modelviewer.ModelViewerApplication
 import com.voxelvisage.modelviewer.ModelViewerApplication.Companion.currentModel
+import com.voxelvisage.modelviewer.R
+import com.voxelvisage.modelviewer.camera.CameraActivity
+import com.voxelvisage.modelviewer.connection.NoInternetActivity
 import com.voxelvisage.modelviewer.databinding.ActivityMainBinding
+import com.voxelvisage.modelviewer.gallery.GalleryViewerActivity
 import com.voxelvisage.modelviewer.gvr.ModelGvrActivity
 import com.voxelvisage.modelviewer.obj.ObjModel
 import com.voxelvisage.modelviewer.ply.PlyModel
+import com.voxelvisage.modelviewer.settings.SettingsActivity
 import com.voxelvisage.modelviewer.stl.StlModel
 import com.voxelvisage.modelviewer.util.Util.closeSilently
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers

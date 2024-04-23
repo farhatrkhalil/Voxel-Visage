@@ -1,4 +1,4 @@
-package com.voxelvisage.modelviewer;
+package com.voxelvisage.modelviewer.connection;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.voxelvisage.modelviewer.main.MainActivity;
+import com.voxelvisage.modelviewer.R;
 
 public class NoInternetActivity extends AppCompatActivity {
 

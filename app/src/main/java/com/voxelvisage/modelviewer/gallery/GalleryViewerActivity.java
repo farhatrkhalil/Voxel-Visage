@@ -1,4 +1,4 @@
-package com.voxelvisage.modelviewer;
+package com.voxelvisage.modelviewer.gallery;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -19,6 +19,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.voxelvisage.modelviewer.R;
+import com.voxelvisage.modelviewer.connection.RetrofitClient;
 
 import java.io.File;
 import java.io.IOException;

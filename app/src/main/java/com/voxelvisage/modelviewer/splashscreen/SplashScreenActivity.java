@@ -1,4 +1,4 @@
-package com.voxelvisage.modelviewer;
+package com.voxelvisage.modelviewer.splashscreen;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -11,6 +11,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import com.voxelvisage.modelviewer.main.MainActivity;
+import com.voxelvisage.modelviewer.R;
 
 @SuppressLint("CustomSplashScreen")
 public class SplashScreenActivity extends AppCompatActivity {

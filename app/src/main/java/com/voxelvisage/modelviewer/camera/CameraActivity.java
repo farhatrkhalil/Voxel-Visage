@@ -1,4 +1,4 @@
-package com.voxelvisage.modelviewer;
+package com.voxelvisage.modelviewer.camera;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -22,6 +22,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.voxelvisage.modelviewer.main.MainActivity;
+import com.voxelvisage.modelviewer.R;
 
 import java.io.File;
 import java.io.FileOutputStream;
