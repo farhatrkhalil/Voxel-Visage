@@ -2,7 +2,6 @@ package com.voxelvisage.modelviewer
 
 import android.opengl.GLES20
 import android.opengl.Matrix
-import com.voxelvisage.modelviewer.R
 import com.voxelvisage.modelviewer.util.Util.compileProgram
 import java.nio.FloatBuffer
 

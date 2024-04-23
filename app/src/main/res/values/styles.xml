@@ -15,12 +15,6 @@
         <item name="actionOverflowButtonStyle">@style/OverflowIconStyle</item>
     </style>
 
-    <style name="AppTheme.NoTitle">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowTitleSize">0dp</item>
-    </style>
-
     <style name="ToolbarStyle" parent="Widget.Material3.Toolbar">
         <item name="android:background">@color/colorPrimary</item>
     </style>

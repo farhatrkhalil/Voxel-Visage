@@ -9,8 +9,8 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.voxelvisage.modelviewer.main.MainActivity;
 import com.voxelvisage.modelviewer.R;
+import com.voxelvisage.modelviewer.main.MainActivity;
 
 public class NoInternetActivity extends AppCompatActivity {
 

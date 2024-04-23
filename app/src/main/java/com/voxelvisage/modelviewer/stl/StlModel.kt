@@ -3,7 +3,11 @@ package com.voxelvisage.modelviewer.stl
 import com.voxelvisage.modelviewer.ArrayModel
 import com.voxelvisage.modelviewer.util.Util
 import com.voxelvisage.modelviewer.util.Util.calculateNormal
-import java.io.*
+import java.io.BufferedInputStream
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStream
+import java.io.InputStreamReader
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.util.regex.Pattern
