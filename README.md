@@ -17,7 +17,7 @@ Our project revolves around developing and deploying a robust API tailored to ta
 - **Depth Estimation:**
   - We employ stereo vision techniques to estimate the depth of facial features, enhancing the spatial understanding of the face.
 - **3D Face Registration:**
-  - The merged coordinates are utilized in delaunay triangulation to reconstruct the 3D structure of the face, enabling accurate facial analysis and visualization.
+  - The merged coordinates are utilized in Delaunay triangulation to reconstruct the 3D structure of the face, enabling accurate facial analysis and visualization.
 
 ## Future Work
 - **Smoothing of the Face:**
@@ -28,5 +28,4 @@ Our project revolves around developing and deploying a robust API tailored to ta
   - Integrating additional features into our API to expand its functionality and utility in facial analysis applications.
 
 ## Integration
-- It's important to note that our API needs to be hosted locally and connected to the app using the correct URL. This ensures seamless integration and communication between the app and the API, allowing users to leverage its capabilities effectively.
-- If you have any questions about how our API works or how to integrate it into your application, feel free to reach out for further assistance.
+- It's important to note that our API needs to be hosted locally and connected to the app using the correct URL. Please ensure to modify the URL in the Android files accordingly. This ensures seamless integration and communication between the app and the API, allowing users to leverage its capabilities effectively.
