@@ -10,7 +10,7 @@ class Floor(var floorColor: FloatArray, var lineColor: FloatArray) : ArrayModel(
     private var extent = 0f
 
     override fun setup(boundSize: Float) {
-        extent = boundSize * 5.0f
+        extent = boundSize * 4.0f
 
         // The grid lines on the floor are rendered procedurally and large polygons cause floating point
         // precision problems on some architectures. So we split the floor into 4 quadrants.
