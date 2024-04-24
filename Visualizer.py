@@ -37,11 +37,12 @@ def write_obj_file(coordinates_3d, filename, color, left_eye_roi, right_eye_roi)
     with open(filename, 'w') as f:
         #f.write(existing_content)  
 
+        elevation = 2.0
         # Append object name and new vertices
         f.write("\no generic_head\n")
         for i in range(len(new_vertices)):
             coord = new_vertices[i]
-            f.write(f"v {coord[0]} {coord[2]} {coord[1]}\n")
+            f.write(f"v {-coord[0]} {-coord[2]+elevation} {-coord[1]}\n")
 
         # Write the new faces
         for simplex in new_tri:
