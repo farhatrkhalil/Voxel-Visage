@@ -46,7 +46,6 @@ dependencies {
 
     //Kotlin and Core Android
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'com.google.android.material:material:1.11.0'
     //noinspection GradleDependency
     implementation 'androidx.activity:activity-ktx:1.8.2'
