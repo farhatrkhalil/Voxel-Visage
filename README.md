@@ -14,6 +14,10 @@ This repository contains the source code and resources for an efficient 3D face 
 - Immersive VR without the need for glasses.
 - Real-time FPS counter for performance monitoring.
 - Adjust Scene Colors & Environment.
+
+## App Size
+
+- Approximately (≈ 50 MB)
   
 ## App Support
 
