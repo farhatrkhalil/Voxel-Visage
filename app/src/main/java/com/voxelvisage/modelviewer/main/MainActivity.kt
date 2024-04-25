@@ -20,12 +20,9 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
 import android.text.InputType
-import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.ArrayAdapter
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -41,7 +38,6 @@ import com.voxelvisage.modelviewer.ModelSurfaceView
 import com.voxelvisage.modelviewer.ModelViewerApplication
 import com.voxelvisage.modelviewer.ModelViewerApplication.Companion.currentModel
 import com.voxelvisage.modelviewer.R
-import com.voxelvisage.modelviewer.camera.CameraActivity
 import com.voxelvisage.modelviewer.connection.NoInternetActivity
 import com.voxelvisage.modelviewer.databinding.ActivityMainBinding
 import com.voxelvisage.modelviewer.gallery.GalleryViewerActivity
@@ -213,13 +209,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showImageSourceDialog() {
-        val options = arrayOf("Capture Images from Camera", "Select Images from Gallery")
+        val options = arrayOf("Select Images from Gallery")
         val builder = AlertDialog.Builder(this)
         val dialog = builder.setTitle("Choose Source Of Images:")
             .setItems(options) { dialog, which ->
                 when (which) {
-                    0 -> captureImage()
-                    1 -> selectFromGallery()
+                    0 -> selectFromGallery()
                 }
                 dialog.dismiss()
             }
@@ -229,12 +224,6 @@ class MainActivity : AppCompatActivity() {
             .create()
 
         dialog.show()
-    }
-
-
-    private fun captureImage() {
-        val intent = Intent(this, CameraActivity::class.java)
-        startActivity(intent)
     }
 
     private fun selectFromGallery() {
