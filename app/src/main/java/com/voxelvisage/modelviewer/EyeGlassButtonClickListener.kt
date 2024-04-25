@@ -34,10 +34,6 @@ class EyeGlassButtonClickListener(private val mainActivity: MainActivity) : View
                 .setMessage("There is currently no model available to apply filters on.")
                 .setPositiveButton("OK", null)
                 .show()
-                .apply {
-                    val messageView = findViewById<TextView>(android.R.id.message)
-                    messageView?.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25f)
-                }
             return
         }
 

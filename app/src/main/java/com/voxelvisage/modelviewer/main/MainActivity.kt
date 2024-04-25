@@ -229,11 +229,6 @@ class MainActivity : AppCompatActivity() {
             .create()
 
         dialog.show()
-
-        val textViewTitle = dialog.findViewById<TextView>(android.R.id.title)
-        val textViewMessage = dialog.findViewById<TextView>(android.R.id.message)
-        textViewTitle?.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25f)
-        textViewMessage?.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25f)
     }
 
 
@@ -279,11 +274,6 @@ class MainActivity : AppCompatActivity() {
 
         dialog.show()
 
-        val titleView = dialog.findViewById<TextView>(android.R.id.title)
-        titleView?.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25f)
-
-        val messageView = dialog.findViewById<TextView>(android.R.id.message)
-        messageView?.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25f)
     }
 
 
@@ -304,14 +294,6 @@ class MainActivity : AppCompatActivity() {
 
         dialog.show()
 
-        val listView = dialog.listView
-        val adapter = listView.adapter as ArrayAdapter<*>
-        for (i in 0 until adapter.count) {
-            val childView = listView.getChildAt(i)
-            if (childView is TextView) {
-                childView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25f)
-            }
-        }
     }
 
 
@@ -332,10 +314,6 @@ class MainActivity : AppCompatActivity() {
                     dialog.dismiss()
                 }
                 .show()
-                .apply {
-                    val messageView = findViewById<TextView>(android.R.id.message)
-                    messageView?.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25f)
-                }
         } else {
             val options = arrayOf("Download/Share model")
             AlertDialog.Builder(this)
@@ -604,20 +582,6 @@ class MainActivity : AppCompatActivity() {
                     dialog.dismiss()
                 }
                 .show()
-                .apply {
-                    val titleView =
-                        findViewById<TextView>(
-                            resources.getIdentifier(
-                                "alertTitle",
-                                "id",
-                                "android"
-                            )
-                        )
-                    titleView?.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25f)
-
-                    val messageView = findViewById<TextView>(android.R.id.message)
-                    messageView?.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 25f)
-                }
         }
     }
 

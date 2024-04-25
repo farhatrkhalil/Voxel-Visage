@@ -66,11 +66,6 @@ dependencies {
     //3D Models and VR
     implementation 'com.google.vr:sdk-base:1.190.0'
 
-    //Media
-    implementation 'androidx.media3:media3-common:1.3.1'
-
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
-
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 }
