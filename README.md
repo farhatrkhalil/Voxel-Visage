@@ -19,6 +19,10 @@ This repository contains the source code and resources for an efficient 3D face 
 
 - Min Android 7.0 => Max Android 14.0
 
+## Application Size
+
+- Approximately (≈ 50 MB) 
+
 ## Requirements
 
 - An internet connection is required to establish a connection to the hosted API and receive the model.
