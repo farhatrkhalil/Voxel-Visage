@@ -2,6 +2,8 @@ package com.voxelvisage.modelviewer.connection
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -60,16 +62,28 @@ object RetrofitClient {
                     val responseBody = response.body()
                     if (responseBody != null) {
                         Log.d("API_CALL", "Response received")
-                        val file = File(context.filesDir, "model.obj")
+
+                        val downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+
+                        val file = File(downloadDir, "model.obj")
+
                         val sink = file.sink().buffer()
+
                         sink.writeAll(responseBody.source())
+
                         sink.close()
+
                         Log.d("API_CALL", "File created at ${file.absolutePath}")
                         modelName = file.absolutePath
-                        val intent = Intent(context, MainActivity::class.java)
-                        intent.putExtra("modelPath", modelName)
-                        intent.putExtra("fromGallery", true)
-                        startActivity(context, intent, null)
+
+                        val scanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
+                        scanIntent.data = Uri.fromFile(file)
+                        context.sendBroadcast(scanIntent)
+
+                        val mainIntent = Intent(context, MainActivity::class.java)
+                        mainIntent.putExtra("modelPath", modelName)
+                        mainIntent.putExtra("fromGallery", true)
+                        startActivity(context, mainIntent, null)
                     } else {
                         Log.d("API_CALL", "Response body is null")
                     }
