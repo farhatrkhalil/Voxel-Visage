@@ -74,6 +74,7 @@ object RetrofitClient {
             if (retrofit == null) {
                 retrofit = Retrofit.Builder()
                     .baseUrl("http://192.168.0.107:3003") // Replace with your actual API base URL
+                    //you can get the base url from ipconfig in cmd and make sure its the wireless lan ipv4 address (WIFI Section)
                     .addConverterFactory(ScalarsConverterFactory.create()) // Adjust if needed (e.g., for JSON use GsonConverterFactory)
                     .client(okHttpClient)
                     .build()

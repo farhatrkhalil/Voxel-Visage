@@ -129,7 +129,10 @@ public class GalleryViewerActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Boolean isReachable) {
-            if (!isReachable) {
+            if (isReachable) {
+                String message = "API connected!";
+                Toast.makeText(GalleryViewerActivity.this, message, Toast.LENGTH_SHORT).show();
+            } else {
                 String message = "API is currently unreachable. Please try again later.";
                 Toast.makeText(GalleryViewerActivity.this, message, Toast.LENGTH_SHORT).show();
             }
