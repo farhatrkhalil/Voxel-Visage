@@ -99,6 +99,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
 
+        val fromGallery = intent.getBooleanExtra("fromGallery", false)
         val intent = intent
 
         if (intent.hasExtra("modelPath")) {
@@ -117,7 +118,10 @@ class MainActivity : AppCompatActivity() {
         val eyeGlassButtonClickListener = EyeGlassButtonClickListener(this)
 
 
-        showWelcomeDialog()
+        if (!fromGallery) {
+            showWelcomeDialog()
+        }
+
         binding.addButton.setOnClickListener {
             showImageSourceDialog()
         }

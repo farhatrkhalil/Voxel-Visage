@@ -3,6 +3,7 @@ package com.voxelvisage.modelviewer.gallery;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.ContentUris;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -22,6 +23,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.voxelvisage.modelviewer.R;
 import com.voxelvisage.modelviewer.connection.RetrofitClient;
+import com.voxelvisage.modelviewer.main.MainActivity;
 
 import java.io.File;
 import java.io.IOException;
@@ -138,7 +140,6 @@ public class GalleryViewerActivity extends AppCompatActivity {
             }
         }
     }
-
 
     @SuppressLint("NonConstantResourceId")
     @Override
