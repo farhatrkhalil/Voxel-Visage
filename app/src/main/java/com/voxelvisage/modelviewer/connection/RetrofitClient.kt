@@ -10,6 +10,7 @@ import android.util.Log
 import android.webkit.MimeTypeMap
 import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.content.FileProvider
 import com.voxelvisage.modelviewer.main.MainActivity
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -65,7 +66,7 @@ object RetrofitClient {
 
                         val downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
 
-                        val file = File(downloadDir, "model.obj")
+                        val file = File(downloadDir, "model982731.obj")
 
                         val sink = file.sink().buffer()
 
@@ -76,13 +77,19 @@ object RetrofitClient {
                         Log.d("API_CALL", "File created at ${file.absolutePath}")
                         modelName = file.absolutePath
 
+                        val fileUri: Uri = FileProvider.getUriForFile(
+                            context,
+                            "com.voxelvisage.modelviewer.fileprovider",
+                            file
+                        )
+
                         val scanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
-                        scanIntent.data = Uri.fromFile(file)
+                        scanIntent.data = fileUri
                         context.sendBroadcast(scanIntent)
 
                         val mainIntent = Intent(context, MainActivity::class.java)
-                        mainIntent.putExtra("modelPath", modelName)
                         mainIntent.putExtra("fromGallery", true)
+                        mainIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         startActivity(context, mainIntent, null)
                     } else {
                         Log.d("API_CALL", "Response body is null")

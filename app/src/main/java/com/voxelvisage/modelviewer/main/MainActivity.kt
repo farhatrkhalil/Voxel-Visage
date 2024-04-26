@@ -20,6 +20,7 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
 import android.text.InputType
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
@@ -29,6 +30,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContentResolverCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.view.ViewCompat
 import com.voxelvisage.modelviewer.EyeGlassButtonClickListener
 import com.voxelvisage.modelviewer.LoadingDialog
@@ -99,13 +101,28 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
 
+        val downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        val file = File(downloadDir, "model982731.obj")
         val fromGallery = intent.getBooleanExtra("fromGallery", false)
         val intent = intent
 
-        if (intent.hasExtra("modelPath")) {
-            val modelPath = intent.getStringExtra("modelPath")!!
-            val uri = Uri.parse(modelPath)
-            beginLoadModel(uri)
+        if (file.exists()) {
+            val lastModified = file.lastModified()
+            val oneMinuteAgo = System.currentTimeMillis() - 60000
+
+            if (lastModified > oneMinuteAgo) {
+                val fileUri: Uri = FileProvider.getUriForFile(
+                    this,
+                    "com.voxelvisage.modelviewer.fileprovider",
+                    file
+                )
+
+                beginLoadModel(fileUri)
+            } else {
+                Log.d("FILE_CHECK", "File is older than 1 minute")
+            }
+        } else {
+            Log.d("FILE_CHECK", "File does not exist")
         }
 
         var floorColor = floatArrayOf(0.8f, 0.4f, 0.8f, 1.0f)

@@ -93,13 +93,6 @@
         </activity>
 
         <activity
-            android:name=".camera.CameraActivity"
-            android:label="Camera Activity"
-            tools:ignore="LockedOrientationActivity,RedundantLabel"
-            android:screenOrientation="portrait">
-        </activity>
-
-        <activity
             android:name=".connection.NoInternetActivity"
             android:label="No Internet Activity"
             android:theme="@style/Theme.AppCompat.NoActionBar"
