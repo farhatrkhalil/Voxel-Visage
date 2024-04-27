@@ -38,7 +38,8 @@ This repository contains the source code and resources for an efficient 3D face 
 - Sammy Medawar
 - Wally El Sayed
 
-Copyright 2024+, licensed under the [MIT License](https://opensource.org/licenses/MIT)
+Copyright 2024+
+licensed under the [MIT License](https://opensource.org/licenses/MIT)
 
 ## Screenshots of Voxel Visage
 
