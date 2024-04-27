@@ -29,3 +29,7 @@ Our project revolves around developing and deploying a robust API tailored to ta
 
 ## Integration
 - It's important to note that our API needs to be hosted locally and connected to the app using the correct URL. Please ensure to modify the URL in the Android files accordingly. Additionally, the API branch contains a 'requirements.txt' file that includes all the libraries and dependencies necessary for the proper functioning of the API. Before hosting the API locally, ensure that you have installed all the libraries listed in the 'requirements.txt' file. This ensures seamless integration and communication between the app and the API, allowing users to leverage its capabilities effectively.
+
+## FastAPI Swagger User Interface 
+
+![Screenshot 2024-04-27 121214](https://github.com/farhatrkhalil/Voxel-Visage/assets/100374222/2b863659-c963-4eff-95d3-c2961e9b699c)
