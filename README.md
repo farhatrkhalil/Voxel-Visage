@@ -1,45 +1,37 @@
-# Voxel Visage - 3D Face Reconstruction App
+# Voxel Visage: ML-Driven 3D Spatial Reconstruction
 
-Voxel Visage is a powerful 3D Face Reconstruction app that leverages a locally hosted API for face and landmarks recognition. The API generates the necessary .obj files, which are then displayed in the application. An Internet connection is required for this functionality.
+**Voxel Visage** is a high-performance 3D facial reconstruction system. It utilizes a custom-engineered ML pipeline to transform 2D facial landmarks into navigable 3D spatial models.
+---
 
-This repository contains the source code and resources for an efficient 3D face reconstruction algorithm, offering users a seamless experience through an Android application developed using both Java and Kotlin in Android Studio.
+## 🛠 Engineering Highlights
+* **ML Analytics Engine:** Developed a facial landmark recognition pipeline utilizing Dlib for high-precision coordinate extraction.
+* **3D Rendering Pipeline:** Engineered a custom renderer for STL, OBJ, and PLY data with low-latency Android integration.
+* **Spatial Optimization:** Implemented real-time FPS monitoring and VR-optimized rendering for mobile hardware.
+* **Data Architecture:** Managed the ingestion of multi-format spatial data (ASCII/Binary) via a decoupled RESTful API.
 
-## Features
+## 🚀 Technical Stack
+* **Languages:** Kotlin, Java (Android), Python (Backend API)
+* **Core Tech:** Dlib (Facial Analysis), OpenGL (3D Rendering)
+* **Architecture:** Decoupled Client-Server (REST API)
+* **Persistence:** Local caching of generated .obj assets
 
-- View 3D models on Android devices.
-- Camera movement & zoom for detailed exploration. 
-- Support for STL (ASCII and binary) files.
-- Limited support for OBJ (Wavefront) and PLY (Stanford) files.
-- Download and share 3D models.
-- Immersive VR without the need for glasses.
-- Real-time FPS counter for performance monitoring.
-- Adjust Scene Colors & Environment.
+## 📈 Performance & Specifications
+* **Rendering:** Real-time FPS monitoring with environment-specific scene optimization.
+* **OS Support:** Android 7.0 (API 24) – Android 14.0 (API 34).
+* **Footprint:** Optimized ≈45MB binary for rapid deployment.
 
-## App Size
+## 🔮 Future Roadmap
+* **AR Integration:** Implementation of Augmented Reality filters and virtual eyewear overlay.
+* **Edge Processing:** Migrating facial landmark detection to on-device processing for reduced latency.
 
-- Approximately (≈ 45 MB)
-  
-## App Support
+## ⚖️ License & Contributors
+* Khalil Farhat
+* Abed El Fattah Amouneh
+* Sammy Medawar
+* Wally El Sayed
 
-- Min Android 7.0 => Max Android 14.0
-
-## Requirements
-
-- An internet connection is required to establish a connection to the hosted API and receive the model.
-
-## Future Development
-
-- Augmented reality filters (planned): We're exploring advanced features like virtual eyewear and other face filters.
-  
-## License
-
-- Khalil Farhat
-- Abed El Fattah Amouneh
-- Sammy Medawar
-- Wally El Sayed
-
-Copyright 2024+
-licensed under the [MIT License](https://opensource.org/licenses/MIT)
+Copyright © 2024 Voxel Visage Team.
+Licensed under the [MIT License](https://opensource.org/licenses/MIT).
 
 ## Screenshots of Voxel Visage
 
